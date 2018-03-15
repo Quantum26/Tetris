@@ -16,6 +16,7 @@ public class Tetris implements ArrowListener
     private BoundedGrid<Block> grid;
     private BlockDisplay display;
     private Tetrad activeTetrad;
+    private TetrisScore scoreBoard;
 
     public Tetris()
     {
@@ -24,6 +25,7 @@ public class Tetris implements ArrowListener
         display.setArrowListener(this);
         display.setTitle("Tetris");
         activeTetrad = new Tetrad(grid);
+        scoreBoard = new TetrisScore();
     }
 
     public void upPressed()
@@ -87,6 +89,7 @@ public class Tetris implements ArrowListener
             }
             display.showBlocks();
         }
+        
     }
 
     //precondition:  0 <= row < number of rows
