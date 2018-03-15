@@ -109,6 +109,14 @@ public class Tetrad
         }
         return locs;
     }
+    public Location[] getLocations()
+    {
+        Location[] l = new Location[4];
+        for(int i = 0; i<4; i++){
+            l[i] = blocks[i].getLocation();
+        }
+        return l;
+    }
 
     //postcondition: Returns true if each of locs is
     //               valid (on the board) AND empty in
@@ -172,7 +180,25 @@ public class Tetrad
         //              remove the blocks (but save the locations)
         //              check if the new locations are empty
         //              replace the tetrad in the proper place (rotated)
-
-        throw new RuntimeException("Insert Exercise 3.0 code here");    // replace this line
+        BoundedGrid<Block> g = blocks[0].getGrid();
+        Location[] locs = new Location[4];
+        for(int i = 0; i < 4; i++){
+            locs[i] = blocks[i].getLocation();
+            blocks[i].removeSelfFromGrid();
+        }
+        Location[] newLocs = new Location[4];
+        for(int i = 0; i<4; i++){
+            newLocs[i] = new Location(locs[1].getRow()-locs[1].getCol() + locs[i].getCol(), locs[1].getRow() +locs[1].getCol() - locs[i].getRow());
+        }
+        boolean valid = true;
+        for(int i = 0; i<4; i++){
+            valid = valid && g.isValid(newLocs[i]);
+        }
+        if(!(areEmpty(g,newLocs)&&valid)){
+            this.addToLocations(g, locs);
+            return false;
+        }
+        this.addToLocations(g, newLocs);
+        return true;
     }
 }

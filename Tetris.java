@@ -11,7 +11,8 @@ public class Tetris implements ArrowListener
         Tetris tetris = new Tetris();
         tetris.play();
     }
-
+    int time = 1000;
+    int gameTime = time;
     private BoundedGrid<Block> grid;
     private BlockDisplay display;
     private Tetrad activeTetrad;
@@ -27,7 +28,7 @@ public class Tetris implements ArrowListener
 
     public void upPressed()
     {
-        activeTetrad.translate(-1, 0);
+        activeTetrad.rotate();
         display.showBlocks();
     }
 
@@ -53,18 +54,37 @@ public class Tetris implements ArrowListener
     {
         while(activeTetrad.translate(1,0))
         activeTetrad.translate(1, 0);
+        gameTime = 0;
         display.showBlocks();
     }
 
     public void play()
     {
-        while (true)
+        boolean game = true;
+        while (game)
         {
-            try { Thread.sleep(1000); } catch(Exception e) {}
-
-            //Insert Exercise 3.2 code here
-            //Insert Exercise 3.3 code here
-
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            activeTetrad.translate(1,0);
+            if(activeTetrad.translate(1,0)!=true){
+                gameTime = time;
+                Location[] l = activeTetrad.getLocations();
+                for(int i = 0; i<4; i++){
+                    if(l[i].getRow() == 0){
+                    game = false;
+                    break;
+                }
+                }
+                activeTetrad = new Tetrad(grid);
+            }
             display.showBlocks();
         }
     }
