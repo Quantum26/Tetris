@@ -15,33 +15,33 @@ public class Block
     //constructs a blue block, because blue is the greatest color ever!
     public Block()
     {
-        color = Color.BLUE;
-        grid = null;
-        location = null;
+        color = Color.BLUE;//color of the block
+        grid = null;//makes the grid nonexistent, like the block
+        location = null;//the block has no location yet
     }
 
     //gets the color of this block
     public Color getColor()
     {
-        return color;    // replace this line
+        return color;    //returns the color
     }
 
     //sets the color of this block to newColor.
     public void setColor(Color newColor)
     {
-        color = newColor;    // replace this line
+        color = newColor;    //sets color to what is desired
     }
 
     //gets the grid of this block, or null if this block is not contained in a grid
     public BoundedGrid<Block> getGrid()
     {
-        return grid;    // replace this line
+        return grid;    //returns grid of what the block is
     }
 
     //gets the location of this block, or null if this block is not contained in a grid
     public Location getLocation()
     {
-        return location;    // replace this line
+        return location;    //returns location of the block
     }
 
     //removes this block from its grid
@@ -51,9 +51,9 @@ public class Block
         //First, using the grid object, call the remove method (pass it this location)
         //Second, set this location to null
         //Third, set this grid to null
-        grid.remove(location);    // replace this line
-        location = null;
-        grid = null;
+        grid.remove(location);    //removes the location from the grid
+        location = null;            //location is gone now, so it's null
+        grid = null;            //grid is gone now, so it's null
     }
 
     //puts this block into location loc of grid gr
