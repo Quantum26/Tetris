@@ -4,7 +4,7 @@
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Tetris
+public class Tetris implements ArrowListener
 {
     public static void main(String[] args)
     {
@@ -20,33 +20,40 @@ public class Tetris
     {
         grid = new BoundedGrid<Block>(20, 10);
         display = new BlockDisplay(grid);
+        display.setArrowListener(this);
         display.setTitle("Tetris");
         activeTetrad = new Tetrad(grid);
     }
 
     public void upPressed()
     {
-        //Insert Exercise 2.3 code here
+        activeTetrad.translate(-1, 0);
+        display.showBlocks();
     }
 
     public void downPressed()
     {
-        //Insert Exercise 2.3 code here
+        activeTetrad.translate(1, 0);
+        display.showBlocks();
     }
 
     public void leftPressed()
     {
-        //Insert Exercise 2.3 code here
+        activeTetrad.translate(0, -1);
+        display.showBlocks();
     }
 
     public void rightPressed()
     {
-        //Insert Exercise 2.3 code here
+        activeTetrad.translate(0, 1);
+        display.showBlocks();
     }
 
     public void spacePressed()
     {
-        //Insert Exercise 2.3 code here
+        while(activeTetrad.translate(1,0))
+        activeTetrad.translate(1, 0);
+        display.showBlocks();
     }
 
     public void play()

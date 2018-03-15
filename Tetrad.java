@@ -25,7 +25,7 @@ public class Tetrad
         Color color = Color.BLACK;
         Location[] locs = new Location[4];
         int shape = 0;
-        
+
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
         shape = (int)(Math.random()*7);
@@ -102,21 +102,25 @@ public class Tetrad
     //               blocks have been removed from grid.
     private Location[] removeBlocks()
     {
-         Location[] locs = new Location[4];
-         for(int i = 0; i<blocks.length; i++){
-             locs[i] = blocks[i].getLocation();
-             blocks[i].removeSelfFromGrid();
-         }
-         return locs;
+        Location[] locs = new Location[4];
+        for(int i = 0; i<blocks.length; i++){
+            locs[i] = blocks[i].getLocation();
+            blocks[i].removeSelfFromGrid();
+        }
+        return locs;
     }
 
     //postcondition: Returns true if each of locs is
     //               valid (on the board) AND empty in
     //               grid; false otherwise.
     private boolean areEmpty(BoundedGrid<Block> grid,
-                             Location[] locs)
+    Location[] locs)
     {
-        
+        for(Location l: locs){
+            if(grid.isValid(l))
+                if(grid.get(l)!=null)
+                    return false;
+        }
         return true;
     }
 
@@ -135,17 +139,24 @@ public class Tetrad
         //              replace the tetrad in the proper place (translated)
         //              return true if moved, false if not moved
         BoundedGrid<Block> g = blocks[0].getGrid();
-        boolean[] x = new boolean[g.getNumRows()*g.getNumCols()];
-        int counter = 0;
-        for(int r = 0; r<g.getNumRows(); r++){
-            for(int c = 0; c<g.getNumCols(); c++){
-            Location loc = new Location(r,c);
-            x[counter] = !g.get(loc).equals(null);
-            counter++;
+        Location[] locs = new Location[4];
+        for(int i = 0; i < 4; i++){
+            locs[i] = blocks[i].getLocation();
+            blocks[i].removeSelfFromGrid();
         }
+        Location[] newLocs = new Location[4];
+        for(int i = 0; i<4; i++){
+            newLocs[i] = new Location(locs[i].getRow() + deltaRow, locs[i].getCol() + deltaCol);
         }
-        
-    
+        boolean valid = true;
+        for(int i = 0; i<4; i++){
+            valid = valid && g.isValid(newLocs[i]);
+        }
+        if(!(areEmpty(g,newLocs)&&valid)){
+            this.addToLocations(g, locs);
+            return false;
+        }
+        this.addToLocations(g, newLocs);
         return true;
     }
 
