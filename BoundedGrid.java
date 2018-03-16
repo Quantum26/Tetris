@@ -67,7 +67,33 @@ public class BoundedGrid<E>
         put(loc, null);
         return r;
     }
+    
+    public ArrayList<Location> getRow(int row){
+        ArrayList<Location> theLocs = new ArrayList<Location>();
+        for (int c = 0; c < getNumCols(); c++)
+            {
+                //if there is an object in this location put it in the array
+                Location loc = new Location(row,c);
+                if (get(loc) != null)
+                    theLocs.add(loc);
+            }
+        
+        return theLocs;
+    }
 
+    public Location getLocBelow(Location l){
+        Location q = new Location(l.getRow(), l.getCol());
+        for(int i = l.getRow()+1; i < 20; i++){
+            q = new Location(i, l.getCol());
+            if(this.get(q)!=null){
+                return new Location(i-1, l.getCol());
+            }
+        }
+        
+        
+        return q;
+    }
+    
     //returns a list of all occupied locations in this grid
     public ArrayList<Location> getOccupiedLocations()
     {

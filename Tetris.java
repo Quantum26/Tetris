@@ -10,13 +10,21 @@ public class Tetris implements ArrowListener
 {
     public static void main(String[] args)
     {
+        boolean x;
+        Scanner s = new Scanner(System.in);
+        System.out.println("Would you like to enable chain reactions?(y/n)");
+        x = s.nextLine().equals("y");
+        
         Tetris tetris = new Tetris();
-
+        if(x){
+            tetris.switchMode();
+        }
+        System.out.println(tetris.getChain());
         tetris.play();
     }
     int time = 1000;
     int gameTime = time;
-
+    private boolean chain;
     private BoundedGrid<Block> grid;
     private BlockDisplay display;
     private Tetrad activeTetrad;
@@ -30,7 +38,7 @@ public class Tetris implements ArrowListener
         display.setTitle("Tetris");
         activeTetrad = new Tetrad(grid);
         scoreBoard = new TetrisScore();
-
+        chain = false;
     }
 
     public void upPressed()
@@ -65,6 +73,10 @@ public class Tetris implements ArrowListener
         display.showBlocks();
     }
 
+    public void switchMode(){
+        chain = !chain;
+    }
+    
     public void play()
     {
         boolean game = true;
@@ -99,8 +111,11 @@ public class Tetris implements ArrowListener
         }
 
     }
-
     
+    public boolean getChain(){
+        return chain;
+    }
+
     //precondition:  0 <= row < number of rows
     //postcondition: Returns true if every cell in the
     //               given row is occupied;
@@ -138,9 +153,11 @@ public class Tetris implements ArrowListener
             if(isCompletedRow(i)){
                 flashRow(i);
                 clearRow(i);
-                moveDownAbove(i);
-
-                
+                if(chain){
+                    chainDown(i);
+                }else{
+                    moveDownAbove(i);
+                }
                 i = 20;
 
             }
@@ -153,7 +170,7 @@ public class Tetris implements ArrowListener
         if(r<1){
             return;
         }
-        List<Location> locs = grid.getOccupiedLocations();
+        List<Location> locs = grid.getRow(r);
         for(Location l: locs){
             Location x = new Location(l.getRow()+1, l.getCol());
             if(grid.isValid(x)&&grid.get(x)==null){
@@ -162,40 +179,45 @@ public class Tetris implements ArrowListener
         }
         moveDownAbove(r-1);
     }
+    
+    private void moveDownAboveCont(int r){
+        if(r<1){
+            return;
+        }
+        List<Location> locs = grid.getOccupiedLocations();
+        for(Location l: locs){
+            Location x = grid.getLocBelow(l);
+            if(grid.isValid(x)&&grid.get(x)==null){
+                grid.remove(l).moveTo(x);
+            }
+        }
+        moveDownAbove(r-1);
+    }
+    
+    private void chainDown(int r){
+        moveDownAbove(r);
+        while(activeTetrad.translate(1,0)){}
+    }
 
     public void flashRow(int row){
         Color[] colors = new Color[10];
+        for(int k = 0; k<2; k++){
+            for(int i = 0; i< 10; i++){
+                Location l = new Location(row, i);
+                colors[i] = grid.get(l).getColor();
+                grid.get(l).setColor(new Color(0, 0, 0));
 
-        for(int i = 0; i< 10; i++){
-            Location l = new Location(row, i);
-            colors[i] = grid.get(l).getColor();
-            grid.get(l).setColor(new Color(0, 0, 0));
+            }
+            display.showBlocks();
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            for(int i = 0; i< 10; i++){
+                Location l = new Location(row, i);
+                grid.get(l).setColor(colors[i]);
 
+            }
+            display.showBlocks();
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
         }
-        display.showBlocks();
-        try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-        for(int i = 0; i< 10; i++){
-            Location l = new Location(row, i);
-            grid.get(l).setColor(colors[i]);
-
-        }
-        display.showBlocks();
-        try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-        for(int i = 0; i< 10; i++){
-            Location l = new Location(row, i);
-            colors[i] = grid.get(l).getColor();
-            grid.get(l).setColor(new Color(0, 0, 0));
-
-        }
-        display.showBlocks();
-        try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-        for(int i = 0; i< 10; i++){
-            Location l = new Location(row, i);
-            grid.get(l).setColor(colors[i]);
-
-        }
-        display.showBlocks();
-        try { Thread.sleep(gameTime/10); } catch(Exception e) {}
     }
 
     //returns true if top two rows of the grid are empty (no blocks), false otherwise
