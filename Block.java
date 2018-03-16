@@ -84,6 +84,7 @@ public class Block
         grid.put(location,this);
     }
 
+        
     //returns a string with the location and color of this block
     public String toString()
     {

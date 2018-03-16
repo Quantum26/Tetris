@@ -1,4 +1,5 @@
 import java.util.*;
+import java.awt.Color;
 /**
  * Tetris class to be completed for Tetris project
  * 
@@ -131,11 +132,12 @@ public class Tetris implements ArrowListener
     {
         for(int i = 19; i > -0; i--){
             if(isCompletedRow(i)){
+                flashRow(i);
                 clearRow(i);
                 moveDownAbove(i);
                 i=20;
             }
-            
+
         }
         display.showBlocks();
     }
@@ -152,6 +154,41 @@ public class Tetris implements ArrowListener
             }
         }
         moveDownAbove(r-1);
+    }
+
+    public void flashRow(int row){
+        Color[] colors = new Color[10];
+
+        for(int i = 0; i< 10; i++){
+            Location l = new Location(row, i);
+            colors[i] = grid.get(l).getColor();
+            grid.get(l).setColor(new Color(0, 0, 0));
+
+        }
+        display.showBlocks();
+        try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+        for(int i = 0; i< 10; i++){
+            Location l = new Location(row, i);
+            grid.get(l).setColor(colors[i]);
+
+        }
+        display.showBlocks();
+        try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+        for(int i = 0; i< 10; i++){
+            Location l = new Location(row, i);
+            colors[i] = grid.get(l).getColor();
+            grid.get(l).setColor(new Color(0, 0, 0));
+
+        }
+        display.showBlocks();
+        try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+        for(int i = 0; i< 10; i++){
+            Location l = new Location(row, i);
+            grid.get(l).setColor(colors[i]);
+
+        }
+        display.showBlocks();
+        try { Thread.sleep(gameTime/10); } catch(Exception e) {}
     }
 
     //returns true if top two rows of the grid are empty (no blocks), false otherwise
