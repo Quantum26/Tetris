@@ -11,10 +11,12 @@ public class Tetris implements ArrowListener
     public static void main(String[] args)
     {
         Tetris tetris = new Tetris();
+
         tetris.play();
     }
     int time = 1000;
     int gameTime = time;
+
     private BoundedGrid<Block> grid;
     private BlockDisplay display;
     private Tetrad activeTetrad;
@@ -28,6 +30,7 @@ public class Tetris implements ArrowListener
         display.setTitle("Tetris");
         activeTetrad = new Tetrad(grid);
         scoreBoard = new TetrisScore();
+
     }
 
     public void upPressed()
@@ -97,6 +100,7 @@ public class Tetris implements ArrowListener
 
     }
 
+    
     //precondition:  0 <= row < number of rows
     //postcondition: Returns true if every cell in the
     //               given row is occupied;
@@ -135,7 +139,10 @@ public class Tetris implements ArrowListener
                 flashRow(i);
                 clearRow(i);
                 moveDownAbove(i);
-                i=20;
+
+                
+                i = 20;
+
             }
 
         }
