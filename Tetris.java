@@ -133,7 +133,7 @@ public class Tetris implements ArrowListener
             if(isCompletedRow(i)){
                 clearRow(i);
                 moveDownAbove(i);
-                i++;
+                i=20;
             }
             
         }
