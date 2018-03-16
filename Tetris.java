@@ -1,3 +1,4 @@
+import java.util.*;
 /**
  * Tetris class to be completed for Tetris project
  * 
@@ -55,7 +56,7 @@ public class Tetris implements ArrowListener
     public void spacePressed()
     {
         while(activeTetrad.translate(1,0))
-        activeTetrad.translate(1, 0);
+            activeTetrad.translate(1, 0);
         gameTime = 0;
         display.showBlocks();
     }
@@ -75,21 +76,23 @@ public class Tetris implements ArrowListener
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            activeTetrad.translate(1,0);
+            
             if(activeTetrad.translate(1,0)!=true){
                 gameTime = time;
                 Location[] l = activeTetrad.getLocations();
                 for(int i = 0; i<4; i++){
                     if(l[i].getRow() == 0){
-                    game = false;
-                    break;
-                }
+                        game = false;
+                        break;
+                    }
                 }
                 activeTetrad = new Tetrad(grid);
             }
+            clearCompletedRows();
             display.showBlocks();
+            
         }
-        
+
     }
 
     //precondition:  0 <= row < number of rows
@@ -98,7 +101,14 @@ public class Tetris implements ArrowListener
     //               returns false otherwise.
     private boolean isCompletedRow(int row)
     {
-        throw new RuntimeException("Insert Exercise 4.0 code here");    // replace this line
+        boolean full = true;
+        for(int i = 0; i < 10; i++){
+            Location l = new Location(row, i);
+            if(grid.get(l)==null){
+                full = false;
+            }
+        }
+        return full;
     }
 
     //precondition:  0 <= row < number of rows;
@@ -108,13 +118,27 @@ public class Tetris implements ArrowListener
     //               has been moved down one row.
     private void clearRow(int row)
     {
-        throw new RuntimeException("Insert Exercise 4.0 code here");    // replace this line
+        for(int i = 0; i<10; i++){
+            Location l = new Location(row, i);
+            grid.remove(l).removeSelfFromGrid();
+
+        }
     }
 
     //postcondition: All completed rows have been cleared.
     private void clearCompletedRows()
     {
-        throw new RuntimeException("Insert Exercise 4.0 code here");    // replace this line
+        for(int i = 19; i > -0; i--){
+            if(isCompletedRow(i)){
+                clearRow(i);
+                List<Location> locs = grid.getOccupiedLocations();
+                for(Location l: locs){
+                    Location x = new Location(l.getRow()+1, l.getCol());
+                    grid.remove(l).moveTo(x);
+                }
+            }
+        }
+        display.showBlocks();
     }
 
     //returns true if top two rows of the grid are empty (no blocks), false otherwise
