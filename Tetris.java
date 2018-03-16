@@ -76,8 +76,8 @@ public class Tetris implements ArrowListener
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            
-            if(activeTetrad.translate(1,0)!=true){
+
+            if(!activeTetrad.translate(1,0)&&topRowsEmpty()){
                 gameTime = time;
                 Location[] l = activeTetrad.getLocations();
                 for(int i = 0; i<4; i++){
@@ -86,11 +86,12 @@ public class Tetris implements ArrowListener
                         break;
                     }
                 }
+                clearCompletedRows();
                 activeTetrad = new Tetrad(grid);
             }
-            clearCompletedRows();
+
             display.showBlocks();
-            
+
         }
 
     }
@@ -131,20 +132,46 @@ public class Tetris implements ArrowListener
         for(int i = 19; i > -0; i--){
             if(isCompletedRow(i)){
                 clearRow(i);
-                List<Location> locs = grid.getOccupiedLocations();
-                for(Location l: locs){
-                    Location x = new Location(l.getRow()+1, l.getCol());
-                    grid.remove(l).moveTo(x);
-                }
+                moveDownAbove(i);
+                i++;
             }
+            
         }
         display.showBlocks();
+    }
+
+    private void moveDownAbove(int r){
+        if(r<1){
+            return;
+        }
+        List<Location> locs = grid.getOccupiedLocations();
+        for(Location l: locs){
+            Location x = new Location(l.getRow()+1, l.getCol());
+            if(grid.isValid(x)&&grid.get(x)==null){
+                grid.remove(l).moveTo(x);
+            }
+        }
+        moveDownAbove(r-1);
     }
 
     //returns true if top two rows of the grid are empty (no blocks), false otherwise
     private boolean topRowsEmpty()
     {
-        throw new RuntimeException("Insert Exercise 4.1 code here");    // replace this line
+        boolean top = true;
+        boolean atop = true;
+        for(int i = 0; i<10; i++){
+            Location l = new Location(0, i);
+            if(grid.get(l)!=null){
+                top = false;
+            }
+        }
+        for(int i = 0; i<10; i++){
+            Location l = new Location(1, i);
+            if(grid.get(l)!=null){
+                atop = false;
+            }
+        }
+        return top &&atop;
     }
 
 }
