@@ -10,21 +10,15 @@ public class Tetris implements ArrowListener
 {
     public static void main(String[] args)
     {
-        boolean x;
-        Scanner s = new Scanner(System.in);
-        System.out.println("Would you like to enable chain reactions?(y/n)");
-        x = s.nextLine().equals("y");
-        
         Tetris tetris = new Tetris();
-        if(x){
-            tetris.switchMode();
-        }
-        System.out.println(tetris.getChain());
         tetris.play();
     }
-    int time = 1000;
-    int gameTime = time;
-    private boolean chain;
+    int time;
+    int gameTime;
+    private int level;
+    private int score;
+    private int rowsDone;
+    private boolean gotTetris;
     private BoundedGrid<Block> grid;
     private BlockDisplay display;
     private Tetrad activeTetrad;
@@ -38,7 +32,12 @@ public class Tetris implements ArrowListener
         display.setTitle("Tetris");
         activeTetrad = new Tetrad(grid);
         scoreBoard = new TetrisScore();
-        chain = false;
+        time = 1000;
+        gameTime = 1000;
+        level = 0;
+        score = 0;
+        gotTetris = false;
+        rowsDone = 0;
     }
 
     public void upPressed()
@@ -73,9 +72,6 @@ public class Tetris implements ArrowListener
         display.showBlocks();
     }
 
-    public void switchMode(){
-        chain = !chain;
-    }
     
     public void play()
     {
@@ -107,14 +103,12 @@ public class Tetris implements ArrowListener
             }
 
             display.showBlocks();
-
+            display.setTitle("Level "+level+", Score: "+score);
         }
 
     }
+
     
-    public boolean getChain(){
-        return chain;
-    }
 
     //precondition:  0 <= row < number of rows
     //postcondition: Returns true if every cell in the
@@ -149,19 +143,24 @@ public class Tetris implements ArrowListener
     //postcondition: All completed rows have been cleared.
     private void clearCompletedRows()
     {
+        int rowsBroke = 0;
         for(int i = 19; i > -0; i--){
             if(isCompletedRow(i)){
                 flashRow(i);
                 clearRow(i);
-                if(chain){
-                    chainDown(i);
-                }else{
-                    moveDownAbove(i);
-                }
+                moveDownAbove(i);
                 i = 20;
-
+                rowsBroke++;
+                rowsDone++;
             }
 
+        }
+        
+        int scor = (gotTetris)?((rowsBroke==4)?1600:rowsBroke*100):((rowsBroke==4)?800:rowsBroke*100);
+        score+= scor;
+        if(rowsDone%10==0&&rowsDone!=0){
+            level++;
+            time-=10;
         }
         display.showBlocks();
     }
@@ -178,25 +177,6 @@ public class Tetris implements ArrowListener
             }
         }
         moveDownAbove(r-1);
-    }
-    
-    private void moveDownAboveCont(int r){
-        if(r<1){
-            return;
-        }
-        List<Location> locs = grid.getOccupiedLocations();
-        for(Location l: locs){
-            Location x = grid.getLocBelow(l);
-            if(grid.isValid(x)&&grid.get(x)==null){
-                grid.remove(l).moveTo(x);
-            }
-        }
-        moveDownAbove(r-1);
-    }
-    
-    private void chainDown(int r){
-        moveDownAbove(r);
-        while(activeTetrad.translate(1,0)){}
     }
 
     public void flashRow(int row){

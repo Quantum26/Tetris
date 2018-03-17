@@ -15,6 +15,7 @@ public class BlockDisplay implements KeyListener
     private JFrame frame;
     private ArrowListener listener;
     private BufferedImage image;
+    
 
     public BlockDisplay(BoundedGrid<Block> board)
     {
@@ -58,6 +59,7 @@ public class BlockDisplay implements KeyListener
         showBlocks();
         frame.pack();
         frame.setVisible(true);
+
     }
 
     public void visible()
@@ -125,4 +127,6 @@ public class BlockDisplay implements KeyListener
     {
         this.listener = listener;
     }
+    
+    
 }
