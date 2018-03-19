@@ -87,19 +87,16 @@ public class Tetris implements ArrowListener
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
 
-            if(!activeTetrad.translate(1,0)&&topRowsEmpty()){
+            if(!activeTetrad.translate(1,0)){
                 gameTime = time;
                 Location[] l = activeTetrad.getLocations();
-                for(int i = 0; i<4; i++){
-                    if(l[i].getRow() == 0){
-                        game = false;
-                        break;
-                    }
+                if(!topRowsEmpty()){
+                    game = false;
+                    gameOver();
+                    break;
                 }
-                if(game){
-                    clearCompletedRows();
-                    activeTetrad = new Tetrad(grid);
-                }
+                clearCompletedRows();
+                activeTetrad = new Tetrad(grid);
             }
             if(game==false){
                 break;
@@ -109,7 +106,6 @@ public class Tetris implements ArrowListener
         }
 
     }
-
 
     //precondition:  0 <= row < number of rows
     //postcondition: Returns true if every cell in the
@@ -232,4 +228,14 @@ public class Tetris implements ArrowListener
         return top &&atop;
     }
 
+    private void gameOver(){
+        for(int r = 0; r < 20; r++){
+            for(int c = 0; c < 10; c++){
+                Location l = new Location (r, c);
+                if(grid.get(l)!=null){
+                    grid.get(l).setColor(new Color(0,0,0));
+                }
+            }
+        }
+    }
 }
