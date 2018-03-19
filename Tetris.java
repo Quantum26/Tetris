@@ -90,10 +90,12 @@ public class Tetris implements ArrowListener
             if(!activeTetrad.translate(1,0)){
                 gameTime = time;
                 Location[] l = activeTetrad.getLocations();
-                if(!topRowsEmpty()){
-                    game = false;
-                    gameOver();
-                    break;
+                for(int i = 0; i<4; i++){
+                    if(l[i].getRow() == 0){
+                        game = false;
+                        gameOver();
+                        break;
+                    }
                 }
                 clearCompletedRows();
                 activeTetrad = new Tetrad(grid);
@@ -233,7 +235,7 @@ public class Tetris implements ArrowListener
             for(int c = 0; c < 10; c++){
                 Location l = new Location (r, c);
                 if(grid.get(l)!=null){
-                    grid.get(l).setColor(new Color(0,0,0));
+                    grid.get(l).setColor(Color.RED);
                 }
             }
         }
