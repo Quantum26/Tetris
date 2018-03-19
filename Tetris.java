@@ -71,7 +71,6 @@ public class Tetris implements ArrowListener
         display.showBlocks();
     }
 
-    
     public void play()
     {
         boolean game = true;
@@ -97,17 +96,20 @@ public class Tetris implements ArrowListener
                         break;
                     }
                 }
-                clearCompletedRows();
-                activeTetrad = new Tetrad(grid);
+                if(game){
+                    clearCompletedRows();
+                    activeTetrad = new Tetrad(grid);
+                }
             }
-
+            if(game==false){
+                break;
+            }
             display.showBlocks();
             display.setTitle("Level "+level+", Score: "+score);
         }
 
     }
 
-    
 
     //precondition:  0 <= row < number of rows
     //postcondition: Returns true if every cell in the
@@ -154,13 +156,22 @@ public class Tetris implements ArrowListener
             }
 
         }
-        
+
         int scor = (gotTetris)?((rowsBroke==4)?1600:rowsBroke*100):((rowsBroke==4)?800:rowsBroke*100);
         score+= scor;
         if(rowsDone==10){
-            level++;
-            time-=100;
-            rowsDone = 0;
+            if(time>200){
+                level++;
+                time-= 200;
+                rowsDone = 0;
+            }else if (time>25){
+                level++;
+                time-= 25;
+                rowsDone = 0;
+            }else{
+                level++;
+                rowsDone = 0;
+            }
         }
         display.showBlocks();
     }
@@ -192,7 +203,8 @@ public class Tetris implements ArrowListener
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
             for(int i = 0; i< 10; i++){
                 Location l = new Location(row, i);
-                grid.get(l).setColor(colors[i]);
+                if(colors[i]!=null && grid.get(l)!=null)
+                    grid.get(l).setColor(colors[i]);
 
             }
             display.showBlocks();

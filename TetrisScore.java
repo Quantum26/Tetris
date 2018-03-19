@@ -7,32 +7,15 @@
  */
 public class TetrisScore
 {
-    private int level;
-    private int score;
-    public static void main(String[] args){
-        System.out.println("Level: 1");
-        System.out.println("Score: 0");
-    }
-    public TetrisScore(){
-        level = 1;
-        score = 0;
-    }
-    public int getScore(){
-        return score;
-    }
-    public int getLevel(){
-        return level;
-    }
-    public void setLevel(int l){
-        level = l;
-    }
-    public void setScore(int s){
-        score = s;
-    }
-    public void printScoreBoard(){
-        for(int i = 0; i<10; i++)
-        System.out.println();
-        System.out.println("Level: " + level);
-        System.out.println("Score: " + score);
+    // instance variables - replace the example below with your own
+    private int x;
+
+    /**
+     * Constructor for objects of class TetrisScore
+     */
+    public TetrisScore()
+    {
+        // initialise instance variables
+        x = 0;
     }
 }
