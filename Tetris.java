@@ -155,7 +155,7 @@ public class Tetris implements ArrowListener
 
         }
 
-        int scor = (gotTetris)?((rowsBroke==4)?1600:rowsBroke*100):((rowsBroke==4)?800:rowsBroke*100);
+        int scor = (gotTetris)?((rowsBroke==4)?1600:rowsBroke*100*level):((rowsBroke==4)?800:rowsBroke*100*level);
         score+= scor;
         if(rowsDone==10){
             if(time>200){
