@@ -66,8 +66,7 @@ public class Tetris implements ArrowListener
 
     public void spacePressed()
     {
-        while(activeTetrad.translate(1,0))
-            activeTetrad.translate(1, 0);
+        while(activeTetrad.translate(1,0)){}
         gameTime = 0;
         display.showBlocks();
     }
@@ -158,9 +157,10 @@ public class Tetris implements ArrowListener
         
         int scor = (gotTetris)?((rowsBroke==4)?1600:rowsBroke*100):((rowsBroke==4)?800:rowsBroke*100);
         score+= scor;
-        if(rowsDone%10==0&&rowsDone!=0){
+        if(rowsDone==10){
             level++;
-            time-=10;
+            time-=100;
+            rowsDone = 0;
         }
         display.showBlocks();
     }

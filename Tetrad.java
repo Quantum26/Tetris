@@ -28,7 +28,7 @@ public class Tetrad
 
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
-        //shape = (int)(Math.random()*7);
+        shape = (int)(Math.random()*7);
         //Exercise 1.2  Insert code here to
         //                  branch (if statements) based on each shape number, to then
         //                      set the color variable for that shape
