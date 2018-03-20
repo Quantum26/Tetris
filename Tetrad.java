@@ -148,9 +148,14 @@ public class Tetrad
         //              return true if moved, false if not moved
         BoundedGrid<Block> g = blocks[0].getGrid();
         Location[] locs = new Location[4];
+        for(Location oof : locs){
+            if(oof == null)
+            return false;
+        }
         for(int i = 0; i < 4; i++){
             locs[i] = blocks[i].getLocation();
             blocks[i].removeSelfFromGrid();
+            
         }
         Location[] newLocs = new Location[4];
         for(int i = 0; i<4; i++){

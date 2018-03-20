@@ -106,7 +106,7 @@ public class Tetris implements ArrowListener
             display.showBlocks();
             title = "Level "+level+", Score: "+score;
             display.setTitle(title);
-            ree();
+            //ree();
         }
 
     }
