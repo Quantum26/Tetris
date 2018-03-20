@@ -25,7 +25,6 @@ public class Tetrad
         Color color = Color.BLACK;
         Location[] locs = new Location[4];
         int shape = 0;
-
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
         shape = (int)(Math.random()*7);
