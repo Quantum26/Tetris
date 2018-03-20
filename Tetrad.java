@@ -151,7 +151,6 @@ public class Tetrad
         for(int i = 0; i < 4; i++){
             locs[i] = blocks[i].getLocation();
             blocks[i].removeSelfFromGrid();
-            
         }
         Location[] newLocs = new Location[4];
         for(int i = 0; i<4; i++){

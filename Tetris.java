@@ -33,7 +33,7 @@ public class Tetris implements ArrowListener
         activeTetrad = new Tetrad(grid);
         time = 1000;
         gameTime = 1000;
-        level = 0;
+        level = 1;
         score = 0;
         gotTetris = false;
         rowsDone = 0;
