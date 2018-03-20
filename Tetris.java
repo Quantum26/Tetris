@@ -22,7 +22,7 @@ public class Tetris implements ArrowListener
     private BoundedGrid<Block> grid;
     private BlockDisplay display;
     private Tetrad activeTetrad;
-    private TetrisScore scoreBoard;
+    private String title;
 
     public Tetris()
     {
@@ -31,13 +31,13 @@ public class Tetris implements ArrowListener
         display.setArrowListener(this);
         display.setTitle("Tetris");
         activeTetrad = new Tetrad(grid);
-        scoreBoard = new TetrisScore();
         time = 1000;
         gameTime = 1000;
         level = 0;
         score = 0;
         gotTetris = false;
         rowsDone = 0;
+        title = "";
     }
 
     public void upPressed()
@@ -104,7 +104,8 @@ public class Tetris implements ArrowListener
                 break;
             }
             display.showBlocks();
-            display.setTitle("Level "+level+", Score: "+score);
+            title = "Level "+level+", Score: "+score;
+            display.setTitle(title);
         }
 
     }
@@ -227,7 +228,7 @@ public class Tetris implements ArrowListener
                 atop = false;
             }
         }
-        return top &&atop;
+        return top &&top;
     }
 
     private void gameOver(){
@@ -236,8 +237,11 @@ public class Tetris implements ArrowListener
                 Location l = new Location (r, c);
                 if(grid.get(l)!=null){
                     grid.get(l).setColor(Color.RED);
+
                 }
             }
         }
+        title+= "You lose m8";
+        display.setTitle(title);
     }
 }
