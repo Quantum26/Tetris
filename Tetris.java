@@ -106,6 +106,7 @@ public class Tetris implements ArrowListener
             display.showBlocks();
             title = "Level "+level+", Score: "+score;
             display.setTitle(title);
+            ree();
         }
 
     }
@@ -244,7 +245,15 @@ public class Tetris implements ArrowListener
                 }
             }
         }
-        title+= "You lose m8";
+        title+= " You lose m8";
         display.setTitle(title);
+    }
+    
+    private void ree(){
+        List<Location> locs = grid.getOccupiedLocations();
+        for(Location l : locs){
+            grid.get(l).setColor(new Color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255)));
+            
+        }
     }
 }
