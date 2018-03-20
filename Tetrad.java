@@ -9,7 +9,7 @@ import java.awt.*;
 public class Tetrad
 {
     private Block[] blocks;
-
+    private int shape;
     public Tetrad(BoundedGrid<Block> grid)
     {
         //Exercise 1.2  Insert code here to
@@ -24,7 +24,7 @@ public class Tetrad
         }
         Color color = Color.BLACK;
         Location[] locs = new Location[4];
-        int shape = 0;
+        shape = 0;
 
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
@@ -180,6 +180,9 @@ public class Tetrad
         //              remove the blocks (but save the locations)
         //              check if the new locations are empty
         //              replace the tetrad in the proper place (rotated)
+        if(shape == 2){
+            return false;
+        }
         BoundedGrid<Block> g = blocks[0].getGrid();
         Location[] locs = new Location[4];
         for(int i = 0; i < 4; i++){

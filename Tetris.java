@@ -135,7 +135,8 @@ public class Tetris implements ArrowListener
     {
         for(int i = 0; i<10; i++){
             Location l = new Location(row, i);
-            grid.remove(l).removeSelfFromGrid();
+            if(grid.get(l)!=null)
+                grid.remove(l).removeSelfFromGrid();
 
         }
     }
@@ -144,12 +145,12 @@ public class Tetris implements ArrowListener
     private void clearCompletedRows()
     {
         int rowsBroke = 0;
-        for(int i = 19; i > -0; i--){
+        for(int i = 19; i > 0; i--){
             if(isCompletedRow(i)){
                 flashRow(i);
                 clearRow(i);
                 moveDownAbove(i);
-                i = 20;
+                i = 19;
                 rowsBroke++;
                 rowsDone++;
             }
@@ -194,8 +195,10 @@ public class Tetris implements ArrowListener
         for(int k = 0; k<2; k++){
             for(int i = 0; i< 10; i++){
                 Location l = new Location(row, i);
-                colors[i] = grid.get(l).getColor();
-                grid.get(l).setColor(new Color(0, 0, 0));
+                if(grid.get(l)!=null){
+                    colors[i] = grid.get(l).getColor();
+                    grid.get(l).setColor(new Color(0, 0, 0));
+                }
 
             }
             display.showBlocks();
