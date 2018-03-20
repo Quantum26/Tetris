@@ -251,6 +251,7 @@ public class Tetris implements ArrowListener
     
     private void ree(){
         List<Location> locs = grid.getOccupiedLocations();
+        display.setRee();
         for(Location l : locs){
             grid.get(l).setColor(new Color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255)));
             

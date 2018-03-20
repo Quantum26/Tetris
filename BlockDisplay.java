@@ -15,12 +15,12 @@ public class BlockDisplay implements KeyListener
     private JFrame frame;
     private ArrowListener listener;
     private BufferedImage image;
-    
+    private boolean ree;
 
     public BlockDisplay(BoundedGrid<Block> board)
     {
         this.board = board;
-
+        ree = false;
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         SwingUtilities.invokeLater(new Runnable()
@@ -43,7 +43,7 @@ public class BlockDisplay implements KeyListener
             System.exit(1);
         }
     }
-    
+
     /**
      * Create the GUI and show it.  For thread safety,
      * this method should be invoked from the
@@ -67,11 +67,20 @@ public class BlockDisplay implements KeyListener
         frame.setVisible(!frame.isVisible());
     }
 
+    public void setRee(){
+        ree = true;
+    }
+    
     //Redraws the board to include the pieces and border colors.
     public void showBlocks()
     {
         Graphics2D graphics = image.createGraphics();
-        graphics.setColor(new Color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255)));
+        if(ree){
+            graphics.setColor(new Color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255)));
+        }
+        else{
+            graphics.setColor(BACKGROUND);
+        }
         graphics.fillRect(0, 0, image.getWidth(), image.getHeight());
         graphics.setColor(new Color(150,0,255));
         graphics.drawRect(0, 0, image.getWidth()-1, image.getHeight()-1);
@@ -88,7 +97,7 @@ public class BlockDisplay implements KeyListener
                     graphics.fillRect(col*30+1, row*30+1, 28, 28);
                     graphics.dispose();
                 }
-        }
+            }
         frame.repaint();
     }
 
@@ -127,6 +136,5 @@ public class BlockDisplay implements KeyListener
     {
         this.listener = listener;
     }
-    
-    
+
 }
