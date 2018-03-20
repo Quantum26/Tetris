@@ -151,7 +151,7 @@ public class Tetris implements ArrowListener
                 flashRow(i);
                 clearRow(i);
                 moveDownAbove(i);
-                i = 19;
+                i = 20;
                 rowsBroke++;
                 rowsDone++;
             }
