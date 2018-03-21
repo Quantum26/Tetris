@@ -1,11 +1,12 @@
 import java.util.*;
 import java.awt.Color;
-/**
- * Tetris class to be completed for Tetris project
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
+import sounds.APSoundClip;
+import sounds.Sample;
+import sun.audio.*;
+import java.io.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 public class Tetris implements ArrowListener
 {
     public static void main(String[] args)
@@ -23,6 +24,8 @@ public class Tetris implements ArrowListener
     private BlockDisplay display;
     private Tetrad activeTetrad;
     private String title;
+    private int combo;
+    private boolean tettet;
 
     public Tetris()
     {
@@ -38,6 +41,7 @@ public class Tetris implements ArrowListener
         gotTetris = false;
         rowsDone = 0;
         title = "";
+        tettet = false;
     }
 
     public void upPressed()
@@ -50,6 +54,7 @@ public class Tetris implements ArrowListener
     {
         activeTetrad.translate(1, 0);
         display.showBlocks();
+        score+=1;
     }
 
     public void leftPressed()
@@ -66,7 +71,7 @@ public class Tetris implements ArrowListener
 
     public void spacePressed()
     {
-        while(activeTetrad.translate(1,0)){}
+        while(activeTetrad.translate(1,0)){score+=2;}
         gameTime = 0;
         display.showBlocks();
     }
@@ -74,6 +79,7 @@ public class Tetris implements ArrowListener
     public void play()
     {
         boolean game = true;
+        //music();
         while (game)
         {
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
@@ -90,12 +96,10 @@ public class Tetris implements ArrowListener
             if(!activeTetrad.translate(1,0)){
                 gameTime = time;
                 Location[] l = activeTetrad.getLocations();
-                for(int i = 0; i<4; i++){
-                    if(l[i].getRow() == 0){
+                if(!topRowsEmpty()){
                         game = false;
                         gameOver();
                         break;
-                    }
                 }
                 clearCompletedRows();
                 activeTetrad = new Tetrad(grid);
@@ -157,8 +161,27 @@ public class Tetris implements ArrowListener
             }
 
         }
-
-        int scor = (gotTetris)?((rowsBroke==4)?1600:rowsBroke*100*level):((rowsBroke==4)?800:rowsBroke*100*level);
+        
+        int scor = 0;
+        if(rowsBroke == 1){
+            scor = 100*level;
+            tettet = false;
+        }else if(rowsBroke == 2){
+            scor = 300*level;
+            tettet = false;
+        }else if(rowsBroke == 3){
+            scor = 500*level;
+            tettet = false;
+        }else if(rowsBroke == 4 && tettet){
+            scor = 1200*level;
+            tettet = true;
+        }else if(rowsBroke == 4){
+            scor = 800*level;
+            tettet = true;
+        }
+        if(combo>0){
+            scor += 50*combo*level;
+        }
         score+= scor;
         if(rowsDone>=10){
             if(time>200){
@@ -232,7 +255,7 @@ public class Tetris implements ArrowListener
                 atop = false;
             }
         }
-        return top &&top;
+        return top && atop;
     }
 
     private void gameOver(){
@@ -248,13 +271,35 @@ public class Tetris implements ArrowListener
         title+= " You lose m8";
         display.setTitle(title);
     }
-    
+
     private void ree(){
         List<Location> locs = grid.getOccupiedLocations();
         display.setRee();
         for(Location l : locs){
             grid.get(l).setColor(new Color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255)));
-            
+
         }
     }
+
+    public static void music(){
+        /**AudioPlayer MGP = AudioPlayer.player;
+        AudioStream BGM;
+        AudioData MD;
+        ContinuousAudioDataStream loop = null;
+        try{
+        FileInputStream fileInputStream = new FileInputStream("Tetris.mp3");
+        BGM = new AudioStream(fileInputStream);
+        MD = BGM.getData();
+        loop = new ContinuousAudioDataStream(MD);
+        System.out.println("Oof");
+        }catch(IOException e){
+        }
+        MGP.start(loop);
+         */
+        String bip = "Tetris.mp3";
+        Media hit = new Media(new File(bip).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(hit);
+        mediaPlayer.play();
+    }
 }
+
