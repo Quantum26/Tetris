@@ -163,9 +163,9 @@ public class Tetris implements ArrowListener
         if(rowsDone>=10){
             if(time>200){
                 level++;
-                time-= 200;
+                time-= 100;
                 rowsDone -= 10;
-            }else if (time>25){
+            }else if (time>50){
                 level++;
                 time-= 25;
                 rowsDone -= 10;
