@@ -197,7 +197,7 @@ public class Tetrad
         for(int i = 0; i<4; i++){
             valid = valid && g.isValid(newLocs[i]);
         }
-        if(!(areEmpty(g,newLocs)&&valid)){
+        if(!areEmpty(g,newLocs)||!valid){
             this.addToLocations(g, locs);
             return false;
         }
