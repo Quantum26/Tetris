@@ -160,18 +160,18 @@ public class Tetris implements ArrowListener
 
         int scor = (gotTetris)?((rowsBroke==4)?1600:rowsBroke*100*level):((rowsBroke==4)?800:rowsBroke*100*level);
         score+= scor;
-        if(rowsDone==10){
+        if(rowsDone>=10){
             if(time>200){
                 level++;
                 time-= 200;
-                rowsDone = 0;
+                rowsDone -= 10;
             }else if (time>25){
                 level++;
                 time-= 25;
-                rowsDone = 0;
+                rowsDone -= 10;
             }else{
                 level++;
-                rowsDone = 0;
+                rowsDone -= 10;
             }
         }
         display.showBlocks();
