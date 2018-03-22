@@ -22,18 +22,24 @@ public class Tetris implements ArrowListener
     private boolean gotTetris;
     private BoundedGrid<Block> grid;
     private BlockDisplay display;
-    private Tetrad activeTetrad;
+    private TetradV2 activeTetrad;
+    private TetradV2 nextTetrad;
     private String title;
     private int combo;
     private boolean tettet;
+    private boolean paused;
+    private boolean game;
+    private Color[][] colors;
 
     public Tetris()
     {
         grid = new BoundedGrid<Block>(20, 10);
+        colors = new Color[20][10];
         display = new BlockDisplay(grid);
         display.setArrowListener(this);
         display.setTitle("Tetris");
-        activeTetrad = new Tetrad(grid);
+        activeTetrad = new TetradV2(grid);
+        nextTetrad = new TetradV2(grid);
         time = 1000;
         gameTime = 1000;
         level = 1;
@@ -42,43 +48,88 @@ public class Tetris implements ArrowListener
         rowsDone = 0;
         title = "";
         tettet = false;
+        paused = false;
+        game = true;
     }
 
     public void upPressed()
     {
-        activeTetrad.rotate();
-        display.showBlocks();
+        if(!paused && game){
+            activeTetrad.rotate();
+            display.showBlocks();
+        }
     }
 
     public void downPressed()
     {
-        activeTetrad.translate(1, 0);
-        display.showBlocks();
-        score+=1;
+        if(!paused && game){
+            activeTetrad.translate(1, 0);
+            display.showBlocks();
+            score+=1;
+        }
     }
 
     public void leftPressed()
     {
-        activeTetrad.translate(0, -1);
-        display.showBlocks();
+        if(!paused && game){
+            activeTetrad.translate(0, -1);
+            display.showBlocks();
+        }
     }
 
     public void rightPressed()
     {
-        activeTetrad.translate(0, 1);
-        display.showBlocks();
+        if(!paused && game){
+            activeTetrad.translate(0, 1);
+            display.showBlocks();
+        }
     }
 
     public void spacePressed()
     {
-        while(activeTetrad.translate(1,0)){score+=2;}
-        gameTime = 0;
-        display.showBlocks();
+        if(!paused && game){
+            while(activeTetrad.translate(1,0)){score+=2;}
+            gameTime = 0;
+            display.showBlocks();
+        }
+    }
+
+    public void escPressed()
+    {
+        if(paused){
+            paused = false;
+            System.out.println("unpause");
+            for(int r = 0; r < 20; r++){
+                for(int c = 0; c < 10; c++){
+                    Location l = new Location (r, c);
+                    if(grid.get(l)!=null&&colors[r][c]!=null){
+                        grid.get(l).setColor(colors[r][c]);
+                        colors[r][c]=null;
+                    }
+                }
+            }
+            display.showBlocks();
+        }else{
+            paused = true;
+            System.out.println("pause");
+            for(int r = 0; r < 20; r++){
+                for(int c = 0; c < 10; c++){
+                    Location l = new Location (r, c);
+                    if(grid.get(l)!=null){
+                        colors[r][c]=(grid.get(l).getColor());
+                        grid.get(l).setColor(Color.BLACK);
+                    }
+                }
+            }
+            display.showBlocks();
+        }
     }
 
     public void play()
     {
-        boolean game = true;
+        game = true;
+        activeTetrad.SpawnTetrad();
+        DisplayNextTetrad();
         //music();
         while (game)
         {
@@ -87,32 +138,38 @@ public class Tetris implements ArrowListener
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
 
-            if(!activeTetrad.translate(1,0)){
-                gameTime = time;
-                Location[] l = activeTetrad.getLocations();
-                if(!topRowsEmpty()){
+            if(!paused){
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+
+                if(!activeTetrad.translate(1,0)){
+                    gameTime = time;
+                    Location[] l = activeTetrad.getLocations();
+                    if(!topRowsEmpty()){
                         game = false;
                         gameOver();
                         break;
+                    }
+                    clearCompletedRows();
+                    activeTetrad = nextTetrad;
+                    activeTetrad.SpawnTetrad();
+                    nextTetrad = new TetradV2(grid);
+                    DisplayNextTetrad();
                 }
-                clearCompletedRows();
-                activeTetrad = new Tetrad(grid);
+                if(game==false){
+                    break;
+                }
+                display.showBlocks();
+                title = "Level "+level+", Score: "+score;
+                display.setTitle(title);
+                //ree();
             }
-            if(game==false){
-                break;
-            }
-            display.showBlocks();
-            title = "Level "+level+", Score: "+score;
-            display.setTitle(title);
-            //ree();
-        }
 
+        }
     }
 
     //precondition:  0 <= row < number of rows
@@ -161,7 +218,7 @@ public class Tetris implements ArrowListener
             }
 
         }
-        
+
         int scor = 0;
         if(rowsBroke == 1){
             scor = 100*level;
@@ -264,7 +321,6 @@ public class Tetris implements ArrowListener
                 Location l = new Location (r, c);
                 if(grid.get(l)!=null){
                     grid.get(l).setColor(Color.RED);
-
                 }
             }
         }
@@ -300,6 +356,27 @@ public class Tetris implements ArrowListener
         Media hit = new Media(new File(bip).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(hit);
         mediaPlayer.play();
+    }
+    public void DisplayNextTetrad(){
+        for(int i = 0; i<20; i++)
+        System.out.println();
+        System.out.println("Next:");
+        if(nextTetrad.getShape()==0){
+            for(int i = 0; i<4; i++)
+            System.out.println(" []");
+        }else if(nextTetrad.getShape()==1){
+            System.out.println(" [][][] \n   []");
+        }else if(nextTetrad.getShape()==2){
+            System.out.println(" [][] \n [][]");
+        }else if(nextTetrad.getShape()==3){
+            System.out.println(" [] \n [] \n [][]");
+        }else if(nextTetrad.getShape()==4){
+            System.out.println("   [] \n   [] \n [][]"); 
+        }else if(nextTetrad.getShape()==6){
+            System.out.println(" [][] \n   [][]"); 
+        }else if(nextTetrad.getShape()==5){
+            System.out.println("   [][] \n [][]"); 
+        }
     }
 }
 
