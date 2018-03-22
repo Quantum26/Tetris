@@ -11,6 +11,7 @@ public class TetradV2
     private Block[] blocks;
     private int shape;
     private BoundedGrid<Block> g;
+    private Color color;
     public TetradV2(BoundedGrid<Block> grid)
     {
         blocks = new Block[4];
@@ -26,7 +27,7 @@ public class TetradV2
 
     public void SpawnTetrad(){
         Location[] locs = new Location[4];
-        Color color = Color.BLACK;
+        color = Color.BLACK;
         if(shape == 0){ //I
             color = Color.BLUE;
             locs[0] = new Location(0,3);
@@ -241,5 +242,10 @@ public class TetradV2
         }
         this.addToLocations(g, newLocs);
         return true;
+    }
+    public void resetColor(){
+        for(int i = 0; i<blocks.length; i++){
+            blocks[i].setColor(color);
+        }
     }
 }

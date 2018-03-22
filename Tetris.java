@@ -108,6 +108,7 @@ public class Tetris implements ArrowListener
                     }
                 }
             }
+            activeTetrad.resetColor();
             display.showBlocks();
         }else{
             paused = true;
@@ -340,12 +341,12 @@ public class Tetris implements ArrowListener
     }
 
     public static void music(){
-        /**AudioPlayer MGP = AudioPlayer.player;
+        AudioPlayer MGP = AudioPlayer.player;
         AudioStream BGM;
         AudioData MD;
         ContinuousAudioDataStream loop = null;
         try{
-        FileInputStream fileInputStream = new FileInputStream("Tetris.mp3");
+        FileInputStream fileInputStream = new FileInputStream("BlueBossa.wav");
         BGM = new AudioStream(fileInputStream);
         MD = BGM.getData();
         loop = new ContinuousAudioDataStream(MD);
@@ -353,11 +354,7 @@ public class Tetris implements ArrowListener
         }catch(IOException e){
         }
         MGP.start(loop);
-         */
-        String bip = "Tetris.mp3";
-        Media hit = new Media(new File(bip).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(hit);
-        mediaPlayer.play();
+        
     }
     public void DisplayNextTetrad(){
         for(int i = 0; i<20; i++)
