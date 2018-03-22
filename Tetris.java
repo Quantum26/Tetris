@@ -378,6 +378,8 @@ public class Tetris implements ArrowListener
             System.out.println(" [][] \n   [][]"); 
         }else if(nextTetrad.getShape()==5){
             System.out.println("   [][] \n [][]"); 
+        }else if(nextTetrad.getShape()==7){
+            System.out.println("ya done mate");
         }
     }
 }

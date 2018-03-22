@@ -18,11 +18,12 @@ public class TetradV2
             blocks[i] = new Block();
         }
         g = grid;
-        shape = 0;
+        shape = 7;
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
         shape = (int)(Math.random()*7);
-        }
+    }
+
     public void SpawnTetrad(){
         Location[] locs = new Location[4];
         Color color = Color.BLACK;
@@ -68,16 +69,57 @@ public class TetradV2
             locs[1] = new Location(0,4);
             locs[2] = new Location(1,5);
             locs[3] = new Location(1,4);
+        }else if(shape == 7){
+
+            color = Color.BLACK;
+            blocks = new Block[30];
+            for(int i = 0; i < blocks.length; i++)
+            {
+                blocks[i] = new Block();
+            }
+            locs = new Location[30];
+            locs[0] = new Location(0, 4);
+            locs[1] = new Location(0, 5);
+            locs[2] = new Location(1, 2);
+            locs[3] = new Location(1, 3);
+            locs[4] = new Location(1, 6);
+            locs[5] = new Location(1, 7);
+            locs[6] = new Location(2, 1);
+            locs[7] = new Location(2, 8);
+            locs[8] = new Location(3, 1);
+            locs[9] = new Location(3, 3);
+            locs[10] = new Location(3, 6);
+            locs[11] = new Location(3, 8);
+            locs[12] = new Location(4, 0);
+            locs[13] = new Location(4, 9);
+            locs[14] = new Location(5, 0);
+            locs[15] = new Location(5, 3);
+            locs[16] = new Location(5, 6);
+            locs[17] = new Location(5, 9);
+            locs[18] = new Location(6, 1);
+            locs[19] = new Location(6, 4);
+            locs[20] = new Location(6, 5);
+            locs[21] = new Location(6, 8);
+            locs[22] = new Location(7, 1);
+            locs[23] = new Location(7, 8);
+            locs[24] = new Location(8, 2);
+            locs[25] = new Location(8, 3);
+            locs[26] = new Location(8, 6);
+            locs[27] = new Location(8, 7);
+            locs[28] = new Location(9, 4);
+            locs[29] = new Location(9, 5);
+
         }
         //Exercise 1.2  Insert code here (after the above if statements) to
         //                  loop through the blocks array to
         //                      set the color of each block
         //                  call addToLocations
-        for(int i = 0; i < 4; i++){
+        for(int i = 0; i < blocks.length; i++){
             blocks[i].setColor(color);
         }
         this.addToLocations(g, locs);
     }
+
     public int getShape(){
         return shape;
     }
@@ -108,7 +150,7 @@ public class TetradV2
     public Location[] getLocations()
     {
         Location[] l = new Location[4];
-        for(int i = 0; i<4; i++){
+        for(int i = 0; i<blocks.length; i++){
             l[i] = blocks[i].getLocation();
         }
         return l;
@@ -143,17 +185,17 @@ public class TetradV2
         //              replace the tetrad in the proper place (translated)
         //              return true if moved, false if not moved
         BoundedGrid<Block> g = blocks[0].getGrid();
-        Location[] locs = new Location[4];
-        for(int i = 0; i < 4; i++){
+        Location[] locs = new Location[blocks.length];
+        for(int i = 0; i < blocks.length; i++){
             locs[i] = blocks[i].getLocation();
             blocks[i].removeSelfFromGrid();
         }
-        Location[] newLocs = new Location[4];
-        for(int i = 0; i<4; i++){
+        Location[] newLocs = new Location[blocks.length];
+        for(int i = 0; i<blocks.length; i++){
             newLocs[i] = new Location(locs[i].getRow() + deltaRow, locs[i].getCol() + deltaCol);
         }
         boolean valid = true;
-        for(int i = 0; i<4; i++){
+        for(int i = 0; i<blocks.length; i++){
             valid = valid && g.isValid(newLocs[i]);
         }
         if(!(areEmpty(g,newLocs)&&valid)){
@@ -180,17 +222,17 @@ public class TetradV2
             return false;
         }
         BoundedGrid<Block> g = blocks[0].getGrid();
-        Location[] locs = new Location[4];
-        for(int i = 0; i < 4; i++){
+        Location[] locs = new Location[blocks.length];
+        for(int i = 0; i < blocks.length; i++){
             locs[i] = blocks[i].getLocation();
             blocks[i].removeSelfFromGrid();
         }
-        Location[] newLocs = new Location[4];
-        for(int i = 0; i<4; i++){
+        Location[] newLocs = new Location[blocks.length];
+        for(int i = 0; i<blocks.length; i++){
             newLocs[i] = new Location(locs[1].getRow()-locs[1].getCol() + locs[i].getCol(), locs[1].getRow() +locs[1].getCol() - locs[i].getRow());
         }
         boolean valid = true;
-        for(int i = 0; i<4; i++){
+        for(int i = 0; i<blocks.length; i++){
             valid = valid && g.isValid(newLocs[i]);
         }
         if(!areEmpty(g,newLocs)||!valid){

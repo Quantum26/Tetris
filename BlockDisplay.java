@@ -85,6 +85,7 @@ public class BlockDisplay implements KeyListener
         graphics.setColor(new Color(150,0,255));
         graphics.drawRect(0, 0, image.getWidth()-1, image.getHeight()-1);
         graphics.dispose();
+        
         for (int row = 0; row < image.getHeight()/30; row++)
             for (int col = 0; col < image.getWidth()/30; col++)
             {
@@ -96,6 +97,7 @@ public class BlockDisplay implements KeyListener
                     graphics.setColor(square.getColor());
                     graphics.fillRect(col*30+1, row*30+1, 28, 28);
                     graphics.dispose();
+                   
                 }
             }
         frame.repaint();

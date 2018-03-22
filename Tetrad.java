@@ -24,7 +24,7 @@ public class Tetrad
         }
         Color color = Color.BLACK;
         Location[] locs = new Location[4];
-        shape = 0;
+        shape =0;
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
         shape = (int)(Math.random()*7);
@@ -74,6 +74,12 @@ public class Tetrad
             locs[1] = new Location(0,4);
             locs[2] = new Location(1,5);
             locs[3] = new Location(1,4);
+        }else if(shape == 7){
+            color = new Color(255, 255, 255);
+            locs[0] = new Location (0,2);
+            locs[1] = new Location (1,3);
+            locs[2] = new Location (1,7);
+            locs[3] = new Location (0,9);
         }
         //Exercise 1.2  Insert code here (after the above if statements) to
         //                  loop through the blocks array to
