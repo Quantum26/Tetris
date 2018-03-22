@@ -321,9 +321,11 @@ public class Tetris implements ArrowListener
                 Location l = new Location (r, c);
                 if(grid.get(l)!=null){
                     grid.get(l).setColor(Color.RED);
+                    
                 }
             }
         }
+        display.showBlocks();
         title+= " You lose m8";
         display.setTitle(title);
     }
