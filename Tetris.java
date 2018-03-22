@@ -30,7 +30,7 @@ public class Tetris implements ArrowListener
     private boolean paused;
     private boolean game;
     private Color[][] colors;
-
+    private final long start = System.currentTimeMillis();
     public Tetris()
     {
         grid = new BoundedGrid<Block>(20, 10);
@@ -135,7 +135,7 @@ public class Tetris implements ArrowListener
         music();
         while (game)
         {
-            long elapsed = System.nanoTime();
+            long elapsed = System.currentTimeMillis()-start;
             System.out.println(elapsed);
             if(elapsed%82000.0>=5000&&elapsed>=82000.0){
                 music();
