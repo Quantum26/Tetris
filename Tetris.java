@@ -131,6 +131,7 @@ public class Tetris implements ArrowListener
         game = true;
         activeTetrad.SpawnTetrad();
         DisplayNextTetrad();
+        try { Thread.sleep(500); } catch(Exception e) {}
         music();
         while (game)
         {
@@ -349,7 +350,6 @@ public class Tetris implements ArrowListener
         InputStream in = new FileInputStream("Tetris.wav"); 
         AudioStream audioStream = new AudioStream(in); 
         AudioPlayer.player.start(audioStream);
-        System.out.println("Oof");
         }catch(IOException e){
             System.out.println("Baka");
         }
