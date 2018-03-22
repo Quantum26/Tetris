@@ -131,7 +131,7 @@ public class Tetris implements ArrowListener
         game = true;
         activeTetrad.SpawnTetrad();
         DisplayNextTetrad();
-        //music();
+        music();
         while (game)
         {
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
@@ -346,15 +346,28 @@ public class Tetris implements ArrowListener
         AudioData MD;
         ContinuousAudioDataStream loop = null;
         try{
+        InputStream in = new FileInputStream("Tetris.wav"); 
+        AudioStream audioStream = new AudioStream(in); 
+        AudioPlayer.player.start(audioStream);
+        System.out.println("Oof");
+        }catch(IOException e){
+            System.out.println("Baka");
+        }
+        /**AudioPlayer MGP = AudioPlayer.player;
+        AudioStream BGM;
+        AudioData MD;
+        ContinuousAudioDataStream loop = null;
+        try{
         FileInputStream fileInputStream = new FileInputStream("BlueBossa.wav");
         BGM = new AudioStream(fileInputStream);
         MD = BGM.getData();
         loop = new ContinuousAudioDataStream(MD);
         System.out.println("Oof");
         }catch(IOException e){
+            System.out.println("baka");
         }
         MGP.start(loop);
-        
+        */
     }
     public void DisplayNextTetrad(){
         for(int i = 0; i<20; i++)

@@ -140,7 +140,7 @@ public class TetradV2
     //               blocks have been removed from grid.
     private Location[] removeBlocks()
     {
-        Location[] locs = new Location[4];
+        Location[] locs = new Location[blocks.length];
         for(int i = 0; i<blocks.length; i++){
             locs[i] = blocks[i].getLocation();
             blocks[i].removeSelfFromGrid();
@@ -150,7 +150,7 @@ public class TetradV2
 
     public Location[] getLocations()
     {
-        Location[] l = new Location[4];
+        Location[] l = new Location[blocks.length];
         for(int i = 0; i<blocks.length; i++){
             l[i] = blocks[i].getLocation();
         }
