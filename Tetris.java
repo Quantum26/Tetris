@@ -135,8 +135,9 @@ public class Tetris implements ArrowListener
         music();
         while (game)
         {
-            int elapsed = (int)(System.nanoTime()*1000000);
-            if(elapsed%82000>=5000&&elapsed>=82000){
+            long elapsed = System.nanoTime();
+            System.out.println(elapsed);
+            if(elapsed%82000.0>=5000&&elapsed>=82000.0){
                 music();
             }
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
