@@ -72,7 +72,7 @@ public class TetradV2
             locs[3] = new Location(1,4);
         }else if(shape == 7){
 
-            color = Color.BLACK;
+            color = Color.WHITE;
             blocks = new Block[30];
             for(int i = 0; i < blocks.length; i++)
             {

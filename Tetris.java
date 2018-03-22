@@ -135,6 +135,10 @@ public class Tetris implements ArrowListener
         music();
         while (game)
         {
+            int elapsed = (int)(System.nanoTime()*1000000);
+            if(elapsed%82000>=5000&&elapsed>=82000){
+                music();
+            }
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
@@ -323,7 +327,7 @@ public class Tetris implements ArrowListener
                 Location l = new Location (r, c);
                 if(grid.get(l)!=null){
                     grid.get(l).setColor(Color.RED);
-                    
+
                 }
             }
         }
@@ -347,9 +351,9 @@ public class Tetris implements ArrowListener
         AudioData MD;
         ContinuousAudioDataStream loop = null;
         try{
-        InputStream in = new FileInputStream("Tetris.wav"); 
-        AudioStream audioStream = new AudioStream(in); 
-        AudioPlayer.player.start(audioStream);
+            InputStream in = new FileInputStream("Tetris.wav"); 
+            AudioStream audioStream = new AudioStream(in); 
+            AudioPlayer.player.start(audioStream);
         }catch(IOException e){
             System.out.println("Baka");
         }
@@ -364,18 +368,19 @@ public class Tetris implements ArrowListener
         loop = new ContinuousAudioDataStream(MD);
         System.out.println("Oof");
         }catch(IOException e){
-            System.out.println("baka");
+        System.out.println("baka");
         }
         MGP.start(loop);
-        */
+         */
     }
+
     public void DisplayNextTetrad(){
         for(int i = 0; i<20; i++)
-        System.out.println();
+            System.out.println();
         System.out.println("Next:");
         if(nextTetrad.getShape()==0){
             for(int i = 0; i<4; i++)
-            System.out.println(" []");
+                System.out.println(" []");
         }else if(nextTetrad.getShape()==1){
             System.out.println(" [][][] \n   []");
         }else if(nextTetrad.getShape()==2){
