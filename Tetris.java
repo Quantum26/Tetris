@@ -30,7 +30,7 @@ public class Tetris implements ArrowListener
     private boolean paused;
     private boolean game;
     private Color[][] colors;
-    private final long start = System.currentTimeMillis();
+    private long start = System.currentTimeMillis();
     public Tetris()
     {
         grid = new BoundedGrid<Block>(20, 10);
@@ -131,14 +131,14 @@ public class Tetris implements ArrowListener
         game = true;
         activeTetrad.SpawnTetrad();
         DisplayNextTetrad();
-        try { Thread.sleep(500); } catch(Exception e) {}
+        
         music();
         while (game)
         {
             long elapsed = System.currentTimeMillis()-start;
-            System.out.println(elapsed);
-            if(elapsed%82000.0>=5000&&elapsed>=82000.0){
+            if(elapsed%82000.0>=1000&&elapsed>=82000.0){
                 music();
+                start = System.currentTimeMillis();
             }
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
@@ -346,14 +346,14 @@ public class Tetris implements ArrowListener
         }
     }
 
-    public static void music(){
+    public void music(){
         AudioPlayer MGP = AudioPlayer.player;
         AudioStream BGM;
         AudioData MD;
         ContinuousAudioDataStream loop = null;
         try{
             InputStream in = new FileInputStream("Tetris.wav"); 
-            AudioStream audioStream = new AudioStream(in); 
+            AudioStream audioStream = new AudioStream(in);
             AudioPlayer.player.start(audioStream);
         }catch(IOException e){
             System.out.println("Baka");
