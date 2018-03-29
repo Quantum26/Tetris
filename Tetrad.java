@@ -6,13 +6,13 @@
  */
 import java.awt.*;
 
-public class TetradV2
+public class Tetrad
 {
     private Block[] blocks;
     private int shape;
     private BoundedGrid<Block> g;
     private Color color;
-    public TetradV2(BoundedGrid<Block> grid)
+    public Tetrad(BoundedGrid<Block> grid)
     {
         blocks = new Block[4];
         for(int i = 0; i<4; i++){

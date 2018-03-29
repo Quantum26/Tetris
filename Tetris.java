@@ -22,8 +22,8 @@ public class Tetris implements ArrowListener
     private boolean gotTetris;
     private BoundedGrid<Block> grid;
     private BlockDisplay display;
-    private TetradV2 activeTetrad;
-    private TetradV2 nextTetrad;
+    private Tetrad activeTetrad;
+    private Tetrad nextTetrad;
     private String title;
     private int combo;
     private boolean tettet;
@@ -38,8 +38,8 @@ public class Tetris implements ArrowListener
         display = new BlockDisplay(grid);
         display.setArrowListener(this);
         display.setTitle("Tetris");
-        activeTetrad = new TetradV2(grid);
-        nextTetrad = new TetradV2(grid);
+        activeTetrad = new Tetrad(grid);
+        nextTetrad = new Tetrad(grid);
         time = 1000;
         gameTime = 1000;
         level = 1;
@@ -164,7 +164,7 @@ public class Tetris implements ArrowListener
                     clearCompletedRows();
                     activeTetrad = nextTetrad;
                     activeTetrad.SpawnTetrad();
-                    nextTetrad = new TetradV2(grid);
+                    nextTetrad = new Tetrad(grid);
                     DisplayNextTetrad();
                 }
                 if(game==false){
@@ -399,4 +399,3 @@ public class Tetris implements ArrowListener
         }
     }
 }
-
