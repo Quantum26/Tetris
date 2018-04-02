@@ -383,7 +383,17 @@ public class Tetris implements ArrowListener
          */
     }
     public void stopMusic(){
-        AudioPlayer.player.stop();
+        AudioPlayer MGP = AudioPlayer.player;
+        AudioStream BGM;
+        AudioData MD;
+        ContinuousAudioDataStream loop = null;
+        try{
+            InputStream in = new FileInputStream("Boosted.wav"); 
+            AudioStream audioStream = new AudioStream(in);
+            AudioPlayer.player.start(audioStream);
+        }catch(IOException e){
+            System.out.println("Baka");
+        }
     }
 
     public void DisplayNextTetrad(){
