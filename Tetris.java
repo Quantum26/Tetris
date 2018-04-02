@@ -173,7 +173,7 @@ public class Tetris implements ArrowListener
                 display.showBlocks();
                 title = "Level "+level+", Score: "+score;
                 display.setTitle(title);
-                ree();
+                //ree();
             }
 
         }
@@ -352,7 +352,7 @@ public class Tetris implements ArrowListener
         AudioData MD;
         ContinuousAudioDataStream loop = null;
         try{
-            InputStream in = new FileInputStream("Boosted.wav"); 
+            InputStream in = new FileInputStream("Tetris.wav"); 
             AudioStream audioStream = new AudioStream(in);
             AudioPlayer.player.start(audioStream);
         }catch(IOException e){
