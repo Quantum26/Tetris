@@ -9,7 +9,7 @@ public class BoundedGrid<E>
     //(Precondition:  rows > 0 and cols > 0.)
     public BoundedGrid(int rows, int cols)
     {
-        occupantArray = new Object[rows][cols];
+        occupantArray = new Object[rows][cols];//
     }
 
     //returns the number of rows
