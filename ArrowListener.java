@@ -19,4 +19,5 @@ public interface ArrowListener
 	void threePressed();
 	void fourPressed();
 	void sPressed();
+	void iPressed();
 }

@@ -137,46 +137,6 @@ public class Tetris implements ArrowListener
         }
     }
 
-    public void oPressed(){
-        if(cheats){
-            nextTetrad = new Tetrad(grid);
-            DisplayNextTetrad();
-        }
-    }
-
-    public void pPressed(){
-        if(cheats){
-            while(nextTetrad.getShape()!=0)
-                nextTetrad = new Tetrad(grid);
-            DisplayNextTetrad();
-            cheatCode1 = !cheatCode1;
-        }
-    }
-
-    public void rPressed(){
-        if(reee)
-            display.setRee(false);
-        reee = !reee;
-    }
-
-    public void cPressed(){
-        Scanner reader = new Scanner(System.in);
-        System.out.println("Enter in code");
-        String input = reader.nextLine();
-        if(input.equals("oof"))
-            cheats = true;
-    }
-
-    public void mPressed(){
-        music.setMuted(!music.getMuted());
-        if(music.getMuted())
-            music.stopMusic();
-        else{
-            music.music();
-            start = System.currentTimeMillis();
-        }
-    }
-
     public void play()
     {
         game = true;
@@ -435,41 +395,95 @@ public class Tetris implements ArrowListener
             System.out.println("ya done mate\n\n\n");
         }
     }
+
     public void onePressed(){
         music.stopMusic();
         music = new MusicPlayer("Tetris.wav", 82000.0);
         start = System.currentTimeMillis();
         music.music();
     }
+
     public void twoPressed(){
         music.stopMusic();
         music = new MusicPlayer("Boosted.wav", 82000.0);
         start = System.currentTimeMillis();
         music.music();
     }
+
     public void threePressed(){
         music.stopMusic();
         music = new MusicPlayer("money.wav", 3500.0);
         start = System.currentTimeMillis();
         music.music();
     }
+
     public void fourPressed(){
         music.stopMusic();
         music = new MusicPlayer("Electric.wav", 191000.0);
-       start = System.currentTimeMillis();
-       music.music();
+        start = System.currentTimeMillis();
+        music.music();
     }
+
     public void sPressed(){
         if(cheats){
-        sped = true;
-        music.stopMusic();
-        music = new MusicPlayer("90s.wav", 284000);
-        music.music();
-        level = 1990;
-        time = 150;
-        gameTime = 0;
-        start = System.currentTimeMillis();
-        elapsed = 0;
+            sped = true;
+            music.stopMusic();
+            music = new MusicPlayer("90s.wav", 284000);
+            music.music();
+            level = 1990;
+            time = 150;
+            gameTime = 0;
+            start = System.currentTimeMillis();
+            elapsed = 0;
+        }
+    }
+
+    public void iPressed(){
+        if(cheats){
+            while(nextTetrad.getShape()!=2)
+                nextTetrad = new Tetrad(grid);
+            DisplayNextTetrad();
+            cheatCode1 = !cheatCode1;
+        }
+    }
+
+    public void oPressed(){
+        if(cheats){
+            nextTetrad = new Tetrad(grid);
+            DisplayNextTetrad();
+        }
+    }
+
+    public void pPressed(){
+        if(cheats){
+            while(nextTetrad.getShape()!=0)
+                nextTetrad = new Tetrad(grid);
+            DisplayNextTetrad();
+            cheatCode1 = !cheatCode1;
+        }
+    }
+
+    public void rPressed(){
+        if(reee)
+            display.setRee(false);
+        reee = !reee;
+    }
+
+    public void cPressed(){
+        Scanner reader = new Scanner(System.in);
+        System.out.println("Enter in code");
+        String input = reader.nextLine();
+        if(input.equals("oof"))
+            cheats = true;
+    }
+
+    public void mPressed(){
+        music.setMuted(!music.getMuted());
+        if(music.getMuted())
+            music.stopMusic();
+        else{
+            music.music();
+            start = System.currentTimeMillis();
         }
     }
 }

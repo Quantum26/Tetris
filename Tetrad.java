@@ -22,7 +22,7 @@ public class Tetrad
         //shape = 8;
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
-        shape = (int)(Math.random()*7);
+        shape = (int)(Math.random()*9);
     }
 
     public void SpawnTetrad(){
