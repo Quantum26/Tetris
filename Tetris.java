@@ -36,6 +36,7 @@ public class Tetris implements ArrowListener
     private boolean reee = false;
     private MusicPlayer music;
     private boolean sped = false;
+    private long elapsed;
     public Tetris()
     {
         grid = new BoundedGrid<Block>(20, 10); //creates a new grid
@@ -185,7 +186,7 @@ public class Tetris implements ArrowListener
         music.music();
         while (game)
         {
-            long elapsed = System.currentTimeMillis()-start;
+            elapsed = System.currentTimeMillis()-start;
             if(elapsed%music.getLength()>=1000&&elapsed>=music.getLength() && !music.getMuted()){
                 music.music();
                 start = System.currentTimeMillis();
@@ -236,6 +237,7 @@ public class Tetris implements ArrowListener
                 time = 25;
                 gameTime = 25;
                 sped = false;
+                display.setRee(true);
             }
         }
     }
@@ -459,14 +461,15 @@ public class Tetris implements ArrowListener
     }
     public void sPressed(){
         if(cheats){
-            sped = true;
+        sped = true;
         music.stopMusic();
         music = new MusicPlayer("90s.wav", 284000);
         music.music();
         level = 1990;
         time = 150;
-        gameTime = 150;
+        gameTime = 0;
         start = System.currentTimeMillis();
+        elapsed = 0;
         }
     }
 }
