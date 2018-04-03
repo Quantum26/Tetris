@@ -134,6 +134,10 @@ public class BlockDisplay implements KeyListener
             listener.spacePressed();
         else if (code == KeyEvent.VK_ESCAPE)
             listener.escPressed();
+        else if (code == KeyEvent.VK_O)
+            listener.oPressed();
+        else if (code == KeyEvent.VK_P)
+            listener.pPressed();
     }
 
     public void setArrowListener(ArrowListener listener)

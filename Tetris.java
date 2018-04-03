@@ -11,55 +11,57 @@ public class Tetris implements ArrowListener
 {
     public static void main(String[] args)
     {
-        Tetris tetris = new Tetris();
-        tetris.play();
+        Tetris tetris = new Tetris(); //creates a new tetris
+        tetris.play(); //starts the game
     }
-    int time;
-    int gameTime;
-    private int level;
-    private int score;
-    private int rowsDone;
-    private int lines;
-    private boolean gotTetris;
-    private BoundedGrid<Block> grid;
-    private BlockDisplay display;
-    private Tetrad activeTetrad;
-    private Tetrad nextTetrad;
-    private String title;
-    private int combo;
-    private boolean tettet;
-    private boolean paused;
-    private boolean game;
-    private boolean controlsActive;
-    private Color[][] colors;
-    private long start = System.currentTimeMillis();
+    int time; //base time it takes for the block to fall
+    int gameTime; //level specific time for the block to fall
+    private int level; //level
+    private int score; //score
+    private int rowsDone; //rows done per level
+    private int lines; // # of rows done in total
+    private boolean gotTetris; //got that tetris?
+    private BoundedGrid<Block> grid; // the background
+    private BlockDisplay display; // the display for tetris
+    private Tetrad activeTetrad; //current tetrad being manipulated
+    private Tetrad nextTetrad; //next tetrad about to fall
+    private String title; //title of the display
+    private int combo; // # of rows previously cleared
+    private boolean tettet; // true if you cleared a tetris previously
+    private boolean paused; //is teh game paused?
+    private boolean game; //is the game still running
+    private boolean controlsActive; //can you control the block
+    private Color[][] colors; // list of colors for every block
+    private long start = System.currentTimeMillis(); //internal stopwatch
+    private String music = "Tetris.wav";
+    private boolean cheatCode1 = false;
     public Tetris()
     {
-        grid = new BoundedGrid<Block>(20, 10);
-        colors = new Color[20][10];
-        display = new BlockDisplay(grid);
-        display.setArrowListener(this);
-        display.setTitle("Tetris");
-        activeTetrad = new Tetrad(grid);
-        nextTetrad = new Tetrad(grid);
-        time = 1000;
-        gameTime = 1000;
-        level = 1;
-        score = 0;
-        gotTetris = false;
-        rowsDone = 0;
-        lines = 0;
-        title = "";
-        tettet = false;
-        paused = false;
-        game = true;
-        controlsActive = true;
+        grid = new BoundedGrid<Block>(20, 10); //creates a new grid
+        colors = new Color[20][10]; //sets the color array to the same size as the grid
+        display = new BlockDisplay(grid); //creates a new display with the grid
+        display.setArrowListener(this); //sets the arrow listener
+        display.setTitle("Tetris"); //sets the title to Tetris
+        activeTetrad = new Tetrad(grid); //creates a new tetrad
+        nextTetrad = new Tetrad(grid); //creates a second tetrad
+        time = 1000; //base time is set to 1000 milliseconds or 1 second
+        gameTime = 1000; //same for this time variable
+        level = 1; //sets level to 1
+        score = 0; //sets score to 0
+        gotTetris = false; //you have not gotten a tetris yet
+        rowsDone = 0; //sets rows done for this first level = 0
+        lines = 0; //sets lines cleared = 0
+        title = ""; //sets title to nothing
+        tettet = false; //you have not gotten a tetris yet
+        paused = false; //the game is not paused
+        game = true; //the game is active
+        controlsActive = true; //controls are active
     }
 
     public void upPressed()
     {
         if(!paused && game && controlsActive){
-            activeTetrad.rotate();
+            activeTetrad.rotate(); //rotates the block when up is pressed
             display.showBlocks();
         }
     }
@@ -67,16 +69,16 @@ public class Tetris implements ArrowListener
     public void downPressed()
     {
         if(!paused && game && controlsActive){
-            activeTetrad.translate(1, 0);
+            activeTetrad.translate(1, 0); //moves the block down 1 square
             display.showBlocks();
-            score+=1;
+            score+=1; //adds to your score
         }
     }
 
     public void leftPressed()
     {
         if(!paused && game && controlsActive){
-            activeTetrad.translate(0, -1);
+            activeTetrad.translate(0, -1); //moves the block left 1 square
             display.showBlocks();
         }
     }
@@ -84,7 +86,7 @@ public class Tetris implements ArrowListener
     public void rightPressed()
     {
         if(!paused && game && controlsActive){
-            activeTetrad.translate(0, 1);
+            activeTetrad.translate(0, 1); //moves the block right 1 square
             display.showBlocks();
         }
     }
@@ -92,42 +94,54 @@ public class Tetris implements ArrowListener
     public void spacePressed()
     {
         if(!paused && game && controlsActive){
-            while(activeTetrad.translate(1,0)){score+=2;}
-            gameTime = 0;
+            while(activeTetrad.translate(1,0)){score+=2;} //adds to your score and moves the block until it is unable to move down
+            gameTime = 0; //sets gameTime = 0 so it can reset the loop, thats why we have two time variables, one for a temp variable the other for the actual time being used
             display.showBlocks();
         }
     }
 
     public void escPressed()
     {
-        if(paused){
-            paused = false;
-            System.out.println("unpause");
-            for(int r = 0; r < 20; r++){
+        if(paused){ //if the game is currently paused
+            paused = false; //the game is no longer paused
+            System.out.println("unpause"); //tells the player the game is unpaused
+            for(int r = 0; r < 20; r++){ //for each block
                 for(int c = 0; c < 10; c++){
                     Location l = new Location (r, c);
                     if(grid.get(l)!=null&&colors[r][c]!=null){
                         grid.get(l).setColor(colors[r][c]);
                         colors[r][c]=null;
                     }
+                    //resets the color of each block
                 }
             }
-            activeTetrad.resetColor();
+            activeTetrad.resetColor(); //resets the color of the active tetrad
             display.showBlocks();
-        }else{
-            paused = true;
-            System.out.println("pause");
+        }else{ //if the game isnt paused
+            paused = true; //pause the game
+            System.out.println("pause"); //tell the player the game is paused
             for(int r = 0; r < 20; r++){
-                for(int c = 0; c < 10; c++){
+                for(int c = 0; c < 10; c++){ //for each block
                     Location l = new Location (r, c);
                     if(grid.get(l)!=null){
                         colors[r][c]=(grid.get(l).getColor());
                         grid.get(l).setColor(Color.BLACK);
+                        //sets the color of each block to black
                     }
                 }
             }
             display.showBlocks();
         }
+    }
+    public void oPressed(){
+        nextTetrad = new Tetrad(grid);
+        DisplayNextTetrad();
+    }
+    public void pPressed(){
+        while(nextTetrad.getShape()!=0)
+            nextTetrad = new Tetrad(grid);
+        DisplayNextTetrad();
+        cheatCode1 = !cheatCode1;
     }
 
     public void play()
@@ -170,6 +184,10 @@ public class Tetris implements ArrowListener
                     activeTetrad = nextTetrad;
                     activeTetrad.SpawnTetrad();
                     nextTetrad = new Tetrad(grid);
+                    if(cheatCode1){
+                        while(nextTetrad.getShape()!=0)
+                        nextTetrad = new Tetrad(grid);
+                    }
                     DisplayNextTetrad();
                     controlsActive = true;
                 }
@@ -346,6 +364,7 @@ public class Tetris implements ArrowListener
     }
 
     private void ree(){
+        music = "Boosted.wav";
         List<Location> locs = grid.getOccupiedLocations();
         display.setRee();
         for(Location l : locs){
@@ -360,7 +379,7 @@ public class Tetris implements ArrowListener
         AudioData MD;
         ContinuousAudioDataStream loop = null;
         try{
-            InputStream in = new FileInputStream("Tetris.wav"); 
+            InputStream in = new FileInputStream(music); 
             AudioStream audioStream = new AudioStream(in);
             AudioPlayer.player.start(audioStream);
         }catch(IOException e){
@@ -388,7 +407,7 @@ public class Tetris implements ArrowListener
         AudioData MD;
         ContinuousAudioDataStream loop = null;
         try{
-            InputStream in = new FileInputStream("Boosted.wav"); 
+            InputStream in = new FileInputStream("money.wav"); 
             AudioStream audioStream = new AudioStream(in);
             AudioPlayer.player.start(audioStream);
         }catch(IOException e){
