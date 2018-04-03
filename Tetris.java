@@ -6,6 +6,7 @@ import sun.audio.*;
 import java.io.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import java.util.Scanner;
 
 public class Tetris implements ArrowListener
 {
@@ -34,6 +35,7 @@ public class Tetris implements ArrowListener
     private Color[][] colors; // list of colors for every block
     private long start = System.currentTimeMillis(); //internal stopwatch
     private String music = "Tetris.wav";
+    private boolean cheats = false;
     private boolean cheatCode1 = false;
     private boolean reee = false;
     public Tetris()
@@ -136,19 +138,33 @@ public class Tetris implements ArrowListener
     }
 
     public void oPressed(){
+        if(cheats){
         nextTetrad = new Tetrad(grid);
         DisplayNextTetrad();
     }
+    }
 
     public void pPressed(){
+        if(cheats){
         while(nextTetrad.getShape()!=0)
             nextTetrad = new Tetrad(grid);
         DisplayNextTetrad();
         cheatCode1 = !cheatCode1;
     }
+    }
 
     public void rPressed(){
+        if(reee)
+        display.setRee(false);
         reee = !reee;
+    }
+    
+    public void cPressed(){
+        Scanner reader = new Scanner(System.in);
+        System.out.println("Enter in code");
+        String input = reader.nextLine();
+        if(input.equals("oof"))
+            cheats = true;
     }
 
     public void play()
@@ -374,7 +390,7 @@ public class Tetris implements ArrowListener
     private void ree(){
         music = "Boosted.wav";
         List<Location> locs = grid.getOccupiedLocations();
-        display.setRee();
+        display.setRee(true);
         for(Location l : locs){
             grid.get(l).setColor(new Color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255)));
 
