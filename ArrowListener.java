@@ -11,4 +11,5 @@ public interface ArrowListener
 	void escPressed();
 	void oPressed();
 	void pPressed();
+	void rPressed();
 }

@@ -35,6 +35,7 @@ public class Tetris implements ArrowListener
     private long start = System.currentTimeMillis(); //internal stopwatch
     private String music = "Tetris.wav";
     private boolean cheatCode1 = false;
+    private boolean reee = false;
     public Tetris()
     {
         grid = new BoundedGrid<Block>(20, 10); //creates a new grid
@@ -133,10 +134,12 @@ public class Tetris implements ArrowListener
             display.showBlocks();
         }
     }
+
     public void oPressed(){
         nextTetrad = new Tetrad(grid);
         DisplayNextTetrad();
     }
+
     public void pPressed(){
         while(nextTetrad.getShape()!=0)
             nextTetrad = new Tetrad(grid);
@@ -144,12 +147,16 @@ public class Tetris implements ArrowListener
         cheatCode1 = !cheatCode1;
     }
 
+    public void rPressed(){
+        reee = !reee;
+    }
+
     public void play()
     {
         game = true;
         activeTetrad.SpawnTetrad();
         DisplayNextTetrad();
-        
+
         music();
         while (game)
         {
@@ -186,7 +193,7 @@ public class Tetris implements ArrowListener
                     nextTetrad = new Tetrad(grid);
                     if(cheatCode1){
                         while(nextTetrad.getShape()!=0)
-                        nextTetrad = new Tetrad(grid);
+                            nextTetrad = new Tetrad(grid);
                     }
                     DisplayNextTetrad();
                     controlsActive = true;
@@ -197,7 +204,8 @@ public class Tetris implements ArrowListener
                 display.showBlocks();
                 title = "Level "+level+", Score: "+score;
                 display.setTitle(title);
-                //ree();
+                if(reee)
+                    ree();
             }
 
         }
@@ -401,6 +409,7 @@ public class Tetris implements ArrowListener
         MGP.start(loop);
          */
     }
+
     public void stopMusic(){
         AudioPlayer MGP = AudioPlayer.player;
         AudioStream BGM;
@@ -419,7 +428,7 @@ public class Tetris implements ArrowListener
         for(int i = 0; i<16; i++)
             System.out.println();
         System.out.println("Level: " + level + "\nLines: " + lines + "\nScore: " + score + 
-        "\nNext:");
+            "\nNext:");
         if(nextTetrad.getShape()==0){
             for(int i = 0; i<4; i++)
                 System.out.println(" []");
