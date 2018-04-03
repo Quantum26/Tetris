@@ -453,11 +453,7 @@ public class Tetris implements ArrowListener
     }
     public void fourPressed(){
         music.stopMusic();
-        if(!music.getMusic().equals("Electric.wav")){
         music = new MusicPlayer("Electric.wav", 191000.0);
-       }else{
-        music = new MusicPlayer("ShutUp.wav", 210000.0);
-        }
        start = System.currentTimeMillis();
        music.music();
     }
