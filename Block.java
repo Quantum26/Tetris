@@ -62,12 +62,12 @@ public class Block
     //               (2) loc is valid in gr
     public void putSelfInGrid(BoundedGrid<Block> gr, Location loc)
     {
-        Block block = gr.get(loc);
-        if (block != null)
-            block.removeSelfFromGrid();
-        gr.put(loc, this);
-        grid = gr;
-        location = loc;
+        Block block = gr.get(loc);//gets the block that was in the position
+        if (block != null)//if there is a block,
+            block.removeSelfFromGrid();//it removes it
+        gr.put(loc, this);//puts this block there
+        grid = gr;//resets the grid of this block to what it was given
+        location = loc;//resets the location to what was given
     }
 
     //moves this block to newLocation
