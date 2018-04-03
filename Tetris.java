@@ -431,16 +431,19 @@ public class Tetris implements ArrowListener
     public void onePressed(){
         music.stopMusic();
         music = new MusicPlayer("Tetris.wav", 82000.0);
+        start = System.currentTimeMillis();
         music.music();
     }
     public void twoPressed(){
         music.stopMusic();
         music = new MusicPlayer("Boosted.wav", 82000.0);
+        start = System.currentTimeMillis();
         music.music();
     }
     public void threePressed(){
         music.stopMusic();
         music = new MusicPlayer("Money.wav", 3500.0);
+        start = System.currentTimeMillis();
         music.music();
     }
 }
