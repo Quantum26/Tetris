@@ -150,6 +150,10 @@ public class BlockDisplay implements KeyListener
             listener.twoPressed();
         else if (code == KeyEvent.VK_3)
             listener.threePressed();
+        else if (code == KeyEvent.VK_4)
+            listener.fourPressed();
+        else if (code == KeyEvent.VK_S)
+            listener.sPressed();
     }
 
     public void setArrowListener(ArrowListener listener)

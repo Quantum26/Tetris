@@ -35,6 +35,7 @@ public class Tetris implements ArrowListener
     private boolean cheatCode1 = false;
     private boolean reee = false;
     private MusicPlayer music;
+    private boolean sped = false;
     public Tetris()
     {
         grid = new BoundedGrid<Block>(20, 10); //creates a new grid
@@ -231,7 +232,11 @@ public class Tetris implements ArrowListener
                 if(reee)
                     ree();
             }
-
+            if(elapsed >=24000 && sped){
+                time = 25;
+                gameTime = 25;
+                sped = false;
+            }
         }
     }
 
@@ -442,8 +447,30 @@ public class Tetris implements ArrowListener
     }
     public void threePressed(){
         music.stopMusic();
-        music = new MusicPlayer("Money.wav", 3500.0);
+        music = new MusicPlayer("money.wav", 3500.0);
         start = System.currentTimeMillis();
         music.music();
+    }
+    public void fourPressed(){
+        music.stopMusic();
+        if(!music.getMusic().equals("Electric.wav")){
+        music = new MusicPlayer("Electric.wav", 191000.0);
+       }else{
+        music = new MusicPlayer("ShutUp.wav", 210000.0);
+        }
+       start = System.currentTimeMillis();
+       music.music();
+    }
+    public void sPressed(){
+        if(cheats){
+            sped = true;
+        music.stopMusic();
+        music = new MusicPlayer("90s.wav", 284000);
+        music.music();
+        level = 1990;
+        time = 150;
+        gameTime = 150;
+        start = System.currentTimeMillis();
+        }
     }
 }
