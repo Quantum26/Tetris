@@ -41,7 +41,7 @@ public class Tetrad
             locs[2] = new Location(0,5);
             locs[3] = new Location(1,4);
         }else if(shape == 2){ //O
-            color = Color.RED;
+            color = Color.WHITE;
             locs[0] = new Location(1,5);
             locs[1] = new Location(0,4);
             locs[2] = new Location(0,5);

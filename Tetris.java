@@ -2,10 +2,7 @@ import java.util.*;
 import java.awt.Color;
 import sounds.APSoundClip;
 import sounds.Sample;
-import sun.audio.*;
 import java.io.*;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import java.util.Scanner;
 
 public class Tetris implements ArrowListener
@@ -34,12 +31,10 @@ public class Tetris implements ArrowListener
     private boolean controlsActive; //can you control the block
     private Color[][] colors; // list of colors for every block
     private long start = System.currentTimeMillis(); //internal stopwatch
-    private String music = "Tetris.wav";
     private boolean cheats = false;
     private boolean cheatCode1 = false;
     private boolean reee = false;
-    private AudioStream as;
-    private boolean muted = false;
+    private MusicPlayer music;
     public Tetris()
     {
         grid = new BoundedGrid<Block>(20, 10); //creates a new grid
@@ -61,6 +56,7 @@ public class Tetris implements ArrowListener
         paused = false; //the game is not paused
         game = true; //the game is active
         controlsActive = true; //controls are active
+        music = new MusicPlayer("Tetris.wav", 82000.0);
     }
 
     public void upPressed()
@@ -170,11 +166,11 @@ public class Tetris implements ArrowListener
     }
 
     public void mPressed(){
-        muted = !muted;
-        if(muted)
-            stopMusic();
+        music.setMuted(!music.getMuted());
+        if(music.getMuted())
+            music.stopMusic();
         else{
-            music();
+            music.music();
             start = System.currentTimeMillis();
         }
     }
@@ -185,12 +181,12 @@ public class Tetris implements ArrowListener
         activeTetrad.SpawnTetrad();
         DisplayNextTetrad();
 
-        music();
+        music.music();
         while (game)
         {
             long elapsed = System.currentTimeMillis()-start;
-            if(elapsed%82000.0>=1000&&elapsed>=82000.0 && !muted){
-                music();
+            if(elapsed%music.getLength()>=1000&&elapsed>=music.getLength() && !music.getMuted()){
+                music.music();
                 start = System.currentTimeMillis();
             }
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
@@ -394,73 +390,17 @@ public class Tetris implements ArrowListener
             }
         }
         display.showBlocks();
-        stopMusic();
+        music.stopMusic();
         title+= " You lose m8";
         display.setTitle(title);
     }
 
     private void ree(){
-        music = "Boosted.wav";
         List<Location> locs = grid.getOccupiedLocations();
         display.setRee(true);
         for(Location l : locs){
             grid.get(l).setColor(new Color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255)));
 
-        }
-    }
-
-    public void music(){
-        AudioPlayer MGP = AudioPlayer.player;
-        AudioStream BGM;
-        AudioData MD;
-        ContinuousAudioDataStream loop = null;
-        try{
-            InputStream in = new FileInputStream(music); 
-            as = new AudioStream(in);
-            AudioPlayer.player.start(as);
-        }catch(IOException e){
-            System.out.println("Baka");
-        }
-        /**AudioPlayer MGP = AudioPlayer.player;
-        AudioStream BGM;
-        AudioData MD;
-        ContinuousAudioDataStream loop = null;
-        try{
-        FileInputStream fileInputStream = new FileInputStream("BlueBossa.wav");
-        BGM = new AudioStream(fileInputStream);
-        MD = BGM.getData();
-        loop = new ContinuousAudioDataStream(MD);
-        System.out.println("Oof");
-        }catch(IOException e){
-        System.out.println("baka");
-        }
-        MGP.start(loop);
-         */
-    }
-
-    public void stopMusic(){
-        /**AudioPlayer MGP = AudioPlayer.player;
-        AudioStream BGM;
-        AudioData MD;
-        ContinuousAudioDataStream loop = null;
-        try{
-        InputStream in = new FileInputStream("money.wav"); 
-        AudioStream audioStream = new AudioStream(in);
-        AudioPlayer.player.start(audioStream);
-        }catch(IOException e){
-        System.out.println("Baka");
-        }*/
-        try
-        {
-            //don't try and do things with a null object!
-            if (as != null)
-            {
-                AudioPlayer.player.stop(as);
-            }
-        }
-        catch (NullPointerException e)
-        {
-            System.err.println(e);
         }
     }
 
@@ -487,5 +427,20 @@ public class Tetris implements ArrowListener
         }else if(nextTetrad.getShape()==7){
             System.out.println("ya done mate\n\n\n");
         }
+    }
+    public void onePressed(){
+        music.stopMusic();
+        music = new MusicPlayer("Tetris.wav", 82000.0);
+        music.music();
+    }
+    public void twoPressed(){
+        music.stopMusic();
+        music = new MusicPlayer("Boosted.wav", 82000.0);
+        music.music();
+    }
+    public void threePressed(){
+        music.stopMusic();
+        music = new MusicPlayer("Money.wav", 3500.0);
+        music.music();
     }
 }
