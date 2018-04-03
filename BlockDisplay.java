@@ -67,8 +67,8 @@ public class BlockDisplay implements KeyListener
         frame.setVisible(!frame.isVisible());
     }
 
-    public void setRee(){
-        ree = true;
+    public void setRee(boolean r){
+        ree = r;
     }
     
     //Redraws the board to include the pieces and border colors.
@@ -134,6 +134,14 @@ public class BlockDisplay implements KeyListener
             listener.spacePressed();
         else if (code == KeyEvent.VK_ESCAPE)
             listener.escPressed();
+        else if (code == KeyEvent.VK_O)
+            listener.oPressed();
+        else if (code == KeyEvent.VK_P)
+            listener.pPressed();
+        else if (code == KeyEvent.VK_R)
+            listener.rPressed();
+        else if (code == KeyEvent.VK_C)
+            listener.cPressed();
     }
 
     public void setArrowListener(ArrowListener listener)

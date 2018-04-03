@@ -35,37 +35,37 @@ public class Tetrad
             locs[2] = new Location(0,5);
             locs[3] = new Location(0,6);
         }else if(shape == 1){ //T
-            color = new Color (127,255,212);
+            color = Color.WHITE;
             locs[0] = new Location(0,3);
             locs[1] = new Location(0,4);
             locs[2] = new Location(0,5);
             locs[3] = new Location(1,4);
         }else if(shape == 2){ //O
-            color = new Color (173,216,230);
+            color = Color.RED;
             locs[0] = new Location(1,5);
             locs[1] = new Location(0,4);
             locs[2] = new Location(0,5);
             locs[3] = new Location(1,4);
         }else if(shape == 3){ //L
-            color = new Color (135,206,235);
+            color = Color.RED;
             locs[0] = new Location(0,4);
             locs[1] = new Location(1,4);
             locs[2] = new Location(2,4);
             locs[3] = new Location(2,5);
         }else if(shape == 4){ //J
-            color = new Color (30,144,255);
+            color = Color.RED;
             locs[0] = new Location(0,5);
             locs[1] = new Location(1,5);
             locs[2] = new Location(2,5);
             locs[3] = new Location(2,4);
         }else if(shape == 5){ //S
-            color = new Color (70,130,180);
+            color = Color.RED;
             locs[0] = new Location(1,5);
             locs[1] = new Location(0,5);
             locs[2] = new Location(0,6);
             locs[3] = new Location(1,4);
         }else if(shape == 6){ //Z
-            color = new Color (176,224,230);
+            color = Color.RED;
             locs[0] = new Location(0,3);
             locs[1] = new Location(0,4);
             locs[2] = new Location(1,5);
