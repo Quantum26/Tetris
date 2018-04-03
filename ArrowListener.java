@@ -13,4 +13,5 @@ public interface ArrowListener
 	void pPressed();
 	void rPressed();
 	void cPressed();
+	void mPressed();
 }

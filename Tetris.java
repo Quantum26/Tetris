@@ -38,6 +38,8 @@ public class Tetris implements ArrowListener
     private boolean cheats = false;
     private boolean cheatCode1 = false;
     private boolean reee = false;
+    private AudioStream as;
+    private boolean muted = false;
     public Tetris()
     {
         grid = new BoundedGrid<Block>(20, 10); //creates a new grid
@@ -139,32 +141,42 @@ public class Tetris implements ArrowListener
 
     public void oPressed(){
         if(cheats){
-        nextTetrad = new Tetrad(grid);
-        DisplayNextTetrad();
-    }
+            nextTetrad = new Tetrad(grid);
+            DisplayNextTetrad();
+        }
     }
 
     public void pPressed(){
         if(cheats){
-        while(nextTetrad.getShape()!=0)
-            nextTetrad = new Tetrad(grid);
-        DisplayNextTetrad();
-        cheatCode1 = !cheatCode1;
-    }
+            while(nextTetrad.getShape()!=0)
+                nextTetrad = new Tetrad(grid);
+            DisplayNextTetrad();
+            cheatCode1 = !cheatCode1;
+        }
     }
 
     public void rPressed(){
         if(reee)
-        display.setRee(false);
+            display.setRee(false);
         reee = !reee;
     }
-    
+
     public void cPressed(){
         Scanner reader = new Scanner(System.in);
         System.out.println("Enter in code");
         String input = reader.nextLine();
         if(input.equals("oof"))
             cheats = true;
+    }
+
+    public void mPressed(){
+        muted = !muted;
+        if(muted)
+            stopMusic();
+        else{
+            music();
+            start = System.currentTimeMillis();
+        }
     }
 
     public void play()
@@ -177,7 +189,7 @@ public class Tetris implements ArrowListener
         while (game)
         {
             long elapsed = System.currentTimeMillis()-start;
-            if(elapsed%82000.0>=1000&&elapsed>=82000.0){
+            if(elapsed%82000.0>=1000&&elapsed>=82000.0 && !muted){
                 music();
                 start = System.currentTimeMillis();
             }
@@ -404,8 +416,8 @@ public class Tetris implements ArrowListener
         ContinuousAudioDataStream loop = null;
         try{
             InputStream in = new FileInputStream(music); 
-            AudioStream audioStream = new AudioStream(in);
-            AudioPlayer.player.start(audioStream);
+            as = new AudioStream(in);
+            AudioPlayer.player.start(as);
         }catch(IOException e){
             System.out.println("Baka");
         }
@@ -427,16 +439,28 @@ public class Tetris implements ArrowListener
     }
 
     public void stopMusic(){
-        AudioPlayer MGP = AudioPlayer.player;
+        /**AudioPlayer MGP = AudioPlayer.player;
         AudioStream BGM;
         AudioData MD;
         ContinuousAudioDataStream loop = null;
         try{
-            InputStream in = new FileInputStream("money.wav"); 
-            AudioStream audioStream = new AudioStream(in);
-            AudioPlayer.player.start(audioStream);
+        InputStream in = new FileInputStream("money.wav"); 
+        AudioStream audioStream = new AudioStream(in);
+        AudioPlayer.player.start(audioStream);
         }catch(IOException e){
-            System.out.println("Baka");
+        System.out.println("Baka");
+        }*/
+        try
+        {
+            //don't try and do things with a null object!
+            if (as != null)
+            {
+                AudioPlayer.player.stop(as);
+            }
+        }
+        catch (NullPointerException e)
+        {
+            System.err.println(e);
         }
     }
 
