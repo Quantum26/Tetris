@@ -19,10 +19,10 @@ public class Tetrad
             blocks[i] = new Block();
         }
         g = grid;
-        //shape = 8;
+        shape = 8;
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
-        shape = (int)(Math.random()*9);
+        //shape = (int)(Math.random()*7);
     }
 
     public void SpawnTetrad(){
@@ -111,7 +111,7 @@ public class Tetrad
             locs[29] = new Location(9, 5);
 
         }else if(shape == 8){
-            color = Color.WHITE;
+            color = Color.BLUE;
             blocks = new Block[40];
             for(int i = 0; i < blocks.length; i++)
             {

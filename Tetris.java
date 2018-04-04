@@ -33,6 +33,7 @@ public class Tetris implements ArrowListener
     private long start = System.currentTimeMillis(); //internal stopwatch
     private boolean cheats = false;
     private boolean cheatCode1 = false;
+    private boolean cheatCode2 = false;
     private boolean reee = false;
     private MusicPlayer music;
     private boolean sped = false;
@@ -180,6 +181,9 @@ public class Tetris implements ArrowListener
                     if(cheatCode1){
                         while(nextTetrad.getShape()!=0)
                             nextTetrad = new Tetrad(grid);
+                    }else if(cheatCode2){
+                        while(nextTetrad.getShape()!=2)
+                            nextTetrad = new Tetrad(grid);
                     }
                     DisplayNextTetrad();
                     controlsActive = true;
@@ -254,18 +258,26 @@ public class Tetris implements ArrowListener
         if(rowsBroke == 1){
             scor = 100*level;
             tettet = false;
+            combo++;
         }else if(rowsBroke == 2){
             scor = 300*level;
             tettet = false;
+            combo++;
         }else if(rowsBroke == 3){
             scor = 500*level;
             tettet = false;
+            combo++;
         }else if(rowsBroke == 4 && tettet){
             scor = 1600*level;
             tettet = true;
+            combo++;
         }else if(rowsBroke == 4){
             scor = 800*level;
             tettet = true;
+            combo++;
+        }else{
+            tettet = false;
+            combo = 0;
         }
         if(combo>0){
             scor += 50*combo*level;
@@ -276,10 +288,13 @@ public class Tetris implements ArrowListener
                 level++;
                 time-= 100;
                 rowsDone -= 10;
-            }else if (time>50){
+            }else if (time>75){
                 level++;
                 time-= 25;
                 rowsDone -= 10;
+            }else if(level>=1999){
+                level=1990;
+                rowsDone -=10;
             }else{
                 level++;
                 rowsDone -= 10;
@@ -412,7 +427,7 @@ public class Tetris implements ArrowListener
 
     public void threePressed(){
         music.stopMusic();
-        music = new MusicPlayer("money.wav", 3500.0);
+        music = new MusicPlayer("dejavu.wav", 273000.0);
         start = System.currentTimeMillis();
         music.music();
     }
@@ -431,10 +446,15 @@ public class Tetris implements ArrowListener
             music = new MusicPlayer("90s.wav", 284000);
             music.music();
             level = 1990;
-            time = 150;
+            time = 300;
             gameTime = 0;
             start = System.currentTimeMillis();
             elapsed = 0;
+        }else{
+            music.stopMusic();
+            music = new MusicPlayer("90s.wav", 284000);
+            music.music();
+            start = System.currentTimeMillis();
         }
     }
 
@@ -442,8 +462,9 @@ public class Tetris implements ArrowListener
         if(cheats){
             while(nextTetrad.getShape()!=2)
                 nextTetrad = new Tetrad(grid);
+            cheatCode1 = false;
             DisplayNextTetrad();
-            cheatCode1 = !cheatCode1;
+            cheatCode2 = !cheatCode2;
         }
     }
 
@@ -460,6 +481,7 @@ public class Tetris implements ArrowListener
                 nextTetrad = new Tetrad(grid);
             DisplayNextTetrad();
             cheatCode1 = !cheatCode1;
+            cheatCode2 = false;
         }
     }
 
