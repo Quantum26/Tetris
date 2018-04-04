@@ -135,7 +135,9 @@ public class Tetrad
         }
         this.addToLocations(g, locs);
     }
-
+    public void setShape(int s){
+        shape = s;
+    }
     public int getShape(){
         return shape;
     }

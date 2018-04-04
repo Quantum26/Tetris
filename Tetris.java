@@ -179,11 +179,9 @@ public class Tetris implements ArrowListener
                     activeTetrad.SpawnTetrad();
                     nextTetrad = new Tetrad(grid);
                     if(cheatCode1){
-                        while(nextTetrad.getShape()!=0)
-                            nextTetrad = new Tetrad(grid);
+                        nextTetrad.setShape(0);
                     }else if(cheatCode2){
-                        while(nextTetrad.getShape()!=2)
-                            nextTetrad = new Tetrad(grid);
+                        nextTetrad.setShape(2);
                     }
                     DisplayNextTetrad();
                     controlsActive = true;
@@ -408,6 +406,8 @@ public class Tetris implements ArrowListener
             System.out.println("   [][] \n [][]\n\n"); 
         }else if(nextTetrad.getShape()==7){
             System.out.println("ya done mate\n\n\n");
+        }else{
+            System.out.println("You dirty cheater");
         }
     }
 
@@ -477,8 +477,7 @@ public class Tetris implements ArrowListener
 
     public void pPressed(){
         if(cheats){
-            while(nextTetrad.getShape()!=0)
-                nextTetrad = new Tetrad(grid);
+            nextTetrad.setShape(0);
             DisplayNextTetrad();
             cheatCode1 = !cheatCode1;
             cheatCode2 = false;
@@ -507,5 +506,13 @@ public class Tetris implements ArrowListener
             music.music();
             start = System.currentTimeMillis();
         }
+    }
+    public void dPressed(){
+        
+    }
+    public void tPressed(){
+        if(cheats)
+            nextTetrad.setShape(8);
+        DisplayNextTetrad();
     }
 }
