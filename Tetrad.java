@@ -125,6 +125,18 @@ public class Tetrad
                     i++;
                 }
             }
+        }else if(shape == 9){
+            color = Color.BLUE;
+            locs[0] = new Location(0, 4);
+            locs[1] = new Location(1, 4);
+            locs[2] = new Location(2, 4);
+            locs[3] = new Location(3, 4);
+        }else if (shape == 10){
+            color = Color.WHITE;
+            locs[0] = new Location(19,4);
+            locs[1] = new Location(19,5);
+            locs[2] = new Location(18,4);
+            locs[3] = new Location(18,5);
         }
         //Exercise 1.2  Insert code here (after the above if statements) to
         //                  loop through the blocks array to
@@ -156,7 +168,7 @@ public class Tetrad
     //precondition:  Blocks are in the grid.
     //postcondition: Returns old locations of blocks;
     //               blocks have been removed from grid.
-    private Location[] removeBlocks()
+    public Location[] removeBlocks()
     {
         Location[] locs = new Location[blocks.length];
         for(int i = 0; i<blocks.length; i++){
@@ -237,7 +249,7 @@ public class Tetrad
         //              remove the blocks (but save the locations)
         //              check if the new locations are empty
         //              replace the tetrad in the proper place (rotated)
-        if(shape == 2){
+        if(shape == 2||shape == 10){
             return false;
         }
         BoundedGrid<Block> g = blocks[0].getGrid();
@@ -265,5 +277,13 @@ public class Tetrad
         for(int i = 0; i<blocks.length; i++){
             blocks[i].setColor(color);
         }
+    }
+    public boolean isOnGround(){
+        for(Block b:blocks){
+            if(b.getLocation().getRow()==g.getNumRows()-1){
+                return true;
+            }
+        }
+        return false;
     }
 }

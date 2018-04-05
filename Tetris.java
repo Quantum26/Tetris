@@ -34,10 +34,12 @@ public class Tetris implements ArrowListener
     private boolean cheats = false;
     private boolean cheatCode1 = false;
     private boolean cheatCode2 = false;
+    private boolean dejavu = false;;
     private boolean reee = false;
     private MusicPlayer music;
     private boolean sped = false;
     private long elapsed;
+    private int meteors = 0;
     public Tetris()
     {
         grid = new BoundedGrid<Block>(20, 10); //creates a new grid
@@ -97,7 +99,7 @@ public class Tetris implements ArrowListener
 
     public void spacePressed()
     {
-        if(!paused && game && controlsActive){
+        if(!paused && game && controlsActive&&!dejavu){
             while(activeTetrad.translate(1,0)){score+=2;} //adds to your score and moves the block until it is unable to move down
             gameTime = 0; //sets gameTime = 0 so it can reset the loop, thats why we have two time variables, one for a temp variable the other for the actual time being used
             display.showBlocks();
@@ -165,26 +167,51 @@ public class Tetris implements ArrowListener
                 try { Thread.sleep(gameTime/10); } catch(Exception e) {}
                 try { Thread.sleep(gameTime/10); } catch(Exception e) {}
 
-                if(!activeTetrad.translate(1,0)){
-                    controlsActive = false;
+                if(!dejavu){
+                    if(!activeTetrad.translate(1,0)){
+                        controlsActive = false;
+                        gameTime = time;
+                        if(!topRowsEmpty()){
+                            game = false;
+                            gameOver();
+                            break;
+                        }
+                        clearCompletedRows();
+                        activeTetrad = nextTetrad;
+                        activeTetrad.SpawnTetrad();
+                        nextTetrad = new Tetrad(grid);
+                        if(cheatCode1){
+                            nextTetrad.setShape(0);
+                        }else if(cheatCode2){
+                            nextTetrad.setShape(2);
+                        }
+                        DisplayNextTetrad();
+                        controlsActive = true;
+                    }
+                }else{
+                    time = 50;
                     gameTime = time;
-                    Location[] l = activeTetrad.getLocations();
-                    if(!topRowsEmpty()){
-                        game = false;
-                        gameOver();
-                        break;
+                    if(!nextTetrad.translate(1,0)){
+                        controlsActive = false;
+                        gameTime = time;
+                        if(!nextTetrad.isOnGround()){
+                            game = false;
+                            gameOver();
+                            break;
+                        }
+                        nextTetrad.removeBlocks();
+                        nextTetrad = new Tetrad(grid);
+                        nextTetrad.setShape(9);
+                        nextTetrad.SpawnTetrad();
+                        nextTetrad.translate(0, ((Math.random()<0.5) ? ((int)(Math.random()*6)) :(-1*(int)(Math.random()*6))));
+                        DisplayNextTetrad();
+                        controlsActive = true;
+                        meteors++;
+                        if(meteors%10==0){
+                            level++;
+                        }
+                        score+=20*level;
                     }
-                    clearCompletedRows();
-                    activeTetrad = nextTetrad;
-                    activeTetrad.SpawnTetrad();
-                    nextTetrad = new Tetrad(grid);
-                    if(cheatCode1){
-                        nextTetrad.setShape(0);
-                    }else if(cheatCode2){
-                        nextTetrad.setShape(2);
-                    }
-                    DisplayNextTetrad();
-                    controlsActive = true;
                 }
                 if(game==false){
                     break;
@@ -383,6 +410,7 @@ public class Tetris implements ArrowListener
 
         }
     }
+
     private void unree(){
         List<Location> locs = grid.getOccupiedLocations();
         display.setRee(false);
@@ -391,6 +419,7 @@ public class Tetris implements ArrowListener
 
         }
     }
+
     public void DisplayNextTetrad(){
         for(int i = 0; i<16; i++)
             System.out.println();
@@ -517,9 +546,28 @@ public class Tetris implements ArrowListener
             start = System.currentTimeMillis();
         }
     }
+
     public void dPressed(){
-        
+        if(cheats){
+            for(int i = 0; i< grid.getNumRows(); i++){
+                clearRow(i);
+            }
+            nextTetrad = new Tetrad(grid);
+            activeTetrad = new Tetrad(grid);
+            nextTetrad.setShape(9);
+            activeTetrad.setShape(10);
+            DisplayNextTetrad();
+            cheatCode1 = !cheatCode1;
+            cheatCode2 = false;
+            dejavu = true;
+            time = 50;
+            activeTetrad.SpawnTetrad();
+            nextTetrad.SpawnTetrad();
+            nextTetrad.translate(0, ((Math.random()<0.5) ? ((int)(Math.random()*6)) :(-1*(int)(Math.random()*6))));
+            
+        }
     }
+
     public void tPressed(){
         if(cheats)
             nextTetrad.setShape(8);
