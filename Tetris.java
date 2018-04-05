@@ -152,18 +152,16 @@ public class Tetris implements ArrowListener
                 music.music();
                 start = System.currentTimeMillis();
             }
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            for(int i = 0; i< 5; i++){
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                elapsed = System.currentTimeMillis()-start;
+            }
 
             if(!paused){
-                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                for(int i = 0; i< 5; i++){
+                    try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                    elapsed = System.currentTimeMillis()-start;
+                }
 
                 if(!activeTetrad.translate(1,0)){
                     controlsActive = false;
@@ -507,9 +505,11 @@ public class Tetris implements ArrowListener
             start = System.currentTimeMillis();
         }
     }
+
     public void dPressed(){
         
     }
+
     public void tPressed(){
         if(cheats)
             nextTetrad.setShape(8);

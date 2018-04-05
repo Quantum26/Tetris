@@ -52,7 +52,14 @@ public class BlockDisplay implements KeyListener
     private void createAndShowGUI()
     {
         frame = new JFrame();
-        image = new BufferedImage(board.getNumCols()*30,board.getNumRows()*30,BufferedImage.TYPE_INT_RGB);
+        int x = board.getNumCols()*30;
+        int y = board.getNumRows()*30;
+        if(x>y){
+            y = x;
+        }else{
+            x = y;
+        }
+        image = new BufferedImage(x,y,BufferedImage.TYPE_INT_RGB);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.addKeyListener(this);
         frame.add(new JLabel(new ImageIcon(image)));
@@ -86,8 +93,8 @@ public class BlockDisplay implements KeyListener
         graphics.drawRect(0, 0, image.getWidth()-1, image.getHeight()-1);
         graphics.dispose();
         
-        for (int row = 0; row < image.getHeight()/30; row++)
-            for (int col = 0; col < image.getWidth()/30; col++)
+        for (int row = 0; row < board.getNumRows(); row++)
+            for (int col = 0; col < board.getNumCols(); col++)
             {
                 Location loc = new Location(row, col);
                 Block square = board.get(loc);
