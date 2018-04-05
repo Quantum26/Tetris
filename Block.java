@@ -11,7 +11,7 @@ public class Block
     private BoundedGrid<Block> grid;
     private Location location;
     private Color color;
-
+    private Color original;
     //constructs a blue block, because blue is the greatest color ever!
     public Block()
     {
@@ -25,7 +25,14 @@ public class Block
     {
         return color;    //returns the color
     }
-
+    //sets the original color of the block
+    public void setOriginal(Color newColor){
+        original = newColor;
+    }
+    //gets the original color of the block
+    public Color getOriginal(){
+        return original;
+    }
     //sets the color of this block to newColor.
     public void setColor(Color newColor)
     {

@@ -152,16 +152,18 @@ public class Tetris implements ArrowListener
                 music.music();
                 start = System.currentTimeMillis();
             }
-            for(int i = 0; i< 5; i++){
-                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-                elapsed = System.currentTimeMillis()-start;
-            }
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
 
             if(!paused){
-                for(int i = 0; i< 5; i++){
-                    try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-                    elapsed = System.currentTimeMillis()-start;
-                }
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
 
                 if(!activeTetrad.translate(1,0)){
                     controlsActive = false;
@@ -381,7 +383,14 @@ public class Tetris implements ArrowListener
 
         }
     }
+    private void unree(){
+        List<Location> locs = grid.getOccupiedLocations();
+        display.setRee(false);
+        for(Location l : locs){
+            grid.get(l).setColor(grid.get(l).getOriginal());
 
+        }
+    }
     public void DisplayNextTetrad(){
         for(int i = 0; i<16; i++)
             System.out.println();
@@ -483,8 +492,11 @@ public class Tetris implements ArrowListener
     }
 
     public void rPressed(){
-        if(reee)
+        if(reee){
             display.setRee(false);
+            display.showBlocks();
+            unree();
+        }
         reee = !reee;
     }
 
@@ -505,11 +517,9 @@ public class Tetris implements ArrowListener
             start = System.currentTimeMillis();
         }
     }
-
     public void dPressed(){
         
     }
-
     public void tPressed(){
         if(cheats)
             nextTetrad.setShape(8);

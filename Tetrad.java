@@ -132,6 +132,7 @@ public class Tetrad
         //                  call addToLocations
         for(int i = 0; i < blocks.length; i++){
             blocks[i].setColor(color);
+            blocks[i].setOriginal(color);
         }
         this.addToLocations(g, locs);
     }
