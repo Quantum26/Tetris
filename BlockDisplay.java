@@ -54,11 +54,11 @@ public class BlockDisplay implements KeyListener
         frame = new JFrame();
         int x = board.getNumCols()*30;
         int y = board.getNumRows()*30;
-        if(x>y){
+       /** if(x>y){
             y = x;
         }else{
             x = y;
-        }
+        }*/
         image = new BufferedImage(x,y,BufferedImage.TYPE_INT_RGB);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.addKeyListener(this);
