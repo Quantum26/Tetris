@@ -36,13 +36,13 @@ public class Tetris implements ArrowListener
     private boolean cheatCode2 = false;
     private boolean dejavu = false;
     private boolean reee = false;
-    private boolean storm = false;
+    private boolean raining = false;
     private MusicPlayer music;
     private boolean sped = false;
     private long elapsed;
     private int meteors = 0;
     private int lives = 3;
-    private List<Tetrad> deathrad;
+    private List<Tetrad> storm;
     public Tetris()
     {
         grid = new BoundedGrid<Block>(20, 10); //creates a new grid
@@ -65,7 +65,7 @@ public class Tetris implements ArrowListener
         game = true; //the game is active
         controlsActive = true; //controls are active
         music = new MusicPlayer("Tetris.wav", 82000.0);
-        deathrad = new ArrayList<Tetrad>();
+        storm = new ArrayList<Tetrad>();
     }
 
     public void upPressed()
@@ -163,8 +163,10 @@ public class Tetris implements ArrowListener
                 elapsed = System.currentTimeMillis()-start;
             }
             if(!paused){
+                
                 for(int i = 0; i<5; i++){
                     try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                    
                     elapsed = System.currentTimeMillis()-start;
                 }
                 if(!dejavu){
@@ -215,6 +217,7 @@ public class Tetris implements ArrowListener
                         int n = activeTetrad.getLocations()[0].getCol();
                         n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
                         nextTetrad.translateToCol(n);
+                        DisplayNextTetrad();
                         controlsActive = true;
                         meteors++;
                         if(meteors%10==0){
@@ -482,7 +485,7 @@ public class Tetris implements ArrowListener
             Tetrad temp = new Tetrad(grid);
             temp.setShape(9);
             temp.translate(0,((Math.random()<0.5)?((int)(Math.random()*6)):(-1*(int)(Math.random()*6))));
-            deathrad.add(temp);
+            storm.add(temp);
         }
     }   
 
