@@ -28,49 +28,64 @@ public class Tetrad
     public void SpawnTetrad(){
         Location[] locs = new Location[4];
         color = Color.BLACK;
-        if(shape == 0){ //I
+        switch(shape){ 
+            case 0://I
             color = Color.BLUE;
             locs[0] = new Location(0,3);
             locs[1] = new Location(0,4);
             locs[2] = new Location(0,5);
             locs[3] = new Location(0,6);
-        }else if(shape == 1){ //T
+            break;
+            
+            case 1: //T
             color = Color.BLUE;
             locs[0] = new Location(0,3);
             locs[1] = new Location(0,4);
             locs[2] = new Location(0,5);
             locs[3] = new Location(1,4);
-        }else if(shape == 2){ //O
+            break;
+            
+            case 2: //O
             color = Color.RED;
             locs[0] = new Location(1,5);
             locs[1] = new Location(0,4);
             locs[2] = new Location(0,5);
             locs[3] = new Location(1,4);
-        }else if(shape == 3){ //L
+            break;
+            
+            case 3://L
             color = Color.RED;
             locs[0] = new Location(0,4);
             locs[1] = new Location(1,4);
             locs[2] = new Location(2,4);
             locs[3] = new Location(2,5);
-        }else if(shape == 4){ //J
+            break;
+            
+            case 4://J
             color = Color.RED;
             locs[0] = new Location(0,5);
             locs[1] = new Location(1,5);
             locs[2] = new Location(2,5);
             locs[3] = new Location(2,4);
-        }else if(shape == 5){ //S
+            break;
+            
+            case 5://S
             color = Color.WHITE;
             locs[0] = new Location(1,5);
             locs[1] = new Location(0,5);
             locs[2] = new Location(0,6);
             locs[3] = new Location(1,4);
-        }else if(shape == 6){ //Z
+            break;
+            
+            case 6://Z
             color = Color.WHITE;
             locs[0] = new Location(0,3);
             locs[1] = new Location(0,4);
             locs[2] = new Location(1,5);
             locs[3] = new Location(1,4);
-        }else if(shape == 7){
+            break;
+            
+            case 7:
 
             color = Color.WHITE;
             blocks = new Block[30];
@@ -109,8 +124,9 @@ public class Tetrad
             locs[27] = new Location(8, 7);
             locs[28] = new Location(9, 4);
             locs[29] = new Location(9, 5);
-
-        }else if(shape == 8){
+            break;
+            
+            case 8:
             color = Color.BLUE;
             blocks = new Block[40];
             for(int i = 0; i < blocks.length; i++)
@@ -125,18 +141,23 @@ public class Tetrad
                     i++;
                 }
             }
-        }else if(shape == 9){
+            break;
+            
+            case 9:
             color = Color.BLUE;
             locs[0] = new Location(0, 4);
             locs[1] = new Location(1, 4);
             locs[2] = new Location(2, 4);
             locs[3] = new Location(3, 4);
-        }else if (shape == 10){
+            break;
+            
+            case 10:
             color = Color.WHITE;
             locs[0] = new Location(19,4);
             locs[1] = new Location(19,5);
             locs[2] = new Location(18,4);
             locs[3] = new Location(18,5);
+            break;
         }
         //Exercise 1.2  Insert code here (after the above if statements) to
         //                  loop through the blocks array to
@@ -152,13 +173,15 @@ public class Tetrad
             blocks[2].setColor(Color.RED);blocks[0].setOriginal(Color.RED);
             Color brown = new Color(166, 91, 41);
             blocks[3].setColor(brown);blocks[0].setOriginal(brown);
-            
+
         }
         this.addToLocations(g, locs);
     }
+
     public void setShape(int s){
         shape = s;
     }
+
     public int getShape(){
         return shape;
     }
@@ -281,11 +304,13 @@ public class Tetrad
         this.addToLocations(g, newLocs);
         return true;
     }
+
     public void resetColor(){
         for(int i = 0; i<blocks.length; i++){
             blocks[i].setColor(color);
         }
     }
+
     public boolean isOnGround(){
         for(Block b:blocks){
             if(b.getLocation().getRow()==g.getNumRows()-1){
@@ -294,6 +319,7 @@ public class Tetrad
         }
         return false;
     }
+
     public boolean isNextToSomething(){
         Block b = blocks[blocks.length-1];
         Location l = b.getLocation();
@@ -305,7 +331,7 @@ public class Tetrad
         if(g.isValid(left)&&g.get(left)!=null){
             return true;
         }
-        
+
         return false;
     }
 }
