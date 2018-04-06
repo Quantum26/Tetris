@@ -41,6 +41,7 @@ public class Tetris implements ArrowListener
     private boolean sped = false;
     private long elapsed;
     private int meteors = 0;
+    private int lives = 3;
     private List<Tetrad> deathrad;
     public Tetris()
     {
@@ -196,9 +197,15 @@ public class Tetris implements ArrowListener
                     time = 30;
                     gameTime = time;
                     if(!nextTetrad.translate(1,0)){
+                        if(level>=11){
+                        ree();
+                        }
                         controlsActive = false;
                         gameTime = time;
                         if(!nextTetrad.isOnGround()){
+                            lives--;
+                        }
+                        if(lives<=0){
                             game = false;
                             gameOver();
                             break;
@@ -404,6 +411,7 @@ public class Tetris implements ArrowListener
         music.stopMusic();
         title+= " You lose m8";
         display.setTitle(title);
+        DisplayNextTetrad();
     }
 
     private void ree(){
@@ -427,8 +435,13 @@ public class Tetris implements ArrowListener
     public void DisplayNextTetrad(){
         for(int i = 0; i<16; i++)
             System.out.println();
+        if(!dejavu){
         System.out.println("Level: " + level + "\nLines: " + lines + "\nScore: " + score + 
             "\nNext:");
+        }else{
+        System.out.println("Level: " + level + "\nLives: " + lives + "\nScore: " + score + 
+            "\nNext:");
+        }
         if(nextTetrad.getShape()==0){
             for(int i = 0; i<4; i++)
                 System.out.println(" []");
@@ -449,6 +462,7 @@ public class Tetris implements ArrowListener
         }else{
             System.out.println("You dirty cheater");
         }
+        
         if(sped){
             System.out.println("SEIZURE WARNING");
         }
@@ -565,6 +579,9 @@ public class Tetris implements ArrowListener
 
     public void dPressed(){
         if(cheats){
+            music.stopMusic();
+            music = new MusicPlayer("dejavu.wav", 264000);
+            music.music();
             dejavu =!dejavu;
             for(int i = 0; i< grid.getNumRows(); i++){
                 clearRow(i);
