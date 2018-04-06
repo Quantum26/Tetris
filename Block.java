@@ -23,15 +23,15 @@ public class Block
     //gets the color of this block
     public Color getColor()
     {
-        return color;    //returns the color
+        return color;    //returns the current color
     }
     //sets the original color of the block
     public void setOriginal(Color newColor){
-        original = newColor;
+        original = newColor;//sets the original color
     }
     //gets the original color of the block
     public Color getOriginal(){
-        return original;
+        return original;//returns original color
     }
     //sets the color of this block to newColor.
     public void setColor(Color newColor)
@@ -83,12 +83,12 @@ public class Block
     //               (2) newLocation is valid in the grid of this block
     public void moveTo(Location newLocation)
     {
-        grid.remove(location);
-        Block other = grid.get(newLocation);
-        if (other != null)
-            other.removeSelfFromGrid();
-        location = newLocation;
-        grid.put(location,this);
+        grid.remove(location);//removes this block from the grid
+        Block other = grid.get(newLocation);//finds what was in the newLocation
+        if (other != null)//if there is a block in the new location
+            other.removeSelfFromGrid();//remove it
+        location = newLocation;//set the location to the new location
+        grid.put(location,this);//put this block to the new location
     }
 
         
