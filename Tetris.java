@@ -441,7 +441,10 @@ public class Tetris implements ArrowListener
             System.out.println("Level: " + level + "\nLines: " + lines + "\nScore: " + score + 
                 "\nNext:");
         }else{
-            System.out.println("Level: " + level + "\nLives: " + lives + "\nScore: " + score + 
+            System.out.print("\nLevel: " + level + "\nLives: ");
+            for(int i = 0; i<lives; i++)
+            System.out.print("[]");
+            System.out.print("\nScore: " + score + 
                 "\nNext:");
         }
         if(nextTetrad.getShape()==0){
@@ -607,6 +610,11 @@ public class Tetris implements ArrowListener
                 DisplayNextTetrad();
                 time = 1000;
             }
+        }else{
+            music.stopMusic();
+            music = new MusicPlayer("dejavu.wav", 264000);
+            music.music();
+            start = System.currentTimeMillis();
         }
     }
 
