@@ -34,12 +34,14 @@ public class Tetris implements ArrowListener
     private boolean cheats = false;
     private boolean cheatCode1 = false;
     private boolean cheatCode2 = false;
-    private boolean dejavu = false;;
+    private boolean dejavu = false;
     private boolean reee = false;
+    private boolean storm = false;
     private MusicPlayer music;
     private boolean sped = false;
     private long elapsed;
     private int meteors = 0;
+    private List<Tetrad> deathrad;
     public Tetris()
     {
         grid = new BoundedGrid<Block>(20, 10); //creates a new grid
@@ -62,6 +64,7 @@ public class Tetris implements ArrowListener
         game = true; //the game is active
         controlsActive = true; //controls are active
         music = new MusicPlayer("Tetris.wav", 82000.0);
+        deathrad = new ArrayList<Tetrad>();
     }
 
     public void upPressed()
@@ -161,6 +164,7 @@ public class Tetris implements ArrowListener
             try { Thread.sleep(gameTime/10); } catch(Exception e) {}
 
             if(!paused){
+                
                 try { Thread.sleep(gameTime/10); } catch(Exception e) {}
                 try { Thread.sleep(gameTime/10); } catch(Exception e) {}
                 try { Thread.sleep(gameTime/10); } catch(Exception e) {}
@@ -189,7 +193,7 @@ public class Tetris implements ArrowListener
                         controlsActive = true;
                     }
                 }else{
-                    time = 50;
+                    time = 30;
                     gameTime = time;
                     if(!nextTetrad.translate(1,0)){
                         controlsActive = false;
@@ -203,7 +207,7 @@ public class Tetris implements ArrowListener
                         nextTetrad = new Tetrad(grid);
                         nextTetrad.setShape(9);
                         nextTetrad.SpawnTetrad();
-                        nextTetrad.translate(0, ((Math.random()<0.5) ? ((int)(Math.random()*6)) :(-1*(int)(Math.random()*6))));
+                        nextTetrad.translate(0,((Math.random()<0.5)?((int)(Math.random()*6)):(-1*(int)(Math.random()*6))));
                         DisplayNextTetrad();
                         controlsActive = true;
                         meteors++;
@@ -445,8 +449,20 @@ public class Tetris implements ArrowListener
         }else{
             System.out.println("You dirty cheater");
         }
+        if(sped){
+            System.out.println("SEIZURE WARNING");
+        }
     }
-
+    
+    public void stockStorm(){
+        for(int i = 0; i<4; i++){
+            Tetrad temp = new Tetrad(grid);
+            temp.setShape(9);
+            temp.translate(0,((Math.random()<0.5)?((int)(Math.random()*6)):(-1*(int)(Math.random()*6))));
+            deathrad.add(temp);
+        }
+    }   
+    
     public void onePressed(){
         music.stopMusic();
         music = new MusicPlayer("Tetris.wav", 82000.0);
@@ -549,22 +565,29 @@ public class Tetris implements ArrowListener
 
     public void dPressed(){
         if(cheats){
+            dejavu =!dejavu;
             for(int i = 0; i< grid.getNumRows(); i++){
                 clearRow(i);
             }
-            nextTetrad = new Tetrad(grid);
-            activeTetrad = new Tetrad(grid);
-            nextTetrad.setShape(9);
-            activeTetrad.setShape(10);
-            DisplayNextTetrad();
-            cheatCode1 = !cheatCode1;
-            cheatCode2 = false;
-            dejavu = true;
-            time = 50;
-            activeTetrad.SpawnTetrad();
-            nextTetrad.SpawnTetrad();
-            nextTetrad.translate(0, ((Math.random()<0.5) ? ((int)(Math.random()*6)) :(-1*(int)(Math.random()*6))));
-            
+            if(dejavu){
+
+                nextTetrad = new Tetrad(grid);
+                activeTetrad = new Tetrad(grid);
+                nextTetrad.setShape(9);
+                activeTetrad.setShape(10);
+                DisplayNextTetrad();
+
+                time = 30;
+                activeTetrad.SpawnTetrad();
+                nextTetrad.SpawnTetrad();
+                nextTetrad.translate(0, ((Math.random()<0.5) ? ((int)(Math.random()*6)) :(-1*(int)(Math.random()*6))));
+            }else{
+                nextTetrad = new Tetrad(grid);
+                activeTetrad = new Tetrad(grid);
+                activeTetrad.SpawnTetrad();
+                DisplayNextTetrad();
+                time = 1000;
+            }
         }
     }
 
