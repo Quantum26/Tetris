@@ -146,6 +146,14 @@ public class Tetrad
             blocks[i].setColor(color);
             blocks[i].setOriginal(color);
         }
+        if(shape == 9){
+            blocks[0].setColor(Color.YELLOW);blocks[0].setOriginal(Color.YELLOW);
+            blocks[1].setColor(Color.ORANGE);blocks[0].setOriginal(Color.ORANGE);
+            blocks[2].setColor(Color.RED);blocks[0].setOriginal(Color.RED);
+            Color brown = new Color(166, 91, 41);
+            blocks[3].setColor(brown);blocks[0].setOriginal(brown);
+            
+        }
         this.addToLocations(g, locs);
     }
     public void setShape(int s){
