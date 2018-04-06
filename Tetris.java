@@ -23,6 +23,7 @@ public class Tetris implements ArrowListener
     private BlockDisplay display; // the display for tetris
     private Tetrad activeTetrad; //current tetrad being manipulated
     private Tetrad nextTetrad; //next tetrad about to fall
+    private Tetrad thirdTetrad; //extra tetrad for dodging mode
     private String title; //title of the display
     private int combo; // # of rows previously cleared
     private boolean tettet; // true if you cleared a tetris previously
@@ -34,6 +35,7 @@ public class Tetris implements ArrowListener
     private boolean cheats = false;
     private boolean cheatCode1 = false;
     private boolean cheatCode2 = false;
+    private boolean cheatCode3 = false;
     private boolean dejavu = false;
     private boolean reee = false;
     private boolean raining = false;
@@ -163,10 +165,10 @@ public class Tetris implements ArrowListener
                 elapsed = System.currentTimeMillis()-start;
             }
             if(!paused){
-                
+
                 for(int i = 0; i<5; i++){
                     try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-                    
+
                     elapsed = System.currentTimeMillis()-start;
                 }
                 if(!dejavu){
@@ -192,12 +194,14 @@ public class Tetris implements ArrowListener
                     }
                 }else{
                     gameTime = time;
-                    if(!nextTetrad.translate(1,0)){
-                        if(elapsed>=64000 && reee){
-                            ree();
-                            reee = !reee;
+                    if(!nextTetrad.translate(1,0)||(thirdTetrad.getSpawned()&&!thirdTetrad.translate(1,0))){
+                        if(elapsed>=64000){
+                            //ree();
+                            //reee = true;
+                            display.setRee(true);
+                            cheatCode3=true;
                         }
-                        if(nextTetrad.isNextToSomething()){
+                        if(nextTetrad.isNextToSomething()||(thirdTetrad.getSpawned()&&thirdTetrad.isNextToSomething())){
                             score+=20*level;
                         }
                         controlsActive = false;
@@ -217,9 +221,23 @@ public class Tetris implements ArrowListener
                         int n = activeTetrad.getLocations()[0].getCol();
                         n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
                         nextTetrad.translateToCol(n);
+                        if(cheatCode3){
+                            if(thirdTetrad.getSpawned()){
+                                thirdTetrad.removeBlocks();
+                            }
+                            thirdTetrad = new Tetrad(grid);
+                            thirdTetrad.setShape(9);
+                            thirdTetrad.SpawnTetrad();
+                            int t = activeTetrad.getLocations()[0].getCol();
+                            t += (Math.random()<0.5)?(-1*(int)(Math.random()*5) - 1):((int)(Math.random()*5) + 1);
+                            thirdTetrad.translateToCol(t); 
+                        }
                         DisplayNextTetrad();
                         controlsActive = true;
                         meteors++;
+                        if(cheatCode3){
+                            meteors++;
+                        }
                         if(meteors%10==0){
                             level++;
                             time-=2;
@@ -230,7 +248,7 @@ public class Tetris implements ArrowListener
                         if(level>=8){
                             System.out.println("SEIZURE WARNING!!!!!!!!");
                         }
-                        score+=20*level;
+                        score+=10*level;
                     }
                 }
                 if(game==false){
@@ -602,6 +620,8 @@ public class Tetris implements ArrowListener
 
                 nextTetrad = new Tetrad(grid);
                 activeTetrad = new Tetrad(grid);
+                thirdTetrad = new Tetrad(grid);
+                thirdTetrad.setShape(9);
                 nextTetrad.setShape(9);
                 activeTetrad.setShape(10);
                 DisplayNextTetrad();

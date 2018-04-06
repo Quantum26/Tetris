@@ -12,6 +12,7 @@ public class Tetrad
     private int shape;
     private BoundedGrid<Block> g;
     private Color color;
+    private boolean spawned;
     public Tetrad(BoundedGrid<Block> grid)
     {
         blocks = new Block[4];
@@ -22,6 +23,7 @@ public class Tetrad
         //shape = 8;
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
+        spawned = false;
         shape = (int)(Math.random()*7);
     }
 
@@ -184,6 +186,7 @@ public class Tetrad
             blocks[3].setColor(brown);blocks[0].setOriginal(brown);
 
         }
+        spawned = true;
         this.addToLocations(g, locs);
     }
 
@@ -259,6 +262,8 @@ public class Tetrad
         Location[] locs = new Location[blocks.length];
         for(int i = 0; i < blocks.length; i++){
             locs[i] = blocks[i].getLocation();
+            if(locs[i]==null)
+            return false;
             blocks[i].removeSelfFromGrid();
         }
         Location[] newLocs = new Location[blocks.length];
@@ -332,6 +337,8 @@ public class Tetrad
     public boolean isNextToSomething(){
         Block b = blocks[blocks.length-1];
         Location l = b.getLocation();
+        if(l==null)
+        return false;
         Location right = new Location(l.getRow(), l.getCol()-1);
         Location left = new Location(l.getRow(), l.getCol()+1);
         if(g.isValid(right)&&g.get(right)!=null){
@@ -347,5 +354,8 @@ public class Tetrad
     public void translateToCol(int col){
         int trans = col-blocks[0].getLocation().getCol();
         translate(0, trans);
+    }
+    public boolean getSpawned(){
+        return spawned;
     }
 }
