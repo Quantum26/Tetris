@@ -212,8 +212,9 @@ public class Tetris implements ArrowListener
                         nextTetrad = new Tetrad(grid);
                         nextTetrad.setShape(9);
                         nextTetrad.SpawnTetrad();
-                        nextTetrad.translate(0,((Math.random()<0.5)?((int)(Math.random()*5)):(-1*(int)(Math.random()*4))));
-                        DisplayNextTetrad();
+                        int n = activeTetrad.getLocations()[0].getCol();
+                        n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
+                        nextTetrad.translateToCol(n);
                         controlsActive = true;
                         meteors++;
                         if(meteors%10==0){
@@ -605,7 +606,9 @@ public class Tetris implements ArrowListener
                 time = 50;
                 activeTetrad.SpawnTetrad();
                 nextTetrad.SpawnTetrad();
-                nextTetrad.translate(0, ((Math.random()<0.5) ? ((int)(Math.random()*5)) :(-1*(int)(Math.random()*4))));
+                int n = activeTetrad.getLocations()[0].getCol();
+                n = (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
+                nextTetrad.translateToCol(n);
             }else{
                 nextTetrad = new Tetrad(grid);
                 activeTetrad = new Tetrad(grid);

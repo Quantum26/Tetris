@@ -36,7 +36,7 @@ public class Tetrad
             locs[2] = new Location(0,5);
             locs[3] = new Location(0,6);
             break;
-            
+
             case 1: //T
             color = Color.BLUE;
             locs[0] = new Location(0,3);
@@ -44,7 +44,7 @@ public class Tetrad
             locs[2] = new Location(0,5);
             locs[3] = new Location(1,4);
             break;
-            
+
             case 2: //O
             color = Color.RED;
             locs[0] = new Location(1,5);
@@ -52,7 +52,7 @@ public class Tetrad
             locs[2] = new Location(0,5);
             locs[3] = new Location(1,4);
             break;
-            
+
             case 3://L
             color = Color.RED;
             locs[0] = new Location(0,4);
@@ -60,7 +60,7 @@ public class Tetrad
             locs[2] = new Location(2,4);
             locs[3] = new Location(2,5);
             break;
-            
+
             case 4://J
             color = Color.RED;
             locs[0] = new Location(0,5);
@@ -68,7 +68,7 @@ public class Tetrad
             locs[2] = new Location(2,5);
             locs[3] = new Location(2,4);
             break;
-            
+
             case 5://S
             color = Color.WHITE;
             locs[0] = new Location(1,5);
@@ -76,7 +76,7 @@ public class Tetrad
             locs[2] = new Location(0,6);
             locs[3] = new Location(1,4);
             break;
-            
+
             case 6://Z
             color = Color.WHITE;
             locs[0] = new Location(0,3);
@@ -84,7 +84,7 @@ public class Tetrad
             locs[2] = new Location(1,5);
             locs[3] = new Location(1,4);
             break;
-            
+
             case 7:
 
             color = Color.WHITE;
@@ -125,7 +125,7 @@ public class Tetrad
             locs[28] = new Location(9, 4);
             locs[29] = new Location(9, 5);
             break;
-            
+
             case 8:
             color = Color.BLUE;
             blocks = new Block[40];
@@ -142,7 +142,7 @@ public class Tetrad
                 }
             }
             break;
-            
+
             case 9:
             color = Color.BLUE;
             locs[0] = new Location(0, 4);
@@ -150,7 +150,7 @@ public class Tetrad
             locs[2] = new Location(2, 4);
             locs[3] = new Location(3, 4);
             break;
-            
+
             case 10:
             color = Color.WHITE;
             locs[0] = new Location(19,4);
@@ -158,6 +158,15 @@ public class Tetrad
             locs[2] = new Location(18,4);
             locs[3] = new Location(18,5);
             break;
+
+            default:
+            color = Color.WHITE;
+            locs[0] = new Location(0,3);
+            locs[1] = new Location(0,4);
+            locs[2] = new Location(1,5);
+            locs[3] = new Location(1,4);
+            break;
+
         }
         //Exercise 1.2  Insert code here (after the above if statements) to
         //                  loop through the blocks array to
@@ -333,5 +342,10 @@ public class Tetrad
         }
 
         return false;
+    }
+
+    public void translateToCol(int col){
+        int trans = col-blocks[0].getLocation().getCol();
+        translate(0, trans);
     }
 }
