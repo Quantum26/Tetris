@@ -286,4 +286,18 @@ public class Tetrad
         }
         return false;
     }
+    public boolean isNextToSomething(){
+        Block b = blocks[blocks.length-1];
+        Location l = b.getLocation();
+        Location right = new Location(l.getRow(), l.getCol()-1);
+        Location left = new Location(l.getRow(), l.getCol()+1);
+        if(g.isValid(right)&&g.get(right)!=null){
+            return true;
+        }
+        if(g.isValid(left)&&g.get(left)!=null){
+            return true;
+        }
+        
+        return false;
+    }
 }

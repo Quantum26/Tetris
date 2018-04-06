@@ -195,6 +195,9 @@ public class Tetris implements ArrowListener
                             ree();
                             reee=true;
                         }
+                        if(nextTetrad.isNextToSomething()){
+                            score+=20*level;
+                        }
                         controlsActive = false;
                         gameTime = time;
                         if(!nextTetrad.isOnGround()){
@@ -443,7 +446,7 @@ public class Tetris implements ArrowListener
         }else{
             System.out.print("\nLevel: " + level + "\nLives: ");
             for(int i = 0; i<lives; i++)
-            System.out.print("[]");
+                System.out.print("[]");
             System.out.print("\nScore: " + score + 
                 "\nNext:");
         }
