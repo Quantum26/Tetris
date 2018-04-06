@@ -158,20 +158,15 @@ public class Tetris implements ArrowListener
                 music.music();
                 start = System.currentTimeMillis();
             }
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-
+            for(int i = 0; i<5; i++){
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                elapsed = System.currentTimeMillis()-start;
+            }
             if(!paused){
-                
-                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-
+                for(int i = 0; i<5; i++){
+                    try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                    elapsed = System.currentTimeMillis()-start;
+                }
                 if(!dejavu){
                     if(!activeTetrad.translate(1,0)){
                         controlsActive = false;
@@ -194,11 +189,11 @@ public class Tetris implements ArrowListener
                         controlsActive = true;
                     }
                 }else{
-                    time = 30;
                     gameTime = time;
                     if(!nextTetrad.translate(1,0)){
-                        if(level>=11){
-                        ree();
+                        if(elapsed>=65500 || reee){
+                            ree();
+                            reee=true;
                         }
                         controlsActive = false;
                         gameTime = time;
@@ -220,6 +215,13 @@ public class Tetris implements ArrowListener
                         meteors++;
                         if(meteors%10==0){
                             level++;
+                            time-=2;
+                            if(time<20){
+                                time = 20;
+                            }
+                        }
+                        if(level>=8){
+                            System.out.println("SEIZURE WARNING!!!!!!!!");
                         }
                         score+=20*level;
                     }
@@ -436,11 +438,11 @@ public class Tetris implements ArrowListener
         for(int i = 0; i<16; i++)
             System.out.println();
         if(!dejavu){
-        System.out.println("Level: " + level + "\nLines: " + lines + "\nScore: " + score + 
-            "\nNext:");
+            System.out.println("Level: " + level + "\nLines: " + lines + "\nScore: " + score + 
+                "\nNext:");
         }else{
-        System.out.println("Level: " + level + "\nLives: " + lives + "\nScore: " + score + 
-            "\nNext:");
+            System.out.println("Level: " + level + "\nLives: " + lives + "\nScore: " + score + 
+                "\nNext:");
         }
         if(nextTetrad.getShape()==0){
             for(int i = 0; i<4; i++)
@@ -462,12 +464,12 @@ public class Tetris implements ArrowListener
         }else{
             System.out.println("You dirty cheater");
         }
-        
+
         if(sped){
             System.out.println("SEIZURE WARNING");
         }
     }
-    
+
     public void stockStorm(){
         for(int i = 0; i<4; i++){
             Tetrad temp = new Tetrad(grid);
@@ -476,7 +478,7 @@ public class Tetris implements ArrowListener
             deathrad.add(temp);
         }
     }   
-    
+
     public void onePressed(){
         music.stopMusic();
         music = new MusicPlayer("Tetris.wav", 82000.0);
@@ -593,8 +595,8 @@ public class Tetris implements ArrowListener
                 nextTetrad.setShape(9);
                 activeTetrad.setShape(10);
                 DisplayNextTetrad();
-
-                time = 30;
+                start = System.currentTimeMillis();
+                time = 50;
                 activeTetrad.SpawnTetrad();
                 nextTetrad.SpawnTetrad();
                 nextTetrad.translate(0, ((Math.random()<0.5) ? ((int)(Math.random()*6)) :(-1*(int)(Math.random()*6))));
