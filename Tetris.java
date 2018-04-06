@@ -191,7 +191,7 @@ public class Tetris implements ArrowListener
                 }else{
                     gameTime = time;
                     if(!nextTetrad.translate(1,0)){
-                        if(elapsed>=65500 && reee){
+                        if(elapsed>=64000 && reee){
                             ree();
                             reee = !reee;
                         }
