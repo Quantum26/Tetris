@@ -23,6 +23,7 @@ public class Tetris implements ArrowListener
     private BlockDisplay display; // the display for tetris
     private Tetrad activeTetrad; //current tetrad being manipulated
     private Tetrad nextTetrad; //next tetrad about to fall
+    private Tetrad thirdTetrad; //extra tetrad for dodging mode
     private String title; //title of the display
     private int combo; // # of rows previously cleared
     private boolean tettet; // true if you cleared a tetris previously
@@ -34,6 +35,7 @@ public class Tetris implements ArrowListener
     private boolean cheats = false;
     private boolean cheatCode1 = false;
     private boolean cheatCode2 = false;
+    private boolean cheatCode3 = false;
     private boolean dejavu = false;
     private boolean reee = false;
     private boolean raining = false;
@@ -126,7 +128,7 @@ public class Tetris implements ArrowListener
                 }
             }
             activeTetrad.resetColor(); //resets the color of the active tetrad
-            display.showBlocks();//shows the block again
+            display.showBlocks();
         }else{ //if the game isnt paused
             paused = true; //pause the game
             System.out.println("pause"); //tell the player the game is paused
@@ -140,113 +142,129 @@ public class Tetris implements ArrowListener
                     }
                 }
             }
-            display.showBlocks();//show the blocks again
+            display.showBlocks();
         }
     }
 
     public void play()
     {
-        game = true;//sets the fact that you aer still going to true
-        activeTetrad.SpawnTetrad();//spawns the active tetrad
-        DisplayNextTetrad();//displays information about your next tetrad on the screen
+        game = true;
+        activeTetrad.SpawnTetrad();
+        DisplayNextTetrad();
 
-        music.music();//starts the music
-        while (game)//while the game is being played
+        music.music();
+        while (game)
         {
-            elapsed = System.currentTimeMillis()-start;//elapsed time since game started
-            if(elapsed%music.getLength()>=1000&&elapsed>=music.getLength() && !music.getMuted()){//if the song is over
-                music.music();//plays the music again
-                start = System.currentTimeMillis();//resets the start time of the music
+            elapsed = System.currentTimeMillis()-start;
+            if(elapsed%music.getLength()>=1000&&elapsed>=music.getLength() && !music.getMuted()){
+                music.music();
+                start = System.currentTimeMillis();
             }
             for(int i = 0; i<5; i++){
-                try { Thread.sleep(gameTime/10); } catch(Exception e) {}//waits for amount of time
-                elapsed = System.currentTimeMillis()-start;//gathers elapsed time since game started
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                elapsed = System.currentTimeMillis()-start;
             }
-            if(!paused){//if the game is not paused
-                
+            if(!paused){
+
                 for(int i = 0; i<5; i++){
-                    try { Thread.sleep(gameTime/10); } catch(Exception e) {}//completes one interval for block to fall due to gravity
-                    
-                    elapsed = System.currentTimeMillis()-start;//elapsed time since game started
+                    try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+
+                    elapsed = System.currentTimeMillis()-start;
                 }
-                if(!dejavu){//if you are in normal mode
-                    if(!activeTetrad.translate(1,0)){//translates tetrad down if it can, for gravity
-                        controlsActive = false;//deactivates controls so game can deal with what needs to happen properly
-                        gameTime = time;//resets time for block to fall
-                        if(!topRowsEmpty()){//if the top rows are not empty
-                            game = false;//the game is over
-                            gameOver();//indicates to player game is over
-                            break;//stops game
+                if(!dejavu){
+                    if(!activeTetrad.translate(1,0)){
+                        controlsActive = false;
+                        gameTime = time;
+                        if(!topRowsEmpty()){
+                            game = false;
+                            gameOver();
+                            break;
                         }
-                        clearCompletedRows();//clears all rows that are complete
-                        activeTetrad = nextTetrad;//sets new tetrad to what was next
-                        activeTetrad.SpawnTetrad();//spawns the new tetrad
-                        nextTetrad = new Tetrad(grid);//makes the next tetrad a new tetrad
-                        if(cheatCode1){//if you have a cheatcode
-                            nextTetrad.setShape(0);//gives you automatic "I" block
-                        }else if(cheatCode2){//another cheatcode
-                            nextTetrad.setShape(2);//gives you an "O" block
+                        clearCompletedRows();
+                        activeTetrad = nextTetrad;
+                        activeTetrad.SpawnTetrad();
+                        nextTetrad = new Tetrad(grid);
+                        if(cheatCode1){
+                            nextTetrad.setShape(0);
+                        }else if(cheatCode2){
+                            nextTetrad.setShape(2);
                         }
-                        DisplayNextTetrad();//displays information
-                        controlsActive = true;//now the user gets their controls back
+                        DisplayNextTetrad();
+                        controlsActive = true;
                     }
-                }else{//in the dejavu game mode
+                }else{
                     gameTime = time;
-                    if(!nextTetrad.translate(1,0)){//nextTetrad is a meteor, drops meteor if possible
-                        if(elapsed>=64000 && reee){//if the beat drop is here
-                            ree();//activates intense display mode
-                            reee = !reee;//sets boolean for intense display mode to not
+                    if(!nextTetrad.translate(1,0)||(thirdTetrad.getSpawned()&&!thirdTetrad.translate(1,0))){
+                        if(elapsed>=64000){
+                            //ree();
+                            //reee = true;
+                            display.setRee(true);
+                            cheatCode3=true;
                         }
-                        if(nextTetrad.isNextToSomething()){//if the meteor dropped next to you
-                            score+=20*level;//get extra points
+                        if(nextTetrad.isNextToSomething()||(thirdTetrad.getSpawned()&&thirdTetrad.isNextToSomething())){
+                            score+=20*level;
                         }
-                        controlsActive = false;//to deal with block deactivaes controls
-                        gameTime = time;//resets time
-                        if(!nextTetrad.isOnGround()){//if the meteor fell on you
-                            lives--;//lose one life
+                        controlsActive = false;
+                        gameTime = time;
+                        if(!nextTetrad.isOnGround()){
+                            lives--;
                         }
-                        if(lives<=0){//if you dont have any lives
-                            game = false;//game is over
-                            gameOver();//display the game is over
-                            break;//stop the game
+                        if(lives<=0){
+                            game = false;
+                            gameOver();
+                            break;
                         }
-                        nextTetrad.removeBlocks();//removes the meteor once it hits the ground
-                        nextTetrad = new Tetrad(grid);//makes a new tetrad
-                        nextTetrad.setShape(9);//sets the new tetrad to a meteor
-                        nextTetrad.SpawnTetrad();//spawns the meteor
-                        int n = activeTetrad.getLocations()[0].getCol();//gets the column your block is in
-                        n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));//translates the meteor so it is above your block
-                        nextTetrad.translateToCol(n);//translates the meteor to above you
-                        DisplayNextTetrad();//displays game information
-                        controlsActive = true;//user gets controls back
-                        meteors++;//amount of meteors cleared goes up
-                        if(meteors%10==0){//if you have completed a multiple of 10 meteors
-                            level++;//level up
-                            time-=2;//game gets faster
-                            if(time<20){//caps time to 20, way too fast after that
-                                time = 20;//time is 20
+                        nextTetrad.removeBlocks();
+                        nextTetrad = new Tetrad(grid);
+                        nextTetrad.setShape(9);
+                        nextTetrad.SpawnTetrad();
+                        int n = activeTetrad.getLocations()[0].getCol();
+                        n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
+                        nextTetrad.translateToCol(n);
+                        if(cheatCode3){
+                            if(thirdTetrad.getSpawned()){
+                                thirdTetrad.removeBlocks();
+                            }
+                            thirdTetrad = new Tetrad(grid);
+                            thirdTetrad.setShape(9);
+                            thirdTetrad.SpawnTetrad();
+                            int t = activeTetrad.getLocations()[0].getCol();
+                            t += (Math.random()<0.5)?(-1*(int)(Math.random()*5) - 1):((int)(Math.random()*5) + 1);
+                            thirdTetrad.translateToCol(t); 
+                        }
+                        DisplayNextTetrad();
+                        controlsActive = true;
+                        meteors++;
+                        if(cheatCode3){
+                            meteors++;
+                        }
+                        if(meteors%10==0){
+                            level++;
+                            time-=2;
+                            if(time<20){
+                                time = 20;
                             }
                         }
-                        if(level>=8){//intense display starts here
-                            System.out.println("SEIZURE WARNING!!!!!!!!");//hopefully you wont, but need the warning for a seizure
+                        if(level>=8){
+                            System.out.println("SEIZURE WARNING!!!!!!!!");
                         }
-                        score+=20*level;//increments score, multiplier of level you are on
+                        score+=10*level;
                     }
                 }
-                if(game==false){//if the game is over
-                    break;//stop the game if you havent already
+                if(game==false){
+                    break;
                 }
-                display.showBlocks();//show information in console
-                title = "Level "+level+", Score: "+score;//show basic information in title of window
-                display.setTitle(title);//sets the title to basic information
-                if(reee)//if you want intense display mode
-                    ree();//activates intense game mode(dont do it)
+                display.showBlocks();
+                title = "Level "+level+", Score: "+score;
+                display.setTitle(title);
+                if(reee)
+                    ree();
             }
-            if(elapsed >=24000 && sped){//if beat drop for "running in the 90s" mode
-                time = 25;//very fast game
-                gameTime = 25;//sets drop speed to way too fast
-                sped = false;//sets this script to completed
-                display.setRee(true);//sets intense display mode
+            if(elapsed >=24000 && sped){
+                time = 25;
+                gameTime = 25;
+                sped = false;
+                display.setRee(true);
             }
         }
     }
@@ -257,14 +275,14 @@ public class Tetris implements ArrowListener
     //               returns false otherwise.
     private boolean isCompletedRow(int row)
     {
-        boolean full = true;//row is full until proven not
-        for(int i = 0; i < 10; i++){//for 10 blocks in a row
-            Location l = new Location(row, i);//makes temporary location to check
-            if(grid.get(l)==null){//if there is nothing in that location on the grid
-                full = false;//the row is not full
+        boolean full = true;
+        for(int i = 0; i < 10; i++){
+            Location l = new Location(row, i);
+            if(grid.get(l)==null){
+                full = false;
             }
         }
-        return full;//returns if the row is full
+        return full;
     }
 
     //precondition:  0 <= row < number of rows;
@@ -274,10 +292,10 @@ public class Tetris implements ArrowListener
     //               has been moved down one row.
     private void clearRow(int row)
     {
-        for(int i = 0; i<10; i++){//for all the blocks in a row
-            Location l = new Location(row, i);//temporary location to delete
-            if(grid.get(l)!=null)//if there is something in the locatoin
-                grid.remove(l).removeSelfFromGrid();//remove it
+        for(int i = 0; i<10; i++){
+            Location l = new Location(row, i);
+            if(grid.get(l)!=null)
+                grid.remove(l).removeSelfFromGrid();
 
         }
     }
@@ -285,105 +303,104 @@ public class Tetris implements ArrowListener
     //postcondition: All completed rows have been cleared.
     private void clearCompletedRows()
     {
-        int rowsBroke = 0;//how many rows have you broken
-        for(int i = 19; i > 0; i--){//goes through all 20 rows
-            if(isCompletedRow(i)){//if it is a completed row
-                flashRow(i);//flash the row to indicate it is broken
-                clearRow(i);//clear the row
-                moveDownAbove(i);//move everything above the row down
-                i = 20;//reset line to 20 to recheck everything
-                rowsBroke++;//you broke one more line
-                rowsDone++;//you have completed one more line
-                lines++;//you have completed one more line
+        int rowsBroke = 0;
+        for(int i = 19; i > 0; i--){
+            if(isCompletedRow(i)){
+                flashRow(i);
+                clearRow(i);
+                moveDownAbove(i);
+                i = 20;
+                rowsBroke++;
+                rowsDone++;
+                lines++;
             }
 
         }
 
-        int scor = 0;//score to add
-        if(rowsBroke == 1){//if you only broke one row
-            scor = 100*level;//100 points for row, multipled by level
-            tettet = false;//did not get tetris
-            combo++;//combo goes up
-        }else if(rowsBroke == 2){//if you broke two rows
-            scor = 300*level;//300 points
-            tettet = false;//did not get tetris
-            combo++;//ups combo
-        }else if(rowsBroke == 3){//if you got 3 rows
-            scor = 500*level;//500 points 
-            tettet = false;//did not get tetris
-            combo++;//combo goes up
-        }else if(rowsBroke == 4 && tettet){//if you have a tetris before this and just got a tetris
-            scor = 1600*level;//1600 points 
-            tettet = true;//you got a tetris
-            combo++;//combo goes up
-        }else if(rowsBroke == 4){//if you only got a tetris
-            scor = 800*level;//800 points
-            tettet = true;//you have a tetris
-            combo++;//combo goes up
+        int scor = 0;
+        if(rowsBroke == 1){
+            scor = 100*level;
+            tettet = false;
+            combo++;
+        }else if(rowsBroke == 2){
+            scor = 300*level;
+            tettet = false;
+            combo++;
+        }else if(rowsBroke == 3){
+            scor = 500*level;
+            tettet = false;
+            combo++;
+        }else if(rowsBroke == 4 && tettet){
+            scor = 1600*level;
+            tettet = true;
+            combo++;
+        }else if(rowsBroke == 4){
+            scor = 800*level;
+            tettet = true;
+            combo++;
         }else{
-            tettet = false;//you did not get a tetris
-            combo = 0;//combo is broken
+            tettet = false;
+            combo = 0;
         }
-        if(combo>0){//if you have a combo
-            scor += 50*combo*level;//extra points for the combo
+        if(combo>0){
+            scor += 50*combo*level;
         }
-        score+= scor;//increments your score
-        if(rowsDone>=10){//if more than 10 rows are completed
-            if(time>200){//if gametime is more than 200
-                level++;//level goes up
-                time-= 100;//time goes down by a 10th of a second
-                rowsDone -= 10;//rowsdone since leveling up goes down by 10
-            }else if (time>75){//if time is less than 200 but more than 75
-                level++;//level up
-                time-= 25;//only go down by 0.025 of a second
-                rowsDone -= 10;//rows done since leveling up goes down by 10
-            }else if(level>=1999){//if running in the 90s mode or you somehow made it to this level
-                level=1990;//you cant pass 2000 sorry and you must continue running in the 90s
-                rowsDone -=10;//rows done since leveling up goes down by 10
-            }else{//if you are already at an insanely fast speed
-                //speed cant go up anymore
-                level++;//level up
-                rowsDone -= 10;//rows done since leveling up goes down by 10
+        score+= scor;
+        if(rowsDone>=10){
+            if(time>200){
+                level++;
+                time-= 100;
+                rowsDone -= 10;
+            }else if (time>75){
+                level++;
+                time-= 25;
+                rowsDone -= 10;
+            }else if(level>=1999){
+                level=1990;
+                rowsDone -=10;
+            }else{
+                level++;
+                rowsDone -= 10;
             }
         }
-        display.showBlocks();//shows blocks after rows cleared
+        display.showBlocks();
     }
 
     private void moveDownAbove(int r){
-        if(r<1){//if it is top row
-            return;//dont do anything
+        if(r<1){
+            return;
         }
-        List<Location> locs = grid.getRow(r);//get locations of the row specified
-        for(Location l: locs){//for all of those locations
-            Location x = new Location(l.getRow()+1, l.getCol());//new locaiton to go to
-            if(grid.isValid(x)&&grid.get(x)==null){//if block can move down
-                grid.remove(l).moveTo(x);//moves block down
+        List<Location> locs = grid.getRow(r);
+        for(Location l: locs){
+            Location x = new Location(l.getRow()+1, l.getCol());
+            if(grid.isValid(x)&&grid.get(x)==null){
+                grid.remove(l).moveTo(x);
             }
         }
-        moveDownAbove(r-1);//uses recursion to do this to all the rows above current row
+        moveDownAbove(r-1);
     }
 
     public void flashRow(int row){
-        Color[] colors = new Color[10];//keeps original colors
-        for(int k = 0; k<2; k++){//does this process twice
-            for(int i = 0; i< 10; i++){//for the entire row
-                Location l = new Location(row, i);//location to look at
-                if(grid.get(l)!=null){//if something is there
-                    colors[i] = grid.get(l).getColor();//sets original color in the array storing original colors
-                    grid.get(l).setColor(new Color(0, 0, 0));//sets color to black to simulate flashing
+        Color[] colors = new Color[10];
+        for(int k = 0; k<2; k++){
+            for(int i = 0; i< 10; i++){
+                Location l = new Location(row, i);
+                if(grid.get(l)!=null){
+                    colors[i] = grid.get(l).getColor();
+                    grid.get(l).setColor(new Color(0, 0, 0));
                 }
 
             }
-            display.showBlocks();//shows what you display should look like
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}//waits for a little bit
-            for(int i = 0; i< 10; i++){//for all of the locations
-                Location l = new Location(row, i);//current location to look at
-                if(colors[i]!=null && grid.get(l)!=null)//if something is there
-                    grid.get(l).setColor(colors[i]);//set back to its original color
+            display.showBlocks();
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            for(int i = 0; i< 10; i++){
+                Location l = new Location(row, i);
+                if(colors[i]!=null && grid.get(l)!=null)
+                    grid.get(l).setColor(colors[i]);
 
             }
-            display.showBlocks();//shows what blocks should look like
-            try { Thread.sleep(gameTime/10); } catch(Exception e) {}//waits a little
+            display.showBlocks();
+            try { Thread.sleep(gameTime/10); } catch(Exception e) {}
         }
     }
 
@@ -392,70 +409,70 @@ public class Tetris implements ArrowListener
     {
         boolean top = true;
         boolean atop = true;
-        for(int i = 0; i<10; i++){//looks at top row
-            Location l = new Location(0, i);//location in top row
-            if(grid.get(l)!=null){//if something is there
-                top = false;//top row is not empty
+        for(int i = 0; i<10; i++){
+            Location l = new Location(0, i);
+            if(grid.get(l)!=null){
+                top = false;
             }
         }
-        for(int i = 0; i<10; i++){//for all elements in second to top row
-            Location l = new Location(1, i);//looks at second to top row
-            if(grid.get(l)!=null){//if something is there
-                atop = false;//second top row is not empty
+        for(int i = 0; i<10; i++){
+            Location l = new Location(1, i);
+            if(grid.get(l)!=null){
+                atop = false;
             }
         }
-        return top && atop;//returns if both rows are empty
+        return top && atop;
     }
 
     private void gameOver(){
-        for(int r = 0; r < 20; r++){//for all of the rows in the grid
-            for(int c = 0; c < 10; c++){//for all of the columns
-                Location l = new Location (r, c);//location to look at
-                if(grid.get(l)!=null){//if something is there
-                    grid.get(l).setColor(Color.RED);//set it to red, to indicate you died
+        for(int r = 0; r < 20; r++){
+            for(int c = 0; c < 10; c++){
+                Location l = new Location (r, c);
+                if(grid.get(l)!=null){
+                    grid.get(l).setColor(Color.RED);
 
                 }
             }
         }
-        display.showBlocks();//shows blocks
-        music.stopMusic();//stops music
-        title+= " You lose m8";//tells you you lost in title
-        display.setTitle(title);//resets title
-        DisplayNextTetrad();//displays information
+        display.showBlocks();
+        music.stopMusic();
+        title+= " You lose m8";
+        display.setTitle(title);
+        DisplayNextTetrad();
     }
 
-    private void ree(){//this should not exist
-        List<Location> locs = grid.getOccupiedLocations();//for all the locaitons
-        display.setRee(true);//sets display to go into intense display mode
-        for(Location l : locs){//for all of the locations
+    private void ree(){
+        List<Location> locs = grid.getOccupiedLocations();
+        display.setRee(true);
+        for(Location l : locs){
             grid.get(l).setColor(new Color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255)));
-            //sets block to a random color
-        }
-    }
-
-    private void unree(){//stop the seizure 
-        List<Location> locs = grid.getOccupiedLocations();//for all of the locations
-        display.setRee(false);//sets display back to normal
-        for(Location l : locs){//for all the locations
-            grid.get(l).setColor(grid.get(l).getOriginal());//sets blocks to original color
 
         }
     }
 
-    public void DisplayNextTetrad(){//information about level
+    private void unree(){
+        List<Location> locs = grid.getOccupiedLocations();
+        display.setRee(false);
+        for(Location l : locs){
+            grid.get(l).setColor(grid.get(l).getOriginal());
+
+        }
+    }
+
+    public void DisplayNextTetrad(){
         for(int i = 0; i<16; i++)
-            System.out.println();//prints extra lines so information is next to display
-        if(!dejavu){//if not in deja vu mode
+            System.out.println();
+        if(!dejavu){
             System.out.println("Level: " + level + "\nLines: " + lines + "\nScore: " + score + 
-                "\nNext:");//displays tetris game information
-        }else{//if you are in deja vu mode
-            System.out.print("\nLevel: " + level + "\nLives: ");//shows lives left
+                "\nNext:");
+        }else{
+            System.out.print("\nLevel: " + level + "\nLives: ");
             for(int i = 0; i<lives; i++)
-                System.out.print("[]");//indicates how many lives are left
-            System.out.print("\nScore: " + score + //shows score
+                System.out.print("[]");
+            System.out.print("\nScore: " + score + 
                 "\nNext:");
         }
-        if(nextTetrad.getShape()==0){//for all the shapes you can have, shows what they are
+        if(nextTetrad.getShape()==0){
             for(int i = 0; i<4; i++)
                 System.out.println(" []");
         }else if(nextTetrad.getShape()==1){
@@ -471,54 +488,54 @@ public class Tetris implements ArrowListener
         }else if(nextTetrad.getShape()==5){
             System.out.println("   [][] \n [][]\n\n"); 
         }else if(nextTetrad.getShape()==7){
-            System.out.println("ya done mate\n\n\n");//smiley  face death tetrad
+            System.out.println("ya done mate\n\n\n");
         }else{
-            System.out.println("Not real block");//if you have an extra block that should not be in the game
+            System.out.println("You dirty cheater");
         }
 
-        if(sped){//if you are in fast mode
-            System.out.println("SEIZURE WARNING");//you might get a seizure
+        if(sped){
+            System.out.println("SEIZURE WARNING");
         }
     }
 
-    public void stockStorm(){//does nothing as of now
+    public void stockStorm(){
         for(int i = 0; i<4; i++){
-            Tetrad temp = new Tetrad(grid);//new tetrad
-            temp.setShape(9);//sets to a meteor
-            temp.translate(0,((Math.random()<0.5)?((int)(Math.random()*6)):(-1*(int)(Math.random()*6))));// translates some amount
-            storm.add(temp);//adds to storm
+            Tetrad temp = new Tetrad(grid);
+            temp.setShape(9);
+            temp.translate(0,((Math.random()<0.5)?((int)(Math.random()*6)):(-1*(int)(Math.random()*6))));
+            storm.add(temp);
         }
     }   
 
     public void onePressed(){
-        music.stopMusic();//stops current music
-        music = new MusicPlayer("Tetris.wav", 82000.0);//plays tetris
-        start = System.currentTimeMillis();//start of song is current time
-        music.music();//plays music
+        music.stopMusic();
+        music = new MusicPlayer("Tetris.wav", 82000.0);
+        start = System.currentTimeMillis();
+        music.music();
     }
 
     public void twoPressed(){
-        music.stopMusic();//stops current music
-        music = new MusicPlayer("Boosted.wav", 82000.0);//plays a song you do not want to hear
-        start = System.currentTimeMillis();//start of song is current time
-        music.music();//plays music
+        music.stopMusic();
+        music = new MusicPlayer("Boosted.wav", 82000.0);
+        start = System.currentTimeMillis();
+        music.music();
     }
 
-    public void threePressed(){//plays song dejavu
+    public void threePressed(){
         music.stopMusic();
         music = new MusicPlayer("dejavu.wav", 273000.0);
         start = System.currentTimeMillis();
         music.music();
     }
 
-    public void fourPressed(){//plays some electric song ian likes
+    public void fourPressed(){
         music.stopMusic();
         music = new MusicPlayer("Electric.wav", 191000.0);
         start = System.currentTimeMillis();
         music.music();
     }
 
-    public void sPressed(){//activates running in the 90s mode
+    public void sPressed(){
         if(cheats){
             sped = true;
             music.stopMusic();
@@ -603,6 +620,8 @@ public class Tetris implements ArrowListener
 
                 nextTetrad = new Tetrad(grid);
                 activeTetrad = new Tetrad(grid);
+                thirdTetrad = new Tetrad(grid);
+                thirdTetrad.setShape(9);
                 nextTetrad.setShape(9);
                 activeTetrad.setShape(10);
                 DisplayNextTetrad();
