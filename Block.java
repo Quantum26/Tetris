@@ -58,9 +58,11 @@ public class Block
         //First, using the grid object, call the remove method (pass it this location)
         //Second, set this location to null
         //Third, set this grid to null
+        if(location!=null){
         grid.remove(location);    //removes the location from the grid
         location = null;            //location is gone now, so it's null
         grid = null;            //grid is gone now, so it's null
+    }
     }
 
     //puts this block into location loc of grid gr
