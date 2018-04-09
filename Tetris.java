@@ -717,4 +717,6 @@ public class Tetris implements ArrowListener
         double d = getBumpiness()*-0.184483;
         return a+b+c+d;
     }
+    
+    
 }

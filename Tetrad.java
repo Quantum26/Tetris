@@ -362,4 +362,10 @@ public class Tetrad
     public boolean getSpawned(){
         return spawned;
     }
+    
+    public Tetrad getEquivTetrad(){
+        Tetrad t = new Tetrad(g);
+        t.setShape(shape);
+        return t;
+    }
 }
