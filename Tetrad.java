@@ -363,8 +363,8 @@ public class Tetrad
         return spawned;
     }
     
-    public Tetrad getEquivTetrad(){
-        Tetrad t = new Tetrad(g);
+    public Tetrad getEquivTetrad(BoundedGrid<Block> grid){
+        Tetrad t = new Tetrad(grid);
         t.setShape(shape);
         return t;
     }

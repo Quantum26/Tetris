@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class MoveList
 {
-    private int value;
+    private double value;
     private List<Move> moves;
     public MoveList(List<Move> m){
         moves = m;
@@ -23,5 +23,13 @@ public class MoveList
     
     public Move remove(int indx){
         return moves.remove(indx);
+    }
+    
+    public void setValue(double val){
+        value = val;
+    }
+    
+    public double getValue(){
+            return value;
     }
 }

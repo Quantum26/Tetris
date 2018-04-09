@@ -173,7 +173,7 @@ public class Tetris implements ArrowListener
                 }
                 if(!dejavu){
                     if(!activeTetrad.translate(1,0)){
-                        
+
                         controlsActive = false;
                         gameTime = time;
                         if(!topRowsEmpty()){
@@ -182,7 +182,7 @@ public class Tetris implements ArrowListener
                             break;
                         }
                         clearCompletedRows();
-                        
+
                         activeTetrad = nextTetrad;
                         activeTetrad.SpawnTetrad();
                         nextTetrad = new Tetrad(grid);
@@ -192,7 +192,7 @@ public class Tetris implements ArrowListener
                             nextTetrad.setShape(2);
                         }
                         DisplayNextTetrad();
-                        
+
                         controlsActive = true;
                     }
                 }else{
@@ -499,7 +499,7 @@ public class Tetris implements ArrowListener
         if(sped){
             System.out.println("SEIZURE WARNING");
         }
-        
+
     }
 
     public void stockStorm(){
@@ -671,14 +671,14 @@ public class Tetris implements ArrowListener
         int sum = grid.getNumRows()-i;
         return sum;
     }
-    
+
     public int getAggHeight(){
         int sum = 0;
         for(int i = 0; i<grid.getNumCols(); i++){
-            
+
             sum+=getColHeight(i);
         }
-        
+
         return sum;
     }
 
@@ -691,7 +691,7 @@ public class Tetris implements ArrowListener
         }
         return sum;
     }
-    
+
     public int getHoles(){
         int sum = 0;
         List<Location> locs = grid.getOccupiedLocations();
@@ -705,7 +705,7 @@ public class Tetris implements ArrowListener
         }
         return sum;
     }
-    
+
     public int getBumpiness(){
         int sum = 0;
         for(int i = 0; i<grid.getNumCols()-1; i++){
@@ -713,7 +713,7 @@ public class Tetris implements ArrowListener
         }   
         return sum;
     }
-    
+
     public double getGridScore(){//returns AI-based value of grid
         double a = getAggHeight()*-0.510066;
         double b = getCompletedLines()*0.760666;
@@ -721,16 +721,36 @@ public class Tetris implements ArrowListener
         double d = getBumpiness()*-0.184483;
         return a+b+c+d;
     }
-    
-    public List<Move> getMovesToMake(){
+
+    public MoveList getMovesToMake(){
         BoundedGrid<Block> temp = grid.getEquivGrid();
-        Tetrad t = nextTetrad.getEquivTetrad();
+        Tetrad t = nextTetrad.getEquivTetrad(temp);
         List<MoveList> movesList = new ArrayList<MoveList>();
-        
-        while(true){
-            break;
+
+        for(int rot = 0; rot< 4; rot++){
+            Tetrad tet = nextTetrad.getEquivTetrad(temp);
+            tet.SpawnTetrad();
+            tet.translate(2,0);
+            
+            for(int i = 0; i<rot; i++){
+                tet.rotate();
+            }   
+            while(tet.translate(0,-1)){}
+            tet.removeBlocks();
+            Tetrad test = tet.getEquivTetrad(temp);
+            test.SpawnTetrad();
+            do{
+                tet.removeBlocks();
+                test = tet.getEquivTetrad(temp);
+                test.SpawnTetrad();
+                
+                
+                
+                test.removeBlocks();
+                tet.SpawnTetrad();
+            }while(test.translate(0,1));
         }
-        
+
         return null;
     }
 }
