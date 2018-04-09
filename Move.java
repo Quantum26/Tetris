@@ -7,5 +7,6 @@
  */
 public enum Move
 {
-    UP, DOWN, LEFT, RIGHT, SPACE
+    UP, DOWN, LEFT, RIGHT, SPACE;
+    
 }

@@ -724,6 +724,12 @@ public class Tetris implements ArrowListener
     
     public List<Move> getMovesToMake(){
         BoundedGrid<Block> temp = grid.getEquivGrid();
+        Tetrad t = nextTetrad.getEquivTetrad();
+        List<MoveList> movesList = new ArrayList<MoveList>();
+        
+        while(true){
+            break;
+        }
         
         return null;
     }
