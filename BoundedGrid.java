@@ -113,4 +113,15 @@ public class BoundedGrid<E>
         }
         return theLocations;
     }
+    
+    public BoundedGrid<E> getEquivGrid(){
+        BoundedGrid<E> grid = new BoundedGrid(getNumRows(), getNumCols());
+        for(int r = 0; r< getNumRows(); r++){
+            for(int c  = 0; c<getNumCols(); c++){
+                Location l = new Location(r, c);
+                grid.put(l, get(l));
+            }
+        }
+        return grid;
+    }
 }

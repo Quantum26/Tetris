@@ -173,7 +173,7 @@ public class Tetris implements ArrowListener
                 }
                 if(!dejavu){
                     if(!activeTetrad.translate(1,0)){
-                        System.out.println(getAggHeight());
+                        
                         controlsActive = false;
                         gameTime = time;
                         if(!topRowsEmpty()){
@@ -696,7 +696,7 @@ public class Tetris implements ArrowListener
         int sum = 0;
         List<Location> locs = grid.getOccupiedLocations();
         for(Location l: locs){
-            Location down = new Location(l.getRow()-1, l.getCol());
+            Location down = new Location(l.getRow()+1, l.getCol());
             if(grid.isValid(down)){
                 if(grid.get(down)==null){
                     sum++;
@@ -722,5 +722,9 @@ public class Tetris implements ArrowListener
         return a+b+c+d;
     }
     
-    
+    public List<Move> getMovesToMake(){
+        BoundedGrid<Block> temp = grid.getEquivGrid();
+        
+        return null;
+    }
 }
