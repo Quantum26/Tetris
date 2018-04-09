@@ -173,6 +173,7 @@ public class Tetris implements ArrowListener
                 }
                 if(!dejavu){
                     if(!activeTetrad.translate(1,0)){
+                        System.out.println(getAggHeight());
                         controlsActive = false;
                         gameTime = time;
                         if(!topRowsEmpty()){
@@ -181,6 +182,7 @@ public class Tetris implements ArrowListener
                             break;
                         }
                         clearCompletedRows();
+                        
                         activeTetrad = nextTetrad;
                         activeTetrad.SpawnTetrad();
                         nextTetrad = new Tetrad(grid);
@@ -190,6 +192,7 @@ public class Tetris implements ArrowListener
                             nextTetrad.setShape(2);
                         }
                         DisplayNextTetrad();
+                        
                         controlsActive = true;
                     }
                 }else{
@@ -496,6 +499,7 @@ public class Tetris implements ArrowListener
         if(sped){
             System.out.println("SEIZURE WARNING");
         }
+        
     }
 
     public void stockStorm(){
@@ -655,17 +659,17 @@ public class Tetris implements ArrowListener
 
     /**AI CODE*/
     public int getColHeight(int col){
-        int h = 0;
-        int dist = 0;
-        for(int i = 0; i<grid.getNumRows(); i++){
-            
-            if(grid.get(new Location(i, col))==null){
-                dist++;
+        int i = 0;
+        while(i<grid.getNumRows()){
+            Location l = new Location (i, col);
+            if(grid.get(l)==null){
+                i++;
+            }else{
+                break;
             }
-            
         }
-        
-        return grid.getNumRows()-dist;
+        int sum = grid.getNumRows()-i;
+        return sum;
     }
     
     public int getAggHeight(){
