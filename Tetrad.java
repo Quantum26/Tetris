@@ -264,7 +264,7 @@ public class Tetrad
         for(int i = 0; i < blocks.length; i++){
             locs[i] = blocks[i].getLocation();
             if(locs[i]==null)
-            return false;
+                return false;
             blocks[i].removeSelfFromGrid();
         }
         Location[] newLocs = new Location[blocks.length];
@@ -327,11 +327,13 @@ public class Tetrad
     }
 
     public boolean isOnGround(){
+
         for(Block b:blocks){
             if(b.getLocation().getRow()==g.getNumRows()-1){
                 return true;
             }
         }
+
         return false;
     }
 
@@ -339,7 +341,7 @@ public class Tetrad
         Block b = blocks[blocks.length-1];
         Location l = b.getLocation();
         if(l==null)
-        return false;
+            return false;
         Location right = new Location(l.getRow(), l.getCol()-1);
         Location left = new Location(l.getRow(), l.getCol()+1);
         if(g.isValid(right)&&g.get(right)!=null){
@@ -356,6 +358,7 @@ public class Tetrad
         int trans = col-blocks[0].getLocation().getCol();
         translate(0, trans);
     }
+
     public boolean getSpawned(){
         return spawned;
     }

@@ -35,7 +35,7 @@ public class Tetris implements ArrowListener
     private boolean cheats = false;
     private boolean cheatCode1 = false;
     private boolean cheatCode2 = false;
-    private boolean cheatCode3 = false;
+    private boolean cheatCode3 = true;
     private boolean dejavu = false;
     private boolean reee = false;
     private boolean raining = false;
@@ -651,5 +651,70 @@ public class Tetris implements ArrowListener
         if(cheats)
             nextTetrad.setShape(8);
         DisplayNextTetrad();
+    }
+
+    /**AI CODE*/
+    public int getColHeight(int col){
+        int h = 0;
+        int dist = 0;
+        for(int i = 0; i<grid.getNumRows(); i++){
+            
+            if(grid.get(new Location(i, col))==null){
+                dist++;
+            }
+            
+        }
+        
+        return grid.getNumRows()-dist;
+    }
+    
+    public int getAggHeight(){
+        int sum = 0;
+        for(int i = 0; i<grid.getNumCols(); i++){
+            
+            sum+=getColHeight(i);
+        }
+        
+        return sum;
+    }
+
+    public int getCompletedLines(){
+        int sum = 0;
+        for(int i = 19; i > 0; i--){
+            if(isCompletedRow(i)){
+                sum++;
+            }
+        }
+        return sum;
+    }
+    
+    public int getHoles(){
+        int sum = 0;
+        List<Location> locs = grid.getOccupiedLocations();
+        for(Location l: locs){
+            Location down = new Location(l.getRow()-1, l.getCol());
+            if(grid.isValid(down)){
+                if(grid.get(down)==null){
+                    sum++;
+                }
+            }
+        }
+        return sum;
+    }
+    
+    public int getBumpiness(){
+        int sum = 0;
+        for(int i = 0; i<grid.getNumCols()-1; i++){
+            sum+=Math.abs(getColHeight(i)-getColHeight(i+1));
+        }   
+        return sum;
+    }
+    
+    public double getGridScore(){//returns AI-based value of grid
+        double a = getAggHeight()*-0.510066;
+        double b = getCompletedLines()*0.760666;
+        double c = getHoles()*-0.35663;
+        double d = getBumpiness()*-0.184483;
+        return a+b+c+d;
     }
 }
