@@ -50,4 +50,8 @@ public class MoveList
     public int size(){
         return moves.size();
     }
+    
+    public List<Move> getList(){
+        return moves;
+    }
 }

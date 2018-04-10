@@ -167,6 +167,7 @@ public class Tetris implements ArrowListener
             if(!paused){
 
                 for(int i = 0; i<5; i++){
+                    makeMove();
                     try { Thread.sleep(gameTime/10); } catch(Exception e) {}
 
                     elapsed = System.currentTimeMillis()-start;
@@ -773,6 +774,32 @@ public class Tetris implements ArrowListener
                     return (a.getValue()>b.getValue())? 1:-1;
                 }
             });
-        return null;
+            
+        return movesList.get(movesList.size()-1);
+    }
+    
+    public void makeMove(){
+        MoveList moves = getMovesToMake();
+        for(Move m: moves.getList()){
+            switch(m){
+                case UP:
+                upPressed();
+                break;
+                case DOWN:
+                downPressed();
+                break;
+                case LEFT:
+                leftPressed();
+                break;
+                case RIGHT:
+                rightPressed();
+                break;
+                case SPACE:
+                spacePressed();
+                break;
+                
+            }
+            try{Thread.sleep(10);}catch(Exception e){};
+        }
     }
 }
