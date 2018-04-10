@@ -191,6 +191,21 @@ public class Tetrad
         this.addToLocations(g, locs);
     }
 
+    public void SpawnTetrad(Location[] locs){
+        blocks = new Block[locs.length];
+        Color c = Color.BLACK;
+        for(int i = 0; i < blocks.length; i++)
+        {
+            blocks[i] = new Block();
+        }
+        for(int i = 0; i < blocks.length; i++){
+            blocks[i].setColor(color);
+            blocks[i].setOriginal(color);
+        }
+        spawned = true;
+        this.addToLocations(g, locs);
+    }
+
     public void setShape(int s){
         shape = s;
     }
@@ -362,10 +377,74 @@ public class Tetrad
     public boolean getSpawned(){
         return spawned;
     }
-    
+
     public Tetrad getEquivTetrad(BoundedGrid<Block> grid){
         Tetrad t = new Tetrad(grid);
         t.setShape(shape);
+        t.SpawnTetrad(locsWhenSpawned());
         return t;
+    }
+
+    public Location[] locsWhenSpawned(){
+        Location[] locs = new Location[4];
+
+        switch(shape){ 
+            case 0://I
+
+            locs[0] = new Location(0,3);
+            locs[1] = new Location(0,4);
+            locs[2] = new Location(0,5);
+            locs[3] = new Location(0,6);
+            break;
+
+            case 1: //T
+
+            locs[0] = new Location(0,3);
+            locs[1] = new Location(0,4);
+            locs[2] = new Location(0,5);
+            locs[3] = new Location(1,4);
+            break;
+
+            case 2: //O
+
+            locs[0] = new Location(1,5);
+            locs[1] = new Location(0,4);
+            locs[2] = new Location(0,5);
+            locs[3] = new Location(1,4);
+            break;
+
+            case 3://L
+
+            locs[0] = new Location(0,4);
+            locs[1] = new Location(1,4);
+            locs[2] = new Location(2,4);
+            locs[3] = new Location(2,5);
+            break;
+
+            case 4://J
+
+            locs[0] = new Location(0,5);
+            locs[1] = new Location(1,5);
+            locs[2] = new Location(2,5);
+            locs[3] = new Location(2,4);
+            break;
+
+            case 5://S
+
+            locs[0] = new Location(1,5);
+            locs[1] = new Location(0,5);
+            locs[2] = new Location(0,6);
+            locs[3] = new Location(1,4);
+            break;
+
+            case 6://Z
+
+            locs[0] = new Location(0,3);
+            locs[1] = new Location(0,4);
+            locs[2] = new Location(1,5);
+            locs[3] = new Location(1,4);
+            break;
+        }
+        return locs;
     }
 }

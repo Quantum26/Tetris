@@ -54,4 +54,9 @@ public class MoveList
     public List<Move> getList(){
         return moves;
     }
+    
+    public MoveList getEquivMoveList(){
+        MoveList temp = new MoveList(moves, value);
+        return temp;
+    }
 }

@@ -151,7 +151,7 @@ public class Tetris implements ArrowListener
         game = true;
         activeTetrad.SpawnTetrad();
         DisplayNextTetrad();
-
+        display.showBlocks();
         music.music();
         while (game)
         {
@@ -733,14 +733,17 @@ public class Tetris implements ArrowListener
 
     public MoveList getMovesToMake(){
         BoundedGrid<Block> temp = grid.getEquivGrid();
-        Tetrad t = nextTetrad.getEquivTetrad(temp);
+        Location[] l = nextTetrad.locsWhenSpawned();
+     
+        
+        
         List<MoveList> movesList = new ArrayList<MoveList>();
 
         for(int rot = 0; rot< 4; rot++){
             MoveList tmove;
             List<Move> actions = new ArrayList<Move>();
             Tetrad active = nextTetrad.getEquivTetrad(temp);
-            active.SpawnTetrad();
+            active.SpawnTetrad(l);
             active.translate(2,0);
             for(int i = 0; i<rot; i++){
                 active.rotate(); 
@@ -758,7 +761,7 @@ public class Tetris implements ArrowListener
 
                 while(test.translate(1,0)){}
                 actions.add(Move.SPACE);
-                tmove = new MoveList(actions, getGridScore(temp));
+                tmove = new MoveList(actions, getGridScore(temp)).getEquivMoveList();
                 movesList.add(tmove);
                 test.removeBlocks();
                 active.SpawnTetrad();
@@ -774,7 +777,7 @@ public class Tetris implements ArrowListener
                     return (a.getValue()>b.getValue())? 1:-1;
                 }
             });
-            
+
         return movesList.get(movesList.size()-1);
     }
     
