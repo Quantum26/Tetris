@@ -59,4 +59,9 @@ public class MoveList
         MoveList temp = new MoveList(moves, value);
         return temp;
     }
+    
+    public void Clear(){
+        moves = null;
+        value = 0.0;
+    }
 }

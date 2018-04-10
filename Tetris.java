@@ -152,7 +152,7 @@ public class Tetris implements ArrowListener
         activeTetrad.SpawnTetrad();
         DisplayNextTetrad();
         display.showBlocks();
-        music.music();
+        //music.music();
         while (game)
         {
             elapsed = System.currentTimeMillis()-start;
@@ -165,9 +165,9 @@ public class Tetris implements ArrowListener
                 elapsed = System.currentTimeMillis()-start;
             }
             if(!paused){
-
+                
                 for(int i = 0; i<5; i++){
-                    makeMove();
+                    
                     try { Thread.sleep(gameTime/10); } catch(Exception e) {}
 
                     elapsed = System.currentTimeMillis()-start;
@@ -195,7 +195,7 @@ public class Tetris implements ArrowListener
                         DisplayNextTetrad();
 
                         controlsActive = true;
-                    }
+                    }else if(lines>0){makeMove();}
                 }else{
                     gameTime = time;
                     if(!nextTetrad.translate(1,0)||(thirdTetrad.getSpawned()&&!thirdTetrad.translate(1,0))){
@@ -614,9 +614,9 @@ public class Tetris implements ArrowListener
 
     public void dPressed(){
         if(cheats){
-            music.stopMusic();
-            music = new MusicPlayer("dejavu.wav", 264000);
-            music.music();
+            //music.stopMusic();
+           // music = new MusicPlayer("dejavu.wav", 264000);
+           // music.music();
             dejavu =!dejavu;
             for(int i = 0; i< grid.getNumRows(); i++){
                 clearRow(i);
@@ -733,39 +733,47 @@ public class Tetris implements ArrowListener
 
     public MoveList getMovesToMake(){
         BoundedGrid<Block> temp = grid.getEquivGrid();
-        Location[] l = nextTetrad.locsWhenSpawned();
-     
-        
-        
         List<MoveList> movesList = new ArrayList<MoveList>();
 
         for(int rot = 0; rot< 4; rot++){
             MoveList tmove;
             List<Move> actions = new ArrayList<Move>();
-            Tetrad active = nextTetrad.getEquivTetrad(temp);
-            active.SpawnTetrad(l);
+            Tetrad active = new Tetrad(temp);
+            active.setShape(activeTetrad.getShape());
+            active.SpawnTetrad();
             active.translate(2,0);
+            actions.add(Move.DOWN);actions.add(Move.DOWN);
             for(int i = 0; i<rot; i++){
                 active.rotate(); 
                 actions.add(Move.UP);    
             }
 
             while(active.translate(0,-1)){actions.add(Move.LEFT);}
-            active.removeBlocks();
-            Tetrad test = active.getEquivTetrad(temp);
-            test.SpawnTetrad();
+
+            Tetrad test = new Tetrad(temp);
             do{
-                active.removeBlocks();
-                test = active.getEquivTetrad(temp);
+                test = new Tetrad(temp, active.removeBlocks(), Color.RED);
                 test.SpawnTetrad();
 
                 while(test.translate(1,0)){}
                 actions.add(Move.SPACE);
-                tmove = new MoveList(actions, getGridScore(temp)).getEquivMoveList();
-                movesList.add(tmove);
+
+                movesList.add(new MoveList(actions, getGridScore(temp)));
+                actions.clear();
                 test.removeBlocks();
+                active = new Tetrad(temp);
+                active.setShape(activeTetrad.getShape());
                 active.SpawnTetrad();
-                actions.remove(actions.size()-1);
+                active.translate(2,0);
+                actions.add(Move.DOWN);actions.add(Move.DOWN);
+                for(int i = 0; i<rot; i++){
+                    active.rotate(); 
+                    actions.add(Move.UP);    
+                }
+
+                while(active.translate(0,-1)){actions.add(Move.LEFT);}
+                
+                
                 actions.add(Move.RIGHT);
             }while(test.translate(0,1));
         }
@@ -780,9 +788,10 @@ public class Tetris implements ArrowListener
 
         return movesList.get(movesList.size()-1);
     }
-    
+
     public void makeMove(){
         MoveList moves = getMovesToMake();
+        Move[] plz = new Move[]{Move.DOWN, Move.DOWN, Move.DOWN, Move.LEFT,Move.UP}; 
         for(Move m: moves.getList()){
             switch(m){
                 case UP:
@@ -800,9 +809,12 @@ public class Tetris implements ArrowListener
                 case SPACE:
                 spacePressed();
                 break;
-                
+
             }
-            try{Thread.sleep(10);}catch(Exception e){};
+            display.showBlocks();
+            try{Thread.sleep(1000);}catch(Exception e){};
+            
         }
+        System.out.println("move done");
     }
 }

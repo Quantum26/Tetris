@@ -1,4 +1,3 @@
-
 /**
  * Tetrad class to be completed for Tetris project
  * 
@@ -10,10 +9,12 @@ import java.awt.*;
 public class Tetrad
 {
     private Block[] blocks;
-    private int shape;
+    private int shape;//94 indicates custom shape
     private BoundedGrid<Block> g;
     private Color color;
     private boolean spawned;
+    boolean hasShape;
+    Location[] lol;
     public Tetrad(BoundedGrid<Block> grid)
     {
         blocks = new Block[4];
@@ -26,184 +27,195 @@ public class Tetrad
         //                  choose a random integer from 0 to 6
         spawned = false;
         shape = (int)(Math.random()*7);
+        hasShape = true;
+    }
+
+    public Tetrad(BoundedGrid<Block> grid, Location[] locs, Color c){
+        blocks = new Block[locs.length];
+        lol = new Location[locs.length];
+        
+        for(int i = 0; i<blocks.length; i++){
+            blocks[i] = new Block();
+            lol[i] = locs[i];
+        }
+        
+        g = grid;
+        color = c;
+        shape = 94;
+        spawned = false;
+        hasShape = false;
     }
 
     public void SpawnTetrad(){
-        Location[] locs = new Location[4];
-        color = Color.BLACK;
-        switch(shape){ 
-            case 0://I
-            color = Color.BLUE;
-            locs[0] = new Location(0,3);
-            locs[1] = new Location(0,4);
-            locs[2] = new Location(0,5);
-            locs[3] = new Location(0,6);
-            break;
+        if(hasShape){
+            Location[] locs = new Location[4];
+            color = Color.BLACK;
+            switch(shape){ 
+                case 0://I
+                color = Color.BLUE;
+                locs[0] = new Location(0,3);
+                locs[1] = new Location(0,4);
+                locs[2] = new Location(0,5);
+                locs[3] = new Location(0,6);
+                break;
 
-            case 1: //T
-            color = Color.BLUE;
-            locs[0] = new Location(0,3);
-            locs[1] = new Location(0,4);
-            locs[2] = new Location(0,5);
-            locs[3] = new Location(1,4);
-            break;
+                case 1: //T
+                color = Color.BLUE;
+                locs[0] = new Location(0,3);
+                locs[1] = new Location(0,4);
+                locs[2] = new Location(0,5);
+                locs[3] = new Location(1,4);
+                break;
 
-            case 2: //O
-            color = Color.RED;
-            locs[0] = new Location(1,5);
-            locs[1] = new Location(0,4);
-            locs[2] = new Location(0,5);
-            locs[3] = new Location(1,4);
-            break;
+                case 2: //O
+                color = Color.RED;
+                locs[0] = new Location(1,5);
+                locs[1] = new Location(0,4);
+                locs[2] = new Location(0,5);
+                locs[3] = new Location(1,4);
+                break;
 
-            case 3://L
-            color = Color.RED;
-            locs[0] = new Location(0,4);
-            locs[1] = new Location(1,4);
-            locs[2] = new Location(2,4);
-            locs[3] = new Location(2,5);
-            break;
+                case 3://L
+                color = Color.RED;
+                locs[0] = new Location(0,4);
+                locs[1] = new Location(1,4);
+                locs[2] = new Location(2,4);
+                locs[3] = new Location(2,5);
+                break;
 
-            case 4://J
-            color = Color.RED;
-            locs[0] = new Location(0,5);
-            locs[1] = new Location(1,5);
-            locs[2] = new Location(2,5);
-            locs[3] = new Location(2,4);
-            break;
+                case 4://J
+                color = Color.RED;
+                locs[0] = new Location(0,5);
+                locs[1] = new Location(1,5);
+                locs[2] = new Location(2,5);
+                locs[3] = new Location(2,4);
+                break;
 
-            case 5://S
-            color = Color.WHITE;
-            locs[0] = new Location(1,5);
-            locs[1] = new Location(0,5);
-            locs[2] = new Location(0,6);
-            locs[3] = new Location(1,4);
-            break;
+                case 5://S
+                color = Color.WHITE;
+                locs[0] = new Location(1,5);
+                locs[1] = new Location(0,5);
+                locs[2] = new Location(0,6);
+                locs[3] = new Location(1,4);
+                break;
 
-            case 6://Z
-            color = Color.WHITE;
-            locs[0] = new Location(0,3);
-            locs[1] = new Location(0,4);
-            locs[2] = new Location(1,5);
-            locs[3] = new Location(1,4);
-            break;
+                case 6://Z
+                color = Color.WHITE;
+                locs[0] = new Location(0,3);
+                locs[1] = new Location(0,4);
+                locs[2] = new Location(1,5);
+                locs[3] = new Location(1,4);
+                break;
 
-            case 7:
+                case 7:
 
-            color = Color.WHITE;
-            blocks = new Block[30];
-            for(int i = 0; i < blocks.length; i++)
-            {
-                blocks[i] = new Block();
-            }
-            locs = new Location[30];
-            locs[0] = new Location(0, 4);
-            locs[1] = new Location(0, 5);
-            locs[2] = new Location(1, 2);
-            locs[3] = new Location(1, 3);
-            locs[4] = new Location(1, 6);
-            locs[5] = new Location(1, 7);
-            locs[6] = new Location(2, 1);
-            locs[7] = new Location(2, 8);
-            locs[8] = new Location(3, 1);
-            locs[9] = new Location(3, 3);
-            locs[10] = new Location(3, 6);
-            locs[11] = new Location(3, 8);
-            locs[12] = new Location(4, 0);
-            locs[13] = new Location(4, 9);
-            locs[14] = new Location(5, 0);
-            locs[15] = new Location(5, 3);
-            locs[16] = new Location(5, 6);
-            locs[17] = new Location(5, 9);
-            locs[18] = new Location(6, 1);
-            locs[19] = new Location(6, 4);
-            locs[20] = new Location(6, 5);
-            locs[21] = new Location(6, 8);
-            locs[22] = new Location(7, 1);
-            locs[23] = new Location(7, 8);
-            locs[24] = new Location(8, 2);
-            locs[25] = new Location(8, 3);
-            locs[26] = new Location(8, 6);
-            locs[27] = new Location(8, 7);
-            locs[28] = new Location(9, 4);
-            locs[29] = new Location(9, 5);
-            break;
-
-            case 8:
-            color = Color.BLUE;
-            blocks = new Block[40];
-            for(int i = 0; i < blocks.length; i++)
-            {
-                blocks[i] = new Block();
-            }
-            locs = new Location[40];
-            int i = 0;
-            for(int r= 0; r<4;r++){
-                for(int c = 0; c<10;c++){
-                    locs[i] = new Location(r, c);
-                    i++;
+                color = Color.WHITE;
+                blocks = new Block[30];
+                for(int i = 0; i < blocks.length; i++)
+                {
+                    blocks[i] = new Block();
                 }
+                locs = new Location[30];
+                locs[0] = new Location(0, 4);
+                locs[1] = new Location(0, 5);
+                locs[2] = new Location(1, 2);
+                locs[3] = new Location(1, 3);
+                locs[4] = new Location(1, 6);
+                locs[5] = new Location(1, 7);
+                locs[6] = new Location(2, 1);
+                locs[7] = new Location(2, 8);
+                locs[8] = new Location(3, 1);
+                locs[9] = new Location(3, 3);
+                locs[10] = new Location(3, 6);
+                locs[11] = new Location(3, 8);
+                locs[12] = new Location(4, 0);
+                locs[13] = new Location(4, 9);
+                locs[14] = new Location(5, 0);
+                locs[15] = new Location(5, 3);
+                locs[16] = new Location(5, 6);
+                locs[17] = new Location(5, 9);
+                locs[18] = new Location(6, 1);
+                locs[19] = new Location(6, 4);
+                locs[20] = new Location(6, 5);
+                locs[21] = new Location(6, 8);
+                locs[22] = new Location(7, 1);
+                locs[23] = new Location(7, 8);
+                locs[24] = new Location(8, 2);
+                locs[25] = new Location(8, 3);
+                locs[26] = new Location(8, 6);
+                locs[27] = new Location(8, 7);
+                locs[28] = new Location(9, 4);
+                locs[29] = new Location(9, 5);
+                break;
+
+                case 8:
+                color = Color.BLUE;
+                blocks = new Block[40];
+                for(int i = 0; i < blocks.length; i++)
+                {
+                    blocks[i] = new Block();
+                }
+                locs = new Location[40];
+                int i = 0;
+                for(int r= 0; r<4;r++){
+                    for(int c = 0; c<10;c++){
+                        locs[i] = new Location(r, c);
+                        i++;
+                    }
+                }
+                break;
+
+                case 9:
+                color = Color.BLUE;
+                locs[0] = new Location(0, 4);
+                locs[1] = new Location(1, 4);
+                locs[2] = new Location(2, 4);
+                locs[3] = new Location(3, 4);
+                break;
+
+                case 10:
+                color = Color.WHITE;
+                locs[0] = new Location(19,4);
+                locs[1] = new Location(19,5);
+                locs[2] = new Location(18,4);
+                locs[3] = new Location(18,5);
+                break;
+
+                default:
+                color = Color.WHITE;
+                locs[0] = new Location(0,3);
+                locs[1] = new Location(0,4);
+                locs[2] = new Location(1,5);
+                locs[3] = new Location(1,4);
+                break;
+
             }
-            break;
+            //Exercise 1.2  Insert code here (after the above if statements) to
+            //                  loop through the blocks array to
+            //                      set the color of each block
+            //                  call addToLocations
+            for(int i = 0; i < blocks.length; i++){
+                blocks[i].setColor(color);
+                blocks[i].setOriginal(color);
+            }
+            if(shape == 9){
+                blocks[0].setColor(Color.YELLOW);blocks[0].setOriginal(Color.YELLOW);
+                blocks[1].setColor(Color.ORANGE);blocks[0].setOriginal(Color.ORANGE);
+                blocks[2].setColor(Color.RED);blocks[0].setOriginal(Color.RED);
+                Color brown = new Color(166, 91, 41);
+                blocks[3].setColor(brown);blocks[0].setOriginal(brown);
 
-            case 9:
-            color = Color.BLUE;
-            locs[0] = new Location(0, 4);
-            locs[1] = new Location(1, 4);
-            locs[2] = new Location(2, 4);
-            locs[3] = new Location(3, 4);
-            break;
-
-            case 10:
-            color = Color.WHITE;
-            locs[0] = new Location(19,4);
-            locs[1] = new Location(19,5);
-            locs[2] = new Location(18,4);
-            locs[3] = new Location(18,5);
-            break;
-
-            default:
-            color = Color.WHITE;
-            locs[0] = new Location(0,3);
-            locs[1] = new Location(0,4);
-            locs[2] = new Location(1,5);
-            locs[3] = new Location(1,4);
-            break;
-
+            }
+            spawned = true;
+            this.addToLocations(g, locs);
+        }else{
+            for(int i = 0; i < blocks.length; i++){
+                blocks[i].setColor(color);
+                blocks[i].setOriginal(color);
+            }
+            spawned = true;
+            this.addToLocations(g, lol);
         }
-        //Exercise 1.2  Insert code here (after the above if statements) to
-        //                  loop through the blocks array to
-        //                      set the color of each block
-        //                  call addToLocations
-        for(int i = 0; i < blocks.length; i++){
-            blocks[i].setColor(color);
-            blocks[i].setOriginal(color);
-        }
-        if(shape == 9){
-            blocks[0].setColor(Color.YELLOW);blocks[0].setOriginal(Color.YELLOW);
-            blocks[1].setColor(Color.ORANGE);blocks[0].setOriginal(Color.ORANGE);
-            blocks[2].setColor(Color.RED);blocks[0].setOriginal(Color.RED);
-            Color brown = new Color(166, 91, 41);
-            blocks[3].setColor(brown);blocks[0].setOriginal(brown);
-
-        }
-        spawned = true;
-        this.addToLocations(g, locs);
-    }
-
-    public void SpawnTetrad(Location[] locs){
-        blocks = new Block[locs.length];
-        Color c = Color.BLACK;
-        for(int i = 0; i < blocks.length; i++)
-        {
-            blocks[i] = new Block();
-        }
-        for(int i = 0; i < blocks.length; i++){
-            blocks[i].setColor(color);
-            blocks[i].setOriginal(color);
-        }
-        spawned = true;
-        this.addToLocations(g, locs);
     }
 
     public void setShape(int s){
@@ -378,73 +390,9 @@ public class Tetrad
         return spawned;
     }
 
-    public Tetrad getEquivTetrad(BoundedGrid<Block> grid){
-        Tetrad t = new Tetrad(grid);
+    public Tetrad getEquivTetrad(){
+        Tetrad t = new Tetrad(g);
         t.setShape(shape);
-        t.SpawnTetrad(locsWhenSpawned());
         return t;
-    }
-
-    public Location[] locsWhenSpawned(){
-        Location[] locs = new Location[4];
-
-        switch(shape){ 
-            case 0://I
-
-            locs[0] = new Location(0,3);
-            locs[1] = new Location(0,4);
-            locs[2] = new Location(0,5);
-            locs[3] = new Location(0,6);
-            break;
-
-            case 1: //T
-
-            locs[0] = new Location(0,3);
-            locs[1] = new Location(0,4);
-            locs[2] = new Location(0,5);
-            locs[3] = new Location(1,4);
-            break;
-
-            case 2: //O
-
-            locs[0] = new Location(1,5);
-            locs[1] = new Location(0,4);
-            locs[2] = new Location(0,5);
-            locs[3] = new Location(1,4);
-            break;
-
-            case 3://L
-
-            locs[0] = new Location(0,4);
-            locs[1] = new Location(1,4);
-            locs[2] = new Location(2,4);
-            locs[3] = new Location(2,5);
-            break;
-
-            case 4://J
-
-            locs[0] = new Location(0,5);
-            locs[1] = new Location(1,5);
-            locs[2] = new Location(2,5);
-            locs[3] = new Location(2,4);
-            break;
-
-            case 5://S
-
-            locs[0] = new Location(1,5);
-            locs[1] = new Location(0,5);
-            locs[2] = new Location(0,6);
-            locs[3] = new Location(1,4);
-            break;
-
-            case 6://Z
-
-            locs[0] = new Location(0,3);
-            locs[1] = new Location(0,4);
-            locs[2] = new Location(1,5);
-            locs[3] = new Location(1,4);
-            break;
-        }
-        return locs;
     }
 }
