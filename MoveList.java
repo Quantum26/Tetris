@@ -13,7 +13,21 @@ public class MoveList
         moves = m;
     }
     
+    public MoveList(List<Move> m, double val){
+        moves = m;
+        value = val;
+    }
+    
     public void add(Move m){
+        if(m == Move.RIGHT){
+            if(moves.remove(Move.LEFT)){
+                return;
+            }
+        }else if(m == Move.LEFT){
+            if(moves.remove(Move.RIGHT)){
+                return;
+            }
+        }
         moves.add(m);
     }
     
@@ -31,5 +45,9 @@ public class MoveList
     
     public double getValue(){
             return value;
+    }
+    
+    public int size(){
+        return moves.size();
     }
 }

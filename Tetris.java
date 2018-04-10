@@ -658,47 +658,55 @@ public class Tetris implements ArrowListener
     }
 
     /**AI CODE*/
-    public int getColHeight(int col){
+    public int getColHeight(int col, BoundedGrid<Block> g){
         int i = 0;
-        while(i<grid.getNumRows()){
+        while(i<g.getNumRows()){
             Location l = new Location (i, col);
-            if(grid.get(l)==null){
+            if(g.get(l)==null){
                 i++;
             }else{
                 break;
             }
         }
-        int sum = grid.getNumRows()-i;
+        int sum = g.getNumRows()-i;
         return sum;
     }
 
-    public int getAggHeight(){
+    public int getAggHeight(BoundedGrid<Block> g){
         int sum = 0;
-        for(int i = 0; i<grid.getNumCols(); i++){
+        for(int i = 0; i<g.getNumCols(); i++){
 
-            sum+=getColHeight(i);
+            sum+=getColHeight(i, g);
         }
 
         return sum;
     }
 
-    public int getCompletedLines(){
+    public int getCompletedLines(BoundedGrid<Block> g){
         int sum = 0;
         for(int i = 19; i > 0; i--){
-            if(isCompletedRow(i)){
+            boolean full = true;
+            for(int k = 0; k < 10; k++){
+                Location l = new Location(i, k);
+                if(grid.get(l)==null){
+                    full = false;
+                }
+            }
+
+            if(full){
                 sum++;
             }
         }
         return sum;
     }
 
-    public int getHoles(){
+    public int getHoles(BoundedGrid<Block> g){
         int sum = 0;
-        List<Location> locs = grid.getOccupiedLocations();
+        List<Location> locs = g.getOccupiedLocations();
         for(Location l: locs){
             Location down = new Location(l.getRow()+1, l.getCol());
-            if(grid.isValid(down)){
-                if(grid.get(down)==null){
+            if(g.isValid(down)){
+                if(g.get(down)==null){
                     sum++;
                 }
             }
@@ -706,19 +714,19 @@ public class Tetris implements ArrowListener
         return sum;
     }
 
-    public int getBumpiness(){
+    public int getBumpiness(BoundedGrid<Block> g){
         int sum = 0;
-        for(int i = 0; i<grid.getNumCols()-1; i++){
-            sum+=Math.abs(getColHeight(i)-getColHeight(i+1));
+        for(int i = 0; i<g.getNumCols()-1; i++){
+            sum+=Math.abs(getColHeight(i, g)-getColHeight(i+1, g));
         }   
         return sum;
     }
 
-    public double getGridScore(){//returns AI-based value of grid
-        double a = getAggHeight()*-0.510066;
-        double b = getCompletedLines()*0.760666;
-        double c = getHoles()*-0.35663;
-        double d = getBumpiness()*-0.184483;
+    public double getGridScore(BoundedGrid<Block> g){//returns AI-based value of grid
+        double a = getAggHeight(g)*-0.510066;
+        double b = getCompletedLines(g)*0.760666;
+        double c = getHoles(g)*-0.35663;
+        double d = getBumpiness(g)*-0.184483;
         return a+b+c+d;
     }
 
@@ -728,37 +736,43 @@ public class Tetris implements ArrowListener
         List<MoveList> movesList = new ArrayList<MoveList>();
 
         for(int rot = 0; rot< 4; rot++){
-            Tetrad tet = nextTetrad.getEquivTetrad(temp);
-            tet.SpawnTetrad();
-            tet.translate(2,0);
-            
+            MoveList tmove;
+            List<Move> actions = new ArrayList<Move>();
+            Tetrad active = nextTetrad.getEquivTetrad(temp);
+            active.SpawnTetrad();
+            active.translate(2,0);
             for(int i = 0; i<rot; i++){
-                tet.rotate();
-            }   
-            while(tet.translate(0,-1)){}
-            tet.removeBlocks();
-            Tetrad test = tet.getEquivTetrad(temp);
+                active.rotate(); 
+                actions.add(Move.UP);    
+            }
+
+            while(active.translate(0,-1)){actions.add(Move.LEFT);}
+            active.removeBlocks();
+            Tetrad test = active.getEquivTetrad(temp);
             test.SpawnTetrad();
             do{
-                tet.removeBlocks();
-                test = tet.getEquivTetrad(temp);
+                active.removeBlocks();
+                test = active.getEquivTetrad(temp);
                 test.SpawnTetrad();
-                
+
                 while(test.translate(1,0)){}
-                
-                
+                actions.add(Move.SPACE);
+                tmove = new MoveList(actions, getGridScore(temp));
+                movesList.add(tmove);
                 test.removeBlocks();
-                tet.SpawnTetrad();
+                active.SpawnTetrad();
+                actions.remove(actions.size()-1);
+                actions.add(Move.RIGHT);
             }while(test.translate(0,1));
         }
         Collections.sort(movesList, new Comparator<MoveList>(){
-            public int compare(MoveList a, MoveList b){
-                if(a.getValue()-b.getValue()==0){
-                    return 0;
+                public int compare(MoveList a, MoveList b){
+                    if(a.getValue()-b.getValue()==0){
+                        return 0;
+                    }
+                    return (a.getValue()>b.getValue())? 1:-1;
                 }
-                return (a.getValue()>b.getValue())? 1:-1;
-            }
-        });
+            });
         return null;
     }
 }
