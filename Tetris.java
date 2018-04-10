@@ -744,13 +744,21 @@ public class Tetris implements ArrowListener
                 test = tet.getEquivTetrad(temp);
                 test.SpawnTetrad();
                 
+                while(test.translate(1,0)){}
                 
                 
                 test.removeBlocks();
                 tet.SpawnTetrad();
             }while(test.translate(0,1));
         }
-
+        Collections.sort(movesList, new Comparator<MoveList>(){
+            public int compare(MoveList a, MoveList b){
+                if(a.getValue()-b.getValue()==0){
+                    return 0;
+                }
+                return (a.getValue()>b.getValue())? 1:-1;
+            }
+        });
         return null;
     }
 }
