@@ -726,6 +726,19 @@ public class Tetris implements ArrowListener
         }   
         return sum;
     }
+    
+    public boolean getHeavySide(BoundedGrid<Block> g){//true is left, false is right
+        int left = 0;
+        int right = 0;
+        for(int i = 0; i<g.getNumCols()/2; i++){
+            left+=getColHeight(i, g);
+        } 
+        for(int i = g.getNumCols()/2; i<g.getNumCols(); i++){
+            right+=getColHeight(i, g);
+        }   
+        
+        return left>right;
+    }
 
     public double getGridScore(BoundedGrid<Block> g){//returns AI-based value of grid
         double a = getAggHeight(g)*-0.510066;
@@ -752,7 +765,7 @@ public class Tetris implements ArrowListener
                 active.rotate(); 
                 actions.add(Move.UP);    
             }
-            int x = (Math.random()<0.5)?1:-1;
+            int x = (getHeavySide(temp))?1:-1;
             while(active.translate(0,x)){
                 actions.add((x==-1)?Move.LEFT:Move.RIGHT);
             }
