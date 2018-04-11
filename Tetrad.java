@@ -22,11 +22,11 @@ public class Tetrad
             blocks[i] = new Block();
         }
         g = grid;
-        //shape = 7;
+        shape = 9;
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
         spawned = false;
-        shape = (int)(Math.random()*7);
+        //shape = (int)(Math.random()*7);
         hasShape = true;
     }
 
@@ -53,14 +53,14 @@ public class Tetrad
             switch(shape){ 
                 case 0://I
                 color = Color.BLUE;
-                locs[0] = new Location(0,3);
-                locs[1] = new Location(0,4);
-                locs[2] = new Location(0,5);
-                locs[3] = new Location(0,6);
+                locs[0] = new Location(0,4);
+                locs[1] = new Location(1,4);
+                locs[2] = new Location(2,4);
+                locs[3] = new Location(3,4);
                 break;
 
                 case 1: //T
-                color = Color.BLUE;
+                color = Color.MAGENTA;
                 locs[0] = new Location(0,3);
                 locs[1] = new Location(0,4);
                 locs[2] = new Location(0,5);
@@ -76,7 +76,7 @@ public class Tetrad
                 break;
 
                 case 3://L
-                color = Color.RED;
+                color = Color.ORANGE;
                 locs[0] = new Location(0,4);
                 locs[1] = new Location(1,4);
                 locs[2] = new Location(2,4);
@@ -84,7 +84,7 @@ public class Tetrad
                 break;
 
                 case 4://J
-                color = Color.RED;
+                color = Color.YELLOW;
                 locs[0] = new Location(0,5);
                 locs[1] = new Location(1,5);
                 locs[2] = new Location(2,5);
@@ -92,7 +92,7 @@ public class Tetrad
                 break;
 
                 case 5://S
-                color = Color.WHITE;
+                color = Color.GREEN;
                 locs[0] = new Location(1,5);
                 locs[1] = new Location(0,5);
                 locs[2] = new Location(0,6);
@@ -100,7 +100,7 @@ public class Tetrad
                 break;
 
                 case 6://Z
-                color = Color.WHITE;
+                color = Color.CYAN;
                 locs[0] = new Location(0,3);
                 locs[1] = new Location(0,4);
                 locs[2] = new Location(1,5);
@@ -356,7 +356,7 @@ public class Tetrad
     public boolean isOnGround(){
 
         for(Block b:blocks){
-            if(b.getLocation().getRow()==g.getNumRows()-1){
+            if(b.getLocation()==null || b.getLocation().getRow()==g.getNumRows()-1){
                 return true;
             }
         }

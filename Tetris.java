@@ -35,7 +35,9 @@ public class Tetris implements ArrowListener
     private boolean cheats = false;
     private boolean cheatCode1 = false;
     private boolean cheatCode2 = false;
-    private boolean cheatCode3 = true;
+    private boolean cheatCode3 = false;
+    private boolean cheatCode4 = false;
+    private boolean cheatCode5 = false;
     private boolean dejavu = false;
     private boolean reee = false;
     private boolean raining = false;
@@ -43,7 +45,7 @@ public class Tetris implements ArrowListener
     private boolean sped = false;
     private long elapsed;
     private int meteors = 0;
-    private int lives = 3;
+    private int lives = 100;
     private List<Tetrad> storm;
     public Tetris()
     {
@@ -152,7 +154,7 @@ public class Tetris implements ArrowListener
         activeTetrad.SpawnTetrad();
         DisplayNextTetrad();
         display.showBlocks();
-        //music.music();
+        music.music();
         while (game)
         {
             elapsed = System.currentTimeMillis()-start;
@@ -173,7 +175,7 @@ public class Tetris implements ArrowListener
                     elapsed = System.currentTimeMillis()-start;
                 }
                 if(!dejavu){
-                    
+
                     if(!activeTetrad.translate(1,0)){
 
                         controlsActive = false;
@@ -186,30 +188,44 @@ public class Tetris implements ArrowListener
                         clearCompletedRows();
 
                         activeTetrad = nextTetrad;
-                        MoveList m = getMovesToMake();
+                        //MoveList m = getMovesToMake();
                         activeTetrad.SpawnTetrad();
-                        
+
                         nextTetrad = new Tetrad(grid);
                         if(cheatCode1){
-                            nextTetrad.setShape(0);
+                            nextTetrad.setShape(9);
                         }else if(cheatCode2){
                             nextTetrad.setShape(2);
                         }
                         DisplayNextTetrad();
 
                         controlsActive = true;
-                        makeMove(m);
+                        //makeMove(m);
                     }
                 }else{
                     gameTime = time;
-                    if(!nextTetrad.translate(1,0)||(thirdTetrad.getSpawned()&&!thirdTetrad.translate(1,0))){
-                        if(elapsed>=64000){
+                    if(!nextTetrad.translate(1,0)||(storm.get(0).getSpawned()&&!storm.get(0).translate(1,0))){
+                        if(elapsed>=129000){
+                            cheatCode3 = true;
+                            //display.setRee(true);
+                        }else if(elapsed>=75000){
+                            display.setRee(false);
+                            cheatCode3=false;
+                            cheatCode4=true;
+                            if(storm.get(0).getSpawned()){
+                                storm.get(0).removeBlocks();
+                                storm.remove(0);
+                            }
+                            storm.add(new Tetrad(grid));
+                        }else if(elapsed>=64000){
                             //ree();
                             //reee = true;
-                            display.setRee(true);
+                            //display.setRee(true);
                             cheatCode3=true;
                         }
-                        if(nextTetrad.isNextToSomething()||(thirdTetrad.getSpawned()&&thirdTetrad.isNextToSomething())){
+                        cheatCode3 = true;
+                        cheatCode4 = true;
+                        if(nextTetrad.isNextToSomething()||(storm.get(0).getSpawned()&&storm.get(0).isNextToSomething())){
                             score+=20*level;
                         }
                         controlsActive = false;
@@ -225,20 +241,42 @@ public class Tetris implements ArrowListener
                         nextTetrad.removeBlocks();
                         nextTetrad = new Tetrad(grid);
                         nextTetrad.setShape(9);
+                        if(cheatCode4){
+                            nextTetrad.setShape((int)(Math.random()*7));
+                        }
                         nextTetrad.SpawnTetrad();
                         int n = activeTetrad.getLocations()[0].getCol();
-                        n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
+                        if(n>1 && n<8){
+                            n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
+                        }else if(n<=1){
+                            n += (int)(Math.random()*2);
+                        }
+                        else if (n>=8){
+                            n += -1*(int)(Math.random()*2);
+                        }
                         nextTetrad.translateToCol(n);
+
                         if(cheatCode3){
-                            if(thirdTetrad.getSpawned()){
-                                thirdTetrad.removeBlocks();
+                            if(storm.get(0).getSpawned()){
+                                storm.get(0).removeBlocks();
+                                storm.remove(0);
                             }
-                            thirdTetrad = new Tetrad(grid);
-                            thirdTetrad.setShape(9);
-                            thirdTetrad.SpawnTetrad();
+                            storm.add(new Tetrad(grid));
+                            storm.get(0).setShape(9);
+                            if(cheatCode4){
+                                storm.get(0).setShape((int)(Math.random()*7));
+                            }
+                            storm.get(0).SpawnTetrad();
                             int t = activeTetrad.getLocations()[0].getCol();
-                            t += (Math.random()<0.5)?(-1*(int)(Math.random()*5) - 1):((int)(Math.random()*5) + 1);
-                            thirdTetrad.translateToCol(t); 
+                            if(n>1 && n<8){
+                                t += (Math.random()<0.5)?(-1*(int)(Math.random()*4) -2):((int)(Math.random()*4) + 2);
+                            }else if(n<=1){
+                                t += (int)(Math.random()*4) + 2;
+                            }
+                            else if (n>=8){
+                                t += -1*(int)(Math.random()*4) - 2;
+                            }
+                            storm.get(0).translateToCol(t); 
                         }
                         DisplayNextTetrad();
                         controlsActive = true;
@@ -249,8 +287,8 @@ public class Tetris implements ArrowListener
                         if(meteors%10==0){
                             level++;
                             time-=2;
-                            if(time<20){
-                                time = 20;
+                            if(time<30){
+                                time = 30;
                             }
                         }
                         if(level>=8){
@@ -269,8 +307,8 @@ public class Tetris implements ArrowListener
                     ree();
             }
             if(elapsed >=24000 && sped){
-                time = 25;
-                gameTime = 25;
+                time = 48;
+                gameTime = 48;
                 sped = false;
                 display.setRee(true);
             }
@@ -361,7 +399,7 @@ public class Tetris implements ArrowListener
                 rowsDone -= 10;
             }else if (time>75){
                 level++;
-                time-= 25;
+                time-= 5;
                 rowsDone -= 10;
             }else if(level>=1999){
                 level=1990;
@@ -472,13 +510,17 @@ public class Tetris implements ArrowListener
             System.out.println();
         if(!dejavu){
             System.out.println("Level: " + level + "\nLines: " + lines + "\nScore: " + score + 
-                "\nNext:");
+                "\nNext:\n");
         }else{
             System.out.print("\nLevel: " + level + "\nLives: ");
-            for(int i = 0; i<lives; i++)
-                System.out.print("[]");
+            if(lives>5){
+                System.out.print(lives);
+            }else{
+                for(int i = 0; i<lives; i++)
+                    System.out.print("[]");
+            }
             System.out.print("\nScore: " + score + 
-                "\nNext:");
+                "\nNext:\n");
         }
         if(nextTetrad.getShape()==0){
             for(int i = 0; i<4; i++)
@@ -582,7 +624,7 @@ public class Tetris implements ArrowListener
 
     public void pPressed(){
         if(cheats){
-            nextTetrad.setShape(0);
+            nextTetrad.setShape(9);
             DisplayNextTetrad();
             cheatCode1 = !cheatCode1;
             cheatCode2 = false;
@@ -616,11 +658,19 @@ public class Tetris implements ArrowListener
         }
     }
 
+    public void aPressed(){
+        if(cheatCode4){
+
+        }
+    }
+
     public void dPressed(){
-        if(cheats){
-            //music.stopMusic();
-            // music = new MusicPlayer("dejavu.wav", 264000);
-            // music.music();
+        if(cheatCode4){
+
+        }else if(cheats){
+            music.stopMusic();
+            music = new MusicPlayer("dejavu.wav", 264000);
+            music.music();
             dejavu =!dejavu;
             for(int i = 0; i< grid.getNumRows(); i++){
                 clearRow(i);
@@ -629,8 +679,8 @@ public class Tetris implements ArrowListener
 
                 nextTetrad = new Tetrad(grid);
                 activeTetrad = new Tetrad(grid);
-                thirdTetrad = new Tetrad(grid);
-                thirdTetrad.setShape(9);
+                storm.add(new Tetrad(grid));
+                storm.get(0).setShape(9);
                 nextTetrad.setShape(9);
                 activeTetrad.setShape(10);
                 DisplayNextTetrad();
@@ -736,7 +786,7 @@ public class Tetris implements ArrowListener
     }
 
     public MoveList getMovesToMake(){
-        
+
         List<MoveList> movesList = new ArrayList<MoveList>();
 
         for(int rot = 0; rot< 4; rot++){
