@@ -749,10 +749,11 @@ public class Tetris implements ArrowListener
             }
 
             while(active.translate(0,-1)){actions.add(Move.LEFT);}
-
+            Location[] testpos = active.removeBlocks();
             Tetrad test = new Tetrad(temp);
             do{
-                test = new Tetrad(temp, active.removeBlocks(), Color.RED);
+                
+                test = new Tetrad(temp, testpos, Color.RED);
                 test.SpawnTetrad();
 
                 while(test.translate(1,0)){}
@@ -761,20 +762,18 @@ public class Tetris implements ArrowListener
                 movesList.add(new MoveList(actions, getGridScore(temp)));
                 actions.clear();
                 test.removeBlocks();
-                active = new Tetrad(temp);
-                active.setShape(activeTetrad.getShape());
-                active.SpawnTetrad();
-                active.translate(2,0);
-                actions.add(Move.DOWN);actions.add(Move.DOWN);
-                for(int i = 0; i<rot; i++){
-                    active.rotate(); 
-                    actions.add(Move.UP);    
+                Location[] newPos = new Location[testpos.length];
+                
+                if(Location.posValid(temp, testpos, 0,1)){
+                    newPos = Location.moveLocsOver(testpos, 0,1);
                 }
 
-                while(active.translate(0,-1)){actions.add(Move.LEFT);}
-
+                active = new Tetrad(temp, newPos, Color.RED);
+                active.SpawnTetrad();
+                
                 actions.add(Move.RIGHT);
-            }while(test.translate(0,1));
+                testpos = active.removeBlocks();
+            }while(Location.posValid(temp, testpos, 0,1));
         }
         Collections.sort(movesList, new Comparator<MoveList>(){
                 public int compare(MoveList a, MoveList b){
@@ -789,7 +788,7 @@ public class Tetris implements ArrowListener
     }
 
     public void makeMove(){
-        MoveList moves = getMovesToMake();
+        //MoveList moves = getMovesToMake();
         Move[] plz = new Move[]{Move.DOWN, Move.DOWN, Move.DOWN, Move.LEFT,Move.UP}; 
         for(Move m: plz){
             switch(m){

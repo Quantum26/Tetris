@@ -235,4 +235,23 @@ public class Location implements Comparable
     {
         return "(" + getRow() + ", " + getCol() + ")";
     }
+    
+    public static Location[] moveLocsOver(Location[] locs, int deltaRow, int deltaCol){
+        Location[] newLocs = new Location[locs.length];
+        for(int i = 0; i<locs.length; i++){
+            newLocs[i] = new Location(locs[i].getRow() + deltaRow, locs[i].getCol() + deltaCol);
+        }
+        return newLocs;
+    }
+    
+    public static boolean posValid(BoundedGrid<Block> g, Location[]locs, int deltaRow, int deltaCol){
+        Location[] newLocs = new Location[locs.length];
+        for(int i = 0; i<locs.length; i++){
+            newLocs[i] = new Location(locs[i].getRow() + deltaRow, locs[i].getCol() + deltaCol);
+            if(!g.isValid(newLocs[i])){
+                return false;
+            }
+        }
+        return true;
+    }
 }
