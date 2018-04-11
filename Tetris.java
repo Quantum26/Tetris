@@ -776,6 +776,19 @@ public class Tetris implements ArrowListener
         }   
         return sum;
     }
+    
+    public boolean getHeavySide(BoundedGrid<Block> g){//true is left, false is right
+        int left = 0;
+        int right = 0;
+        for(int i = 0; i<g.getNumCols()/2; i++){
+            left+=getColHeight(i, g);
+        } 
+        for(int i = g.getNumCols()/2; i<g.getNumCols(); i++){
+            right+=getColHeight(i, g);
+        }   
+        
+        return left>right;
+    }
 
     public double getGridScore(BoundedGrid<Block> g){//returns AI-based value of grid
         double a = getAggHeight(g)*-0.510066;
@@ -802,11 +815,14 @@ public class Tetris implements ArrowListener
                 active.rotate(); 
                 actions.add(Move.UP);    
             }
-
-            while(active.translate(0,-1)){actions.add(Move.LEFT);}
+            int x = (getHeavySide(temp))?1:-1;
+            while(active.translate(0,x)){
+                actions.add((x==-1)?Move.LEFT:Move.RIGHT);
+            }
             Location[] testpos = active.removeBlocks();
             Tetrad test = new Tetrad(temp);
-            do{
+            
+            while(Location.posValid(temp, testpos, 0,x*-1)){
 
                 test = new Tetrad(temp, testpos, Color.RED);
                 test.SpawnTetrad();
@@ -819,16 +835,18 @@ public class Tetris implements ArrowListener
                 test.removeBlocks();
                 Location[] newPos = new Location[testpos.length];
 
-                if(Location.posValid(temp, testpos, 0,1)){
-                    newPos = Location.moveLocsOver(testpos, 0,1);
+                if(Location.posValid(temp, testpos, 0,x*-1)){
+                    newPos = Location.moveLocsOver(testpos, 0,x*-1);
                 }
 
                 active = new Tetrad(temp, newPos, Color.RED);
                 active.SpawnTetrad();
 
-                actions.add(Move.RIGHT);
+                actions.add((x==1)?Move.LEFT:Move.RIGHT);
                 testpos = active.removeBlocks();
-            }while(Location.posValid(temp, testpos, 0,1));
+                
+            }
+            
         }
         Collections.sort(movesList, new Comparator<MoveList>(){
                 public int compare(MoveList a, MoveList b){
@@ -864,7 +882,7 @@ public class Tetris implements ArrowListener
 
             }
             display.showBlocks();
-            try{Thread.sleep(100);}catch(Exception e){};
+            try{Thread.sleep(gameTime/10);}catch(Exception e){};
 
         }
         System.out.println("move done");
