@@ -173,7 +173,7 @@ public class Tetris implements ArrowListener
                     elapsed = System.currentTimeMillis()-start;
                 }
                 if(!dejavu){
-                    //MoveList m = getMovesToMake();
+                    
                     if(!activeTetrad.translate(1,0)){
 
                         controlsActive = false;
@@ -186,8 +186,9 @@ public class Tetris implements ArrowListener
                         clearCompletedRows();
 
                         activeTetrad = nextTetrad;
-                        
+                        MoveList m = getMovesToMake();
                         activeTetrad.SpawnTetrad();
+                        
                         nextTetrad = new Tetrad(grid);
                         if(cheatCode1){
                             nextTetrad.setShape(0);
@@ -197,8 +198,7 @@ public class Tetris implements ArrowListener
                         DisplayNextTetrad();
 
                         controlsActive = true;
-                    }else if(lines>0){
-                        //makeMove(m);
+                        makeMove(m);
                     }
                 }else{
                     gameTime = time;
@@ -736,10 +736,11 @@ public class Tetris implements ArrowListener
     }
 
     public MoveList getMovesToMake(){
-        BoundedGrid<Block> temp = grid.getEquivGrid();
+        
         List<MoveList> movesList = new ArrayList<MoveList>();
 
         for(int rot = 0; rot< 4; rot++){
+            BoundedGrid<Block> temp = grid.getEquivGrid();
             MoveList tmove;
             List<Move> actions = new ArrayList<Move>();
             Tetrad active = new Tetrad(temp);
@@ -764,7 +765,7 @@ public class Tetris implements ArrowListener
                 actions.add(Move.SPACE);
 
                 movesList.add(new MoveList(actions, getGridScore(temp)));
-                actions.clear();
+                actions.remove(actions.size()-1);
                 test.removeBlocks();
                 Location[] newPos = new Location[testpos.length];
 
@@ -813,7 +814,7 @@ public class Tetris implements ArrowListener
 
             }
             display.showBlocks();
-            try{Thread.sleep(1000);}catch(Exception e){};
+            try{Thread.sleep(100);}catch(Exception e){};
 
         }
         System.out.println("move done");
