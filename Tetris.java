@@ -56,8 +56,8 @@ public class Tetris implements ArrowListener
         display.setTitle("Tetris"); //sets the title to Tetris
         activeTetrad = new Tetrad(grid); //creates a new tetrad
         nextTetrad = new Tetrad(grid); //creates a second tetrad
-        time = 1000; //base time is set to 1000 milliseconds or 1 second
-        gameTime = 1000; //same for this time variable
+        time = 500; //base time is set to 1000 milliseconds or 1 second
+        gameTime = 500; //same for this time variable
         level = 1; //sets level to 1
         score = 0; //sets score to 0
         gotTetris = false; //you have not gotten a tetris yet
@@ -188,7 +188,7 @@ public class Tetris implements ArrowListener
                         clearCompletedRows();
 
                         activeTetrad = nextTetrad;
-                        //MoveList m = getMovesToMake();
+                        MoveList m = getMovesToMake();
                         activeTetrad.SpawnTetrad();
 
                         nextTetrad = new Tetrad(grid);
@@ -200,7 +200,7 @@ public class Tetris implements ArrowListener
                         DisplayNextTetrad();
 
                         controlsActive = true;
-                        //makeMove(m);
+                        makeMove(m);
                     }
                 }else{
                     gameTime = time;
@@ -776,7 +776,7 @@ public class Tetris implements ArrowListener
         }   
         return sum;
     }
-    
+
     public boolean getHeavySide(BoundedGrid<Block> g){//true is left, false is right
         int left = 0;
         int right = 0;
@@ -786,7 +786,7 @@ public class Tetris implements ArrowListener
         for(int i = g.getNumCols()/2; i<g.getNumCols(); i++){
             right+=getColHeight(i, g);
         }   
-        
+
         return left>right;
     }
 
@@ -821,7 +821,7 @@ public class Tetris implements ArrowListener
             }
             Location[] testpos = active.removeBlocks();
             Tetrad test = new Tetrad(temp);
-            
+
             while(Location.posValid(temp, testpos, 0,x*-1)){
 
                 test = new Tetrad(temp, testpos, Color.RED);
@@ -844,8 +844,18 @@ public class Tetris implements ArrowListener
 
                 actions.add((x==1)?Move.LEFT:Move.RIGHT);
                 testpos = active.removeBlocks();
-                
+
             }
+
+            test = new Tetrad(temp, testpos, Color.RED);
+            test.SpawnTetrad();
+
+            while(test.translate(1,0)){}
+            actions.add(Move.SPACE);
+
+            movesList.add(new MoveList(actions, getGridScore(temp)).getEquivMoveList());
+            actions.remove(actions.size()-1);
+            test.removeBlocks();
             
         }
         Collections.sort(movesList, new Comparator<MoveList>(){

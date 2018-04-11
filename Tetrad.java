@@ -22,11 +22,11 @@ public class Tetrad
             blocks[i] = new Block();
         }
         g = grid;
-        shape = 9;
+        //shape = 9;
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
         spawned = false;
-        //shape = (int)(Math.random()*7);
+        shape = (int)(Math.random()*7);
         hasShape = true;
     }
 
@@ -53,10 +53,10 @@ public class Tetrad
             switch(shape){ 
                 case 0://I
                 color = Color.BLUE;
-                locs[0] = new Location(0,4);
-                locs[1] = new Location(1,4);
-                locs[2] = new Location(2,4);
-                locs[3] = new Location(3,4);
+                locs[0] = new Location(0,3);
+                locs[1] = new Location(0,4);
+                locs[2] = new Location(0,5);
+                locs[3] = new Location(0,6);
                 break;
 
                 case 1: //T
