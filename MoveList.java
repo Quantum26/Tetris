@@ -56,8 +56,11 @@ public class MoveList
     }
     
     public MoveList getEquivMoveList(){
-        MoveList temp = new MoveList(moves, value);
-        return temp;
+        List<Move> boiz = new ArrayList<Move>();
+        for(int i = 0; i<moves.size(); i++){
+            boiz.add(moves.get(i));
+        }
+        return new MoveList(boiz, value);
     }
     
     public void Clear(){

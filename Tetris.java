@@ -764,7 +764,7 @@ public class Tetris implements ArrowListener
                 while(test.translate(1,0)){}
                 actions.add(Move.SPACE);
 
-                movesList.add(new MoveList(actions, getGridScore(temp)));
+                movesList.add(new MoveList(actions, getGridScore(temp)).getEquivMoveList());
                 actions.remove(actions.size()-1);
                 test.removeBlocks();
                 Location[] newPos = new Location[testpos.length];
