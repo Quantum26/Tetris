@@ -173,7 +173,7 @@ public class Tetris implements ArrowListener
                     elapsed = System.currentTimeMillis()-start;
                 }
                 if(!dejavu){
-                    MoveList m = getMovesToMake();
+                    //MoveList m = getMovesToMake();
                     if(!activeTetrad.translate(1,0)){
 
                         controlsActive = false;
