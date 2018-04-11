@@ -165,7 +165,7 @@ public class Tetris implements ArrowListener
                 elapsed = System.currentTimeMillis()-start;
             }
             if(!paused){
-                if(lines>0){makeMove();}
+                
                 for(int i = 0; i<5; i++){
 
                     try { Thread.sleep(gameTime/10); } catch(Exception e) {}
@@ -195,7 +195,7 @@ public class Tetris implements ArrowListener
                         DisplayNextTetrad();
 
                         controlsActive = true;
-                    }
+                    }else if(lines>0){makeMove();}
                 }else{
                     gameTime = time;
                     if(!nextTetrad.translate(1,0)||(thirdTetrad.getSpawned()&&!thirdTetrad.translate(1,0))){
@@ -788,9 +788,9 @@ public class Tetris implements ArrowListener
     }
 
     public void makeMove(){
-        //MoveList moves = getMovesToMake();
-        Move[] plz = new Move[]{Move.DOWN, Move.DOWN, Move.DOWN, Move.LEFT,Move.UP}; 
-        for(Move m: plz){
+        MoveList moves = getMovesToMake();
+        Move[] plz = new Move[]{Move.DOWN,Move.DOWN,Move.LEFT,Move.UP,Move.SPACE}; 
+        for(Move m: moves.getList()){
             switch(m){
                 case UP:
                 upPressed();
