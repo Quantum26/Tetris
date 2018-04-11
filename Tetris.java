@@ -165,9 +165,9 @@ public class Tetris implements ArrowListener
                 elapsed = System.currentTimeMillis()-start;
             }
             if(!paused){
-                
+                if(lines>0){makeMove();}
                 for(int i = 0; i<5; i++){
-                    
+
                     try { Thread.sleep(gameTime/10); } catch(Exception e) {}
 
                     elapsed = System.currentTimeMillis()-start;
@@ -195,7 +195,7 @@ public class Tetris implements ArrowListener
                         DisplayNextTetrad();
 
                         controlsActive = true;
-                    }else if(lines>0){makeMove();}
+                    }
                 }else{
                     gameTime = time;
                     if(!nextTetrad.translate(1,0)||(thirdTetrad.getSpawned()&&!thirdTetrad.translate(1,0))){
@@ -615,8 +615,8 @@ public class Tetris implements ArrowListener
     public void dPressed(){
         if(cheats){
             //music.stopMusic();
-           // music = new MusicPlayer("dejavu.wav", 264000);
-           // music.music();
+            // music = new MusicPlayer("dejavu.wav", 264000);
+            // music.music();
             dejavu =!dejavu;
             for(int i = 0; i< grid.getNumRows(); i++){
                 clearRow(i);
@@ -772,8 +772,7 @@ public class Tetris implements ArrowListener
                 }
 
                 while(active.translate(0,-1)){actions.add(Move.LEFT);}
-                
-                
+
                 actions.add(Move.RIGHT);
             }while(test.translate(0,1));
         }
@@ -792,7 +791,7 @@ public class Tetris implements ArrowListener
     public void makeMove(){
         MoveList moves = getMovesToMake();
         Move[] plz = new Move[]{Move.DOWN, Move.DOWN, Move.DOWN, Move.LEFT,Move.UP}; 
-        for(Move m: moves.getList()){
+        for(Move m: plz){
             switch(m){
                 case UP:
                 upPressed();
@@ -813,7 +812,7 @@ public class Tetris implements ArrowListener
             }
             display.showBlocks();
             try{Thread.sleep(1000);}catch(Exception e){};
-            
+
         }
         System.out.println("move done");
     }
