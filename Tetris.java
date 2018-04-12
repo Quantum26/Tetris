@@ -283,7 +283,7 @@ public class Tetris implements ArrowListener
                         nextTetrad.SpawnTetrad();
                         int n = activeTetrad.getLocations()[0].getCol();
                         if(cheatCode5){
-                            n = Math.random()<0.5?(n=thirdTetrad.getLocations()[0].getCol()):n;
+                            n = Math.random()<0.5?(thirdTetrad.getLocations()[0].getCol()):n;
                         }
                         if(n>1 && n<8){
                             n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
@@ -309,7 +309,7 @@ public class Tetris implements ArrowListener
                             storm.get(0).SpawnTetrad();
                             int t = activeTetrad.getLocations()[0].getCol();
                             if(cheatCode5){
-                                t = thirdTetrad.getLocations()[0].getCol();
+                                t = Math.random()<0.5?(thirdTetrad.getLocations()[0].getCol()):t;
                                 if(n>1 && n<8){
                                     t += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
                                 }else if(n<=1){
