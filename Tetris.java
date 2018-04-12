@@ -767,7 +767,7 @@ public class Tetris implements ArrowListener
             boolean full = true;
             for(int k = 0; k < 10; k++){
                 Location l = new Location(i, k);
-                if(grid.get(l)==null){
+                if(g.get(l)==null){
                     full = false;
                 }
             }
@@ -817,6 +817,12 @@ public class Tetris implements ArrowListener
     public double getGridScore(BoundedGrid<Block> g){//returns AI-based value of grid
         double a = getAggHeight(g)*-0.510066;
         double b = getCompletedLines(g)*0.760666;
+        for(int i = 0; i<g.getNumCols(); i++){
+            if(getColHeight(i, g)>10){
+                b*=2;
+                break;
+            }
+        }
         double c = getHoles(g)*-0.35663;
         double d = getBumpiness(g)*-0.184483;
         return a+b+c+d;
