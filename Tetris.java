@@ -66,8 +66,8 @@ public class Tetris implements ArrowListener
         display.setTitle("Tetris"); //sets the title to Tetris
         activeTetrad = new Tetrad(grid); //creates a new tetrad
         nextTetrad = new Tetrad(grid); //creates a second tetrad
-        time = 1000; //base time is set to 1000 milliseconds or 1 second
-        gameTime = 1000; //same for this time variable
+        time = 300; //base time is set to 1000 milliseconds or 1 second
+        gameTime = 300; //same for this time variable
         level = 1; //sets level to 1
         score = 0; //sets score to 0
         gotTetris = false; //you have not gotten a tetris yet
@@ -198,7 +198,7 @@ public class Tetris implements ArrowListener
                         clearCompletedRows();
 
                         activeTetrad = nextTetrad;
-                        //MoveList m = getMovesToMake();
+                        MoveList m = getMovesToMake();
                         activeTetrad.SpawnTetrad();
 
                         nextTetrad = new Tetrad(grid);
@@ -210,7 +210,7 @@ public class Tetris implements ArrowListener
                         DisplayNextTetrad();
 
                         controlsActive = true;
-                        //makeMove(m);
+                        makeMove(m);
                     }
                 }else{
                     gameTime = time;
@@ -919,6 +919,5 @@ public class Tetris implements ArrowListener
             try{Thread.sleep(gameTime/10);}catch(Exception e){};
 
         }
-        System.out.println("move done");
     }
 }

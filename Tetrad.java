@@ -22,7 +22,7 @@ public class Tetrad
             blocks[i] = new Block();
         }
         g = grid;
-        //shape = 9;
+        //shape = 7;
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
         spawned = false;
