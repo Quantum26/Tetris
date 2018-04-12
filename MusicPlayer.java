@@ -18,10 +18,9 @@ public class MusicPlayer
     JFXPanel fxPanel;
     Media hit;
     MediaPlayer mediaPlayer;
-    public MusicPlayer(String s, double l){
+    public MusicPlayer(String s){
         music = s;
         muted = false;
-        length = l;
         fxPanel = new JFXPanel();
         hit = new Media(new File(music).toURI().toString());
         mediaPlayer = new MediaPlayer(hit);
@@ -48,7 +47,7 @@ public class MusicPlayer
         return length;
     }
 
-    public void music(){
+    public void play(){
         if(!muted){
             /**
             try{
@@ -63,7 +62,9 @@ public class MusicPlayer
             int x = 0;
         }
     }
-
+    public void pause(){
+        mediaPlayer.pause();
+    }
     public void stopMusic(){
 
         mediaPlayer.stop();
