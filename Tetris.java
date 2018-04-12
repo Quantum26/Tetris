@@ -55,7 +55,7 @@ public class Tetris implements ArrowListener
     private boolean sped = false;
     private long elapsed;
     private int meteors = 0;
-    private int lives = 20;
+    private int lives = 15;
     private List<Tetrad> storm;
     public Tetris()
     {
@@ -80,6 +80,7 @@ public class Tetris implements ArrowListener
         controlsActive = true; //controls are active
         music = new MusicPlayer("Tetris.wav", 82000.0);
         storm = new ArrayList<Tetrad>();
+        start = System.currentTimeMillis();
     }
 
     public void upPressed()
@@ -198,42 +199,54 @@ public class Tetris implements ArrowListener
                         clearCompletedRows();
 
                         activeTetrad = nextTetrad;
-                        MoveList m = getMovesToMake();
+                        //MoveList m = getMovesToMake();
                         activeTetrad.SpawnTetrad();
 
                         nextTetrad = new Tetrad(grid);
                         if(cheatCode1){
-                            nextTetrad.setShape(9);
+                            nextTetrad.setShape(0);
                         }else if(cheatCode2){
                             nextTetrad.setShape(2);
                         }
                         DisplayNextTetrad();
 
                         controlsActive = true;
-                        makeMove(m);
+                        //makeMove(m);
                     }
                 }else{
                     gameTime = time;
                     if(activeTetrad.getSpawned()&&(!nextTetrad.translate(1,0)||(storm.size()>0&&storm.get(0).getSpawned()&&!storm.get(0).translate(1,0)))){
-                        if(elapsed>=200000){
-
+                        if(elapsed>=195000){
+                            display.setRee(true);
+                            cheatCode3 = true;
+                            if(storm.size()>0&&storm.get(0).getSpawned()){
+                                storm.get(0).removeBlocks();
+                                storm.remove(0);
+                            }
+                            storm.add(new Tetrad(grid));
+                        }else if(elapsed>=158000){
+                            display.setRee(false);
                         }else if(elapsed>=129000&&!cheatCode5){
                             cheatCode5 = true;
                             nextTetrad.removeBlocks();
                             storm.get(0).removeBlocks();
                             storm.remove(0);
-                            activeTetrad.translateToCol(8);
+                            activeTetrad.removeBlocks();
+                            activeTetrad.setShape(12);
+                            activeTetrad.SpawnTetrad();
+                            activeTetrad.translateToCol(9);
+                            thirdTetrad.setShape(11);
                             thirdTetrad.SpawnTetrad();
                             thirdTetrad.translateToCol(0);
                             //unree();
                             //reee = false;
-                            display.setRee(false);
+                            display.setRee(true);
                             nextTetrad = new Tetrad(grid);
                             nextTetrad.setShape(9);
                             nextTetrad.SpawnTetrad();
                             cheatCode3 = false;
                             cheatCode4 = false;
-                        }else if(elapsed>=75000){
+                        }else if(elapsed>=92000&&!cheatCode5){
                             display.setRee(false);
                             cheatCode3=false;
                             cheatCode4=true;
@@ -242,7 +255,7 @@ public class Tetris implements ArrowListener
                                 storm.remove(0);
                             }
                             storm.add(new Tetrad(grid));
-                        }else if(elapsed>=64000){
+                        }else if(elapsed>=64000&&!cheatCode5){
                             //ree();
                             //reee = true;
                             display.setRee(true);
@@ -295,13 +308,26 @@ public class Tetris implements ArrowListener
                             }
                             storm.get(0).SpawnTetrad();
                             int t = activeTetrad.getLocations()[0].getCol();
-                            if(n>1 && n<8){
-                                t += (Math.random()<0.5)?(-1*(int)(Math.random()*4) -2):((int)(Math.random()*4) + 2);
-                            }else if(n<=1){
-                                t += (int)(Math.random()*4) + 2;
+                            if(cheatCode5){
+                                t = thirdTetrad.getLocations()[0].getCol();
+                                if(n>1 && n<8){
+                                    t += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
+                                }else if(n<=1){
+                                    t += (int)(Math.random()*2);
+                                }
+                                else if (n>=8){
+                                    t += -1*(int)(Math.random()*2);
+                                }
                             }
-                            else if (n>=8){
-                                t += -1*(int)(Math.random()*4) - 2;
+                            else{
+                                if(n>1 && n<8){
+                                    t += (Math.random()<0.5)?(-1*(int)(Math.random()*4) -2):((int)(Math.random()*4) + 2);
+                                }else if(n<=1){
+                                    t += (int)(Math.random()*4) + 2;
+                                }
+                                else if (n>=8){
+                                    t += -1*(int)(Math.random()*4) - 2;
+                                }
                             }
                             storm.get(0).translateToCol(t); 
                         }
@@ -322,6 +348,11 @@ public class Tetris implements ArrowListener
                             System.out.println("SEIZURE WARNING!!!!!!!!");
                         }
                         score+=10*level;
+                        if(elapsed>=273000){
+                            game = false;
+                            win();
+                            break;
+                        }
                     }
                 }
                 if(game==false){
@@ -337,7 +368,9 @@ public class Tetris implements ArrowListener
                 time = 48;
                 gameTime = 48;
                 sped = false;
-                //display.setRee(true);
+                display.setRee(true);
+                ree();
+                reee = true;
             }
         }
     }
@@ -513,7 +546,11 @@ public class Tetris implements ArrowListener
         display.setTitle(title);
         DisplayNextTetrad();
     }
-
+    public void win(){
+        System.out.println("YOU WIN! \nYour Score was: " + score);
+        title+=" YOU A WINNER";
+        display.setTitle(title);
+    }
     private void ree(){
         List<Location> locs = grid.getOccupiedLocations();
         display.setRee(true);
@@ -539,6 +576,9 @@ public class Tetris implements ArrowListener
             System.out.println("Level: " + level + "\nLines: " + lines + "\nScore: " + score + 
                 "\nNext:\n");
         }else{
+            if(level>=14){
+                System.out.println("GET READY FOR DOUBLE BLOCK (A and D keys)");
+            }
             System.out.print("\nLevel: " + level + "\nLives: ");
             if(lives>5){
                 System.out.print(lives);
@@ -614,21 +654,23 @@ public class Tetris implements ArrowListener
     }
 
     public void sPressed(){
-        if(cheats){
-            sped = true;
-            music.stopMusic();
-            music = new MusicPlayer("90s.wav", 284000);
-            music.music();
-            level = 1990;
-            time = 300;
-            gameTime = 0;
-            start = System.currentTimeMillis();
-            elapsed = 0;
-        }else{
-            music.stopMusic();
-            music = new MusicPlayer("90s.wav", 284000);
-            music.music();
-            start = System.currentTimeMillis();
+        if(!dejavu){
+            if(cheats){
+                sped = true;
+                music.stopMusic();
+                music = new MusicPlayer("90s.wav", 284000);
+                music.music();
+                level = 1990;
+                time = 300;
+                gameTime = 0;
+                start = System.currentTimeMillis();
+                elapsed = 0;
+            }else{
+                music.stopMusic();
+                music = new MusicPlayer("90s.wav", 284000);
+                music.music();
+                start = System.currentTimeMillis();
+            }
         }
     }
 
@@ -651,7 +693,7 @@ public class Tetris implements ArrowListener
 
     public void pPressed(){
         if(cheats){
-            nextTetrad.setShape(9);
+            nextTetrad.setShape(0);
             DisplayNextTetrad();
             cheatCode1 = !cheatCode1;
             cheatCode2 = false;

@@ -180,7 +180,25 @@ public class Tetrad
                 locs[2] = new Location(18,4);
                 locs[3] = new Location(18,5);
                 break;
-
+                
+                case 11:
+                color = Color.WHITE;
+                blocks = new Block[2];
+                blocks[0] = new Block();
+                blocks[1] = new Block();
+                locs = new Location[2];
+                locs[0] = new Location (19,1);
+                locs[1] = new Location (18,1);
+                break;
+                case 12:
+                color = Color.WHITE;
+                blocks = new Block[2];
+                blocks[0] = new Block();
+                blocks[1] = new Block();
+                locs = new Location[2];
+                locs[0] = new Location (19,8);
+                locs[1] = new Location (18,8);
+                break;
                 default:
                 color = Color.WHITE;
                 locs[0] = new Location(0,3);
