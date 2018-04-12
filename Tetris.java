@@ -215,7 +215,9 @@ public class Tetris implements ArrowListener
                 }else{
                     gameTime = time;
                     if(activeTetrad.getSpawned()&&(!nextTetrad.translate(1,0)||(storm.size()>0&&storm.get(0).getSpawned()&&!storm.get(0).translate(1,0)))){
-                        if(!cheatCode5){
+                        if(elapsed>=200000){
+
+                        }else if(elapsed>=129000&&!cheatCode5){
                             cheatCode5 = true;
                             nextTetrad.removeBlocks();
                             storm.get(0).removeBlocks();
@@ -235,7 +237,7 @@ public class Tetris implements ArrowListener
                             display.setRee(false);
                             cheatCode3=false;
                             cheatCode4=true;
-                            if(storm.get(0).getSpawned()){
+                            if(storm.size()>0&&storm.get(0).getSpawned()){
                                 storm.get(0).removeBlocks();
                                 storm.remove(0);
                             }
@@ -267,6 +269,9 @@ public class Tetris implements ArrowListener
                         }
                         nextTetrad.SpawnTetrad();
                         int n = activeTetrad.getLocations()[0].getCol();
+                        if(cheatCode5){
+                            n = Math.random()<0.5?(n=thirdTetrad.getLocations()[0].getCol()):n;
+                        }
                         if(n>1 && n<8){
                             n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
                         }else if(n<=1){
