@@ -11,14 +11,20 @@ import javafx.embed.swing.JFXPanel;
  */
 public class MusicPlayer
 {
+
     private String music = "Tetris.mp3";
-    private AudioStream as;
     private boolean muted = false;
     private double length;
+    JFXPanel fxPanel;
+    Media hit;
+    MediaPlayer mediaPlayer;
     public MusicPlayer(String s, double l){
         music = s;
         muted = false;
         length = l;
+        JFXPanel fxPanel = new JFXPanel();
+        Media hit = new Media(new File(music).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(hit);
     }
 
     public void setMusic(String s, double l){
@@ -52,10 +58,7 @@ public class MusicPlayer
             }catch(IOException e){
             System.out.println("Baka");
             }*/
-            String bip = "Fingerdash.mp3";
-            JFXPanel fxPanel = new JFXPanel();
-            Media hit = new Media(new File(music).toURI().toString());
-            MediaPlayer mediaPlayer = new MediaPlayer(hit);
+
             mediaPlayer.play();
             int x = 0;
         }
@@ -63,17 +66,6 @@ public class MusicPlayer
 
     public void stopMusic(){
 
-        try
-        {
-            //don't try and do things with a null object!
-            if (as != null)
-            {
-                AudioPlayer.player.stop(as);
-            }
-        }
-        catch (NullPointerException e)
-        {
-            System.err.println(e);
-        }
+        mediaPlayer.stop();
     }
 }

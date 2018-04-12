@@ -78,7 +78,7 @@ public class Tetris implements ArrowListener
         paused = false; //the game is not paused
         game = true; //the game is active
         controlsActive = true; //controls are active
-        music = new MusicPlayer("Tetris.wav", 82000.0);
+        music = new MusicPlayer("Tetris.mp3", 82000.0);
         storm = new ArrayList<Tetrad>();
         start = System.currentTimeMillis();
     }
