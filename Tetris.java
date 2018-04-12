@@ -544,15 +544,19 @@ public class Tetris implements ArrowListener
         }
         display.showBlocks();
         music.stopMusic();
+        music = new MusicPlayer("oof.mp3", 10);
+        music.music();
         title+= " You lose m8";
         display.setTitle(title);
         DisplayNextTetrad();
     }
+
     public void win(){
         System.out.println("YOU WIN! \nYour Score was: " + score);
         title+=" YOU A WINNER";
         display.setTitle(title);
     }
+
     private void ree(){
         List<Location> locs = grid.getOccupiedLocations();
         display.setRee(true);
@@ -629,7 +633,7 @@ public class Tetris implements ArrowListener
 
     public void onePressed(){
         music.stopMusic();
-        music = new MusicPlayer("Tetris.wav", 82000.0);
+        music = new MusicPlayer("Tetris.mp3", 82000.0);
         start = System.currentTimeMillis();
         music.music();
     }
@@ -643,7 +647,7 @@ public class Tetris implements ArrowListener
 
     public void threePressed(){
         music.stopMusic();
-        music = new MusicPlayer("dejavu.wav", 273000.0);
+        music = new MusicPlayer("dejavu.mp3", 273000.0);
         start = System.currentTimeMillis();
         music.music();
     }
@@ -660,7 +664,7 @@ public class Tetris implements ArrowListener
             if(cheats){
                 sped = true;
                 music.stopMusic();
-                music = new MusicPlayer("90s.wav", 284000);
+                music = new MusicPlayer("90s.mp3", 284000);
                 music.music();
                 level = 1990;
                 time = 300;
@@ -669,7 +673,7 @@ public class Tetris implements ArrowListener
                 elapsed = 0;
             }else{
                 music.stopMusic();
-                music = new MusicPlayer("90s.wav", 284000);
+                music = new MusicPlayer("90s.mp3", 284000);
                 music.music();
                 start = System.currentTimeMillis();
             }
@@ -746,7 +750,7 @@ public class Tetris implements ArrowListener
             }
         }else if(cheats){
             music.stopMusic();
-            music = new MusicPlayer("dejavu.wav", 264000);
+            music = new MusicPlayer("dejavu.mp3", 264000);
             music.music();
             dejavu = true;
             for(int i = 0; i< grid.getNumRows(); i++){
@@ -773,7 +777,7 @@ public class Tetris implements ArrowListener
             }
         }else{
             music.stopMusic();
-            music = new MusicPlayer("dejavu.wav", 264000);
+            music = new MusicPlayer("dejavu.mp3", 264000);
             music.music();
             start = System.currentTimeMillis();
         }

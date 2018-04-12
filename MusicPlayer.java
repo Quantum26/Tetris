@@ -11,7 +11,7 @@ import javafx.embed.swing.JFXPanel;
  */
 public class MusicPlayer
 {
-    private String music = "Tetris.wav";
+    private String music = "Tetris.mp3";
     private AudioStream as;
     private boolean muted = false;
     private double length;
@@ -54,7 +54,7 @@ public class MusicPlayer
             }*/
             String bip = "Fingerdash.mp3";
             JFXPanel fxPanel = new JFXPanel();
-            Media hit = new Media(new File(bip).toURI().toString());
+            Media hit = new Media(new File(music).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(hit);
             mediaPlayer.play();
             int x = 0;
