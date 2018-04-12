@@ -217,15 +217,17 @@ public class Tetris implements ArrowListener
                     gameTime = time;
                     if(activeTetrad.getSpawned()&&(!nextTetrad.translate(1,0)||(storm.size()>0&&storm.get(0).getSpawned()&&!storm.get(0).translate(1,0)))){
                         if(elapsed>=195000){
-                            display.setRee(true);
+                            //display.setRee(true);
                             cheatCode3 = true;
                             if(storm.size()>0&&storm.get(0).getSpawned()){
                                 storm.get(0).removeBlocks();
                                 storm.remove(0);
                             }
                             storm.add(new Tetrad(grid));
+                            cheatCode4 = false;
                         }else if(elapsed>=158000){
-                            display.setRee(false);
+                            //display.setRee(false);
+                            cheatCode4 = true;
                         }else if(elapsed>=129000&&!cheatCode5){
                             cheatCode5 = true;
                             nextTetrad.removeBlocks();
@@ -240,14 +242,14 @@ public class Tetris implements ArrowListener
                             thirdTetrad.translateToCol(0);
                             //unree();
                             //reee = false;
-                            display.setRee(true);
+                            //display.setRee(true);
                             nextTetrad = new Tetrad(grid);
                             nextTetrad.setShape(9);
                             nextTetrad.SpawnTetrad();
                             cheatCode3 = false;
                             cheatCode4 = false;
                         }else if(elapsed>=92000&&!cheatCode5){
-                            display.setRee(false);
+                            //display.setRee(false);
                             cheatCode3=false;
                             cheatCode4=true;
                             if(storm.size()>0&&storm.get(0).getSpawned()){
@@ -258,7 +260,7 @@ public class Tetris implements ArrowListener
                         }else if(elapsed>=64000&&!cheatCode5){
                             //ree();
                             //reee = true;
-                            display.setRee(true);
+                            //display.setRee(true);
                             cheatCode3=true;
                         }
                         if(nextTetrad.isNextToSomething()||(storm.size()>0&&storm.get(0).getSpawned()&&storm.get(0).isNextToSomething())){
