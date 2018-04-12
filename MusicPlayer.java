@@ -22,9 +22,9 @@ public class MusicPlayer
         music = s;
         muted = false;
         length = l;
-        JFXPanel fxPanel = new JFXPanel();
-        Media hit = new Media(new File(music).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(hit);
+        fxPanel = new JFXPanel();
+        hit = new Media(new File(music).toURI().toString());
+        mediaPlayer = new MediaPlayer(hit);
     }
 
     public void setMusic(String s, double l){
