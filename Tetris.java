@@ -640,7 +640,7 @@ public class Tetris implements ArrowListener
 
     public void twoPressed(){
         music.stopMusic();
-        music = new MusicPlayer("Boosted.wav", 82000.0);
+        music = new MusicPlayer("Boosted.mp3", 82000.0);
         start = System.currentTimeMillis();
         music.music();
     }
