@@ -24,11 +24,15 @@ public class MusicPlayer
         fxPanel = new JFXPanel();
         hit = new Media(new File(music).toURI().toString());
         mediaPlayer = new MediaPlayer(hit);
+        length = mediaPlayer.getTotalDuration().toMillis();
     }
 
-    public void setMusic(String s, double l){
+    public void setMusic(String s){
         music = s;
-        length = l;
+        stopMusic();
+        hit = new Media(new File(music).toURI().toString());
+        mediaPlayer = new MediaPlayer(hit);
+        length = mediaPlayer.getTotalDuration().toMillis();
     }
 
     public void setMuted(boolean m){
@@ -37,6 +41,10 @@ public class MusicPlayer
 
     public String getMusic(){
         return music;
+    }
+    
+    public String getStatus(){
+        return ""+mediaPlayer.getStatus();
     }
 
     public boolean getMuted(){
@@ -59,7 +67,6 @@ public class MusicPlayer
             }*/
 
             mediaPlayer.play();
-            int x = 0;
         }
     }
     public void pause(){
