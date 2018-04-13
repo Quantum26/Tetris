@@ -765,7 +765,7 @@ public class Tetris implements ArrowListener
     public void mPressed(){
         music.setMuted(!music.getMuted());
         if(music.getMuted())
-            music.stopMusic();
+            music.pause();
         else{
             music.play();
             start = System.currentTimeMillis();
