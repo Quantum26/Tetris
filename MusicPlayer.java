@@ -44,6 +44,7 @@ public class MusicPlayer
     public void setMusic(String s){
         music = s;
         stopMusic();
+        
         hit = new Media(new File(music).toURI().toString());
         mediaPlayer = new MediaPlayer(hit);
         length = mediaPlayer.getTotalDuration().toMillis();

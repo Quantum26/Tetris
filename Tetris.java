@@ -5,7 +5,7 @@ import sounds.Sample;
 import java.io.*;
 import java.util.Scanner;
 import javafx.util.Duration;
-
+import javazoom.jl.player.*;
 public class Tetris implements ArrowListener
 {
     public static void main(String[] args)
@@ -193,7 +193,7 @@ public class Tetris implements ArrowListener
                         clearCompletedRows();
 
                         activeTetrad = nextTetrad;
-                        //MoveList m = getMovesToMake();
+                        MoveList m = getMovesToMake();
                         activeTetrad.SpawnTetrad();
                         if(activeTetrad.getShape()==7){
                             omae();
@@ -208,7 +208,7 @@ public class Tetris implements ArrowListener
                         DisplayNextTetrad();
 
                         controlsActive = true;
-                        //makeMove(m);
+                        makeMove(m);
                     }
                 }else{
                     playDejaMode();
