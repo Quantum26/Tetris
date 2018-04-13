@@ -201,6 +201,9 @@ public class Tetris implements ArrowListener
                         activeTetrad = nextTetrad;
                         //MoveList m = getMovesToMake();
                         activeTetrad.SpawnTetrad();
+                        if(activeTetrad.getShape()==7){
+                            omae();
+                        }
 
                         nextTetrad = new Tetrad(grid);
                         if(cheatCode1){
@@ -260,6 +263,7 @@ public class Tetris implements ArrowListener
                     elapsed = System.currentTimeMillis()-start;
                 }
                 if(activeTetrad.getSpawned()&&(!nextTetrad.translate(1,0)||(storm.size()>0&&storm.get(0).getSpawned()&&!storm.get(0).translate(1,0)))){
+                    elapsed = (long)music.getCurrentTime().toMillis();
                     if(elapsed>=195000){
                         //display.setRee(true);
                         cheatCode3 = true;
@@ -579,6 +583,10 @@ public class Tetris implements ArrowListener
         music.stopMusic();
         music = new MusicPlayer("oof.mp3");
         music.play();
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+        music.stopMusic();
         title+= " You lose m8";
         display.setTitle(title);
         DisplayNextTetrad();
@@ -597,6 +605,38 @@ public class Tetris implements ArrowListener
             grid.get(l).setColor(new Color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255)));
 
         }
+    }
+
+    private void omae(){
+        Duration temp = music.getCurrentTime();
+        String tempName = music.getMusic();
+        music.stopMusic();
+        music = new MusicPlayer("omae.mp3");
+        music.setStopTime(new Duration(2450));
+        music.setAutoPlay(false);
+        music.setCycleCount(1);
+        music.play();
+        try{
+            Thread.sleep(2450);
+        }catch(Exception e){
+        }
+        music.stopMusic();
+        if(display!=null){
+            display.showBlocks();
+        }
+        music.setStartTime(new Duration(2700));
+        music.setStopTime(new Duration(3490));
+        music.setCycleCount(1);
+        music.play();
+        try{
+            Thread.sleep(790);
+        }catch(Exception e){
+        }
+        music.stopMusic();
+        music = new MusicPlayer(tempName);
+        music.setStartTime(temp);
+        music.play();
+        music.setStartTime(Duration.ZERO);
     }
 
     private void unree(){
@@ -680,14 +720,14 @@ public class Tetris implements ArrowListener
 
     public void threePressed(){
         music.stopMusic();
-        music = new MusicPlayer("dejavu.mp3");
+        music = new MusicPlayer("oof.mp3");
         start = System.currentTimeMillis();
         music.play();
     }
 
     public void fourPressed(){
         music.stopMusic();
-        music = new MusicPlayer("Electric.wav");
+        music = new MusicPlayer("omae.mp3");
         start = System.currentTimeMillis();
         music.play();
     }

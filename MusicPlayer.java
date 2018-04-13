@@ -26,8 +26,19 @@ public class MusicPlayer
         hit = new Media(new File(music).toURI().toString());
         mediaPlayer = new MediaPlayer(hit);
         length = mediaPlayer.getTotalDuration().toMillis();
-        mediaPlayer.setAutoPlay(true);
         mediaPlayer.setCycleCount(mediaPlayer.INDEFINITE);
+    }
+
+    public void setCycleCount(int c){
+        if(c!=-1)
+            mediaPlayer.setCycleCount(c);
+        else
+            mediaPlayer.setCycleCount(mediaPlayer.INDEFINITE);
+
+    }
+
+    public void setAutoPlay(boolean a){
+        mediaPlayer.setAutoPlay(a);
     }
 
     public void setMusic(String s){
@@ -46,7 +57,7 @@ public class MusicPlayer
     public String getMusic(){
         return music;
     }
-    
+
     public String getStatus(){
         return ""+mediaPlayer.getStatus();
     }
@@ -58,9 +69,21 @@ public class MusicPlayer
     public double getLength(){
         return length;
     }
+
     public void setStopTime(Duration x){
         mediaPlayer.setStopTime(x);
     }
+    public Duration getCurrentTime(){
+        return mediaPlayer.getCurrentTime();
+    }
+
+    public void setStartTime(Duration x){
+        mediaPlayer.setStartTime(x);
+    }
+    public void setVolume(double v){
+        mediaPlayer.setVolume(v);
+    }
+
     public void play(){
         if(!muted){
             /**
@@ -75,9 +98,11 @@ public class MusicPlayer
             mediaPlayer.play();
         }
     }
+
     public void pause(){
         mediaPlayer.pause();
     }
+
     public void stopMusic(){
 
         mediaPlayer.stop();

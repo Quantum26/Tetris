@@ -5,6 +5,7 @@
  * @version (a version number or a date)
  */
 import java.awt.*;
+import javafx.util.Duration;
 
 public class Tetrad
 {
@@ -14,6 +15,7 @@ public class Tetrad
     private Color color;
     private boolean spawned;
     boolean hasShape;
+    private MusicPlayer omae = new MusicPlayer("omae.mp3");
     Location[] lol;
     public Tetrad(BoundedGrid<Block> grid)
     {
@@ -26,19 +28,19 @@ public class Tetrad
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
         spawned = false;
-        shape = (int)(Math.random()*7);
+        shape = (int)(Math.random()*8);
         hasShape = true;
     }
 
     public Tetrad(BoundedGrid<Block> grid, Location[] locs, Color c){
         blocks = new Block[locs.length];
         lol = new Location[locs.length];
-        
+
         for(int i = 0; i<blocks.length; i++){
             blocks[i] = new Block();
             lol[i] = locs[i];
         }
-        
+
         g = grid;
         color = c;
         shape = 94;
@@ -180,7 +182,7 @@ public class Tetrad
                 locs[2] = new Location(18,4);
                 locs[3] = new Location(18,5);
                 break;
-                
+
                 case 11:
                 color = Color.WHITE;
                 blocks = new Block[2];
@@ -222,10 +224,9 @@ public class Tetrad
                 blocks[2].setColor(Color.RED);blocks[0].setOriginal(Color.RED);
                 Color brown = new Color(166, 91, 41);
                 blocks[3].setColor(brown);blocks[0].setOriginal(brown);
-
             }
-            spawned = true;
             this.addToLocations(g, locs);
+            spawned = true;
         }else{
             for(int i = 0; i < blocks.length; i++){
                 blocks[i].setColor(color);
