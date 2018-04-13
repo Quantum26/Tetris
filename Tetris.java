@@ -216,147 +216,194 @@ public class Tetris implements ArrowListener
                         makeMove(m);
                     }
                 }else{
-                    gameTime = time;
-                    if(activeTetrad.getSpawned()&&(!nextTetrad.translate(1,0)||(storm.size()>0&&storm.get(0).getSpawned()&&!storm.get(0).translate(1,0)))){
-                        if(elapsed>=195000){
-                            //display.setRee(true);
-                            cheatCode3 = true;
-                            if(storm.size()>0&&storm.get(0).getSpawned()){
-                                storm.get(0).removeBlocks();
-                                storm.remove(0);
-                            }
-                            storm.add(new Tetrad(grid));
-                            cheatCode4 = false;
-                        }else if(elapsed>=158000){
-                            //display.setRee(false);
-                            cheatCode4 = true;
-                        }else if(elapsed>=129000&&!cheatCode5){
-                            cheatCode5 = true;
-                            nextTetrad.removeBlocks();
+                    playDejaMode();
+                    if(game==false){
+                        break;
+                    }
+                    display.showBlocks();
+                    title = "Level "+level+", Score: "+score;
+                    display.setTitle(title);
+                    if(reee)
+                        ree();
+                }
+                if(elapsed >=24000 && sped){
+                    time = 48;
+                    gameTime = 48;
+                    sped = false;
+                    display.setRee(true);
+                    ree();
+                    reee = true;
+                }
+
+                if(game==false){
+                    break;
+                }
+                display.showBlocks();
+                title = "Level "+level+", Score: "+score;
+                display.setTitle(title);
+            }
+        }
+    }
+
+    public void playDejaMode(){
+        while (game){
+            gameTime = time;
+            elapsed = System.currentTimeMillis()-start;
+            if(elapsed>= music.getLength()){
+                music.play();
+                start = System.currentTimeMillis();
+            }
+            for(int i = 0; i<5; i++){
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                elapsed = System.currentTimeMillis()-start;
+            }
+            if(!paused){
+
+                for(int i = 0; i<5; i++){
+
+                    try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+
+                    elapsed = System.currentTimeMillis()-start;
+                }
+                if(activeTetrad.getSpawned()&&(!nextTetrad.translate(1,0)||(storm.size()>0&&storm.get(0).getSpawned()&&!storm.get(0).translate(1,0)))){
+                    if(elapsed>=195000){
+                        //display.setRee(true);
+                        cheatCode3 = true;
+                        if(storm.size()>0&&storm.get(0).getSpawned()){
                             storm.get(0).removeBlocks();
                             storm.remove(0);
-                            activeTetrad.removeBlocks();
-                            activeTetrad.setShape(12);
-                            activeTetrad.SpawnTetrad();
-                            activeTetrad.translateToCol(9);
-                            thirdTetrad.setShape(11);
-                            thirdTetrad.SpawnTetrad();
-                            thirdTetrad.translateToCol(0);
-                            //unree();
-                            //reee = false;
-                            //display.setRee(true);
-                            nextTetrad = new Tetrad(grid);
-                            nextTetrad.setShape(9);
-                            nextTetrad.SpawnTetrad();
-                            cheatCode3 = false;
-                            cheatCode4 = false;
-                        }else if(elapsed>=92000&&!cheatCode5){
-                            //display.setRee(false);
-                            cheatCode3=false;
-                            cheatCode4=true;
-                            if(storm.size()>0&&storm.get(0).getSpawned()){
-                                storm.get(0).removeBlocks();
-                                storm.remove(0);
-                            }
-                            storm.add(new Tetrad(grid));
-                        }else if(elapsed>=64000&&!cheatCode5){
-                            //ree();
-                            //reee = true;
-                            //display.setRee(true);
-                            cheatCode3=true;
                         }
-                        if(nextTetrad.isNextToSomething()||(storm.size()>0&&storm.get(0).getSpawned()&&storm.get(0).isNextToSomething())){
-                            score+=20*level;
-                        }
-                        controlsActive = false;
-                        gameTime = time;
-                        if(!nextTetrad.isOnGround()){
-                            lives--;
-                        }
-                        if(lives<=0){
-                            game = false;
-                            gameOver();
-                            break;
-                        }
+                        storm.add(new Tetrad(grid));
+                        cheatCode4 = false;
+                    }else if(elapsed>=158000){
+                        //display.setRee(false);
+                        cheatCode4 = true;
+                    }else if(elapsed>=129000&&!cheatCode5){
+                        cheatCode5 = true;
                         nextTetrad.removeBlocks();
+                        storm.get(0).removeBlocks();
+                        storm.remove(0);
+                        activeTetrad.removeBlocks();
+                        activeTetrad.setShape(12);
+                        activeTetrad.SpawnTetrad();
+                        activeTetrad.translateToCol(9);
+                        thirdTetrad.setShape(11);
+                        thirdTetrad.SpawnTetrad();
+                        thirdTetrad.translateToCol(0);
+                        //unree();
+                        //reee = false;
+                        //display.setRee(true);
                         nextTetrad = new Tetrad(grid);
                         nextTetrad.setShape(9);
-                        if(cheatCode4){
-                            nextTetrad.setShape((int)(Math.random()*7));
-                        }
                         nextTetrad.SpawnTetrad();
-                        int n = activeTetrad.getLocations()[0].getCol();
+                        cheatCode3 = false;
+                        cheatCode4 = false;
+                    }else if(elapsed>=92000&&!cheatCode5){
+                        //display.setRee(false);
+                        cheatCode3=false;
+                        cheatCode4=true;
+                        if(storm.size()>0&&storm.get(0).getSpawned()){
+                            storm.get(0).removeBlocks();
+                            storm.remove(0);
+                        }
+                        storm.add(new Tetrad(grid));
+                    }else if(elapsed>=64000&&!cheatCode5){
+                        //ree();
+                        //reee = true;
+                        //display.setRee(true);
+                        cheatCode3=true;
+                    }
+                    if(nextTetrad.isNextToSomething()||(storm.size()>0&&storm.get(0).getSpawned()&&storm.get(0).isNextToSomething())){
+                        score+=20*level;
+                    }
+                    controlsActive = false;
+                    gameTime = time;
+                    if(!nextTetrad.isOnGround()){
+                        lives--;
+                    }
+                    if(lives<=0){
+                        game = false;
+                        gameOver();
+                        break;
+                    }
+                    nextTetrad.removeBlocks();
+                    nextTetrad = new Tetrad(grid);
+                    nextTetrad.setShape(9);
+                    if(cheatCode4){
+                        nextTetrad.setShape((int)(Math.random()*7));
+                    }
+                    nextTetrad.SpawnTetrad();
+                    int n = activeTetrad.getLocations()[0].getCol();
+                    if(cheatCode5){
+                        n = Math.random()<0.5?(thirdTetrad.getLocations()[0].getCol()):n;
+                    }
+                    if(n>1 && n<8){
+                        n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
+                    }else if(n<=1){
+                        n += (int)(Math.random()*2);
+                    }
+                    else if (n>=8){
+                        n += -1*(int)(Math.random()*2);
+                    }
+
+                    nextTetrad.translateToCol(n);
+
+                    if(cheatCode3){
+                        if(storm.get(0).getSpawned()){
+                            storm.get(0).removeBlocks();
+                            storm.remove(0);
+                        }
+                        storm.add(new Tetrad(grid));
+                        storm.get(0).setShape(9);
+                        if(cheatCode4){
+                            storm.get(0).setShape((int)(Math.random()*7));
+                        }
+                        storm.get(0).SpawnTetrad();
+                        int t = activeTetrad.getLocations()[0].getCol();
                         if(cheatCode5){
-                            n = Math.random()<0.5?(thirdTetrad.getLocations()[0].getCol()):n;
-                        }
-                        if(n>1 && n<8){
-                            n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
-                        }else if(n<=1){
-                            n += (int)(Math.random()*2);
-                        }
-                        else if (n>=8){
-                            n += -1*(int)(Math.random()*2);
-                        }
-
-                        nextTetrad.translateToCol(n);
-
-                        if(cheatCode3){
-                            if(storm.get(0).getSpawned()){
-                                storm.get(0).removeBlocks();
-                                storm.remove(0);
+                            t = Math.random()<0.5?(thirdTetrad.getLocations()[0].getCol()):t;
+                            if(n>1 && n<8){
+                                t += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
+                            }else if(n<=1){
+                                t += (int)(Math.random()*2);
                             }
-                            storm.add(new Tetrad(grid));
-                            storm.get(0).setShape(9);
-                            if(cheatCode4){
-                                storm.get(0).setShape((int)(Math.random()*7));
+                            else if (n>=8){
+                                t += -1*(int)(Math.random()*2);
                             }
-                            storm.get(0).SpawnTetrad();
-                            int t = activeTetrad.getLocations()[0].getCol();
-                            if(cheatCode5){
-                                t = Math.random()<0.5?(thirdTetrad.getLocations()[0].getCol()):t;
-                                if(n>1 && n<8){
-                                    t += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
-                                }else if(n<=1){
-                                    t += (int)(Math.random()*2);
-                                }
-                                else if (n>=8){
-                                    t += -1*(int)(Math.random()*2);
-                                }
-                            }
-                            else{
-                                if(n>1 && n<8){
-                                    t += (Math.random()<0.5)?(-1*(int)(Math.random()*4) -2):((int)(Math.random()*4) + 2);
-                                }else if(n<=1){
-                                    t += (int)(Math.random()*4) + 2;
-                                }
-                                else if (n>=8){
-                                    t += -1*(int)(Math.random()*4) - 2;
-                                }
-                            }
-                            storm.get(0).translateToCol(t); 
                         }
-                        DisplayNextTetrad();
-                        controlsActive = true;
+                        else{
+                            if(n>1 && n<8){
+                                t += (Math.random()<0.5)?(-1*(int)(Math.random()*4) -2):((int)(Math.random()*4) + 2);
+                            }else if(n<=1){
+                                t += (int)(Math.random()*4) + 2;
+                            }
+                            else if (n>=8){
+                                t += -1*(int)(Math.random()*4) - 2;
+                            }
+                        }
+                        storm.get(0).translateToCol(t); 
+                    }
+                    DisplayNextTetrad();
+                    controlsActive = true;
+                    meteors++;
+                    if(cheatCode3){
                         meteors++;
-                        if(cheatCode3){
-                            meteors++;
+                    }
+                    if(meteors%10==0){
+                        level++;
+                        time-=2;
+                        if(time<30){
+                            time = 30;
                         }
-                        if(meteors%10==0){
-                            level++;
-                            time-=2;
-                            if(time<30){
-                                time = 30;
-                            }
-                        }
-                        if(level>=8){
-                            System.out.println("SEIZURE WARNING!!!!!!!!");
-                        }
-                        score+=10*level;
-                        if(elapsed>=273000){
-                            game = false;
-                            win();
-                            break;
-                        }
+                    }
+                    if(level>=8){
+                        System.out.println("SEIZURE WARNING!!!!!!!!");
+                    }
+                    score+=10*level;
+                    if(elapsed>=273000){
+                        game = false;
+                        win();
+                        break;
                     }
                 }
                 if(game==false){
@@ -365,16 +412,6 @@ public class Tetris implements ArrowListener
                 display.showBlocks();
                 title = "Level "+level+", Score: "+score;
                 display.setTitle(title);
-                if(reee)
-                    ree();
-            }
-            if(elapsed >=24000 && sped){
-                time = 48;
-                gameTime = 48;
-                sped = false;
-                display.setRee(true);
-                ree();
-                reee = true;
             }
         }
     }
