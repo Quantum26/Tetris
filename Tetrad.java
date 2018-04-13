@@ -15,7 +15,6 @@ public class Tetrad
     private Color color;
     private boolean spawned;
     boolean hasShape;
-    private MusicPlayer omae = new MusicPlayer("omae.mp3");
     Location[] lol;
     public Tetrad(BoundedGrid<Block> grid)
     {
