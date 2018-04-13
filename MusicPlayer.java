@@ -3,6 +3,7 @@ import sun.audio.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.embed.swing.JFXPanel;
+import javafx.util.Duration;
 /**
  * Write a description of class MusicPlayer here.
  *
@@ -25,6 +26,8 @@ public class MusicPlayer
         hit = new Media(new File(music).toURI().toString());
         mediaPlayer = new MediaPlayer(hit);
         length = mediaPlayer.getTotalDuration().toMillis();
+        mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setCycleCount(mediaPlayer.INDEFINITE);
     }
 
     public void setMusic(String s){
@@ -37,6 +40,7 @@ public class MusicPlayer
 
     public void setMuted(boolean m){
         muted = m;
+        mediaPlayer.setMute(m);
     }
 
     public String getMusic(){
@@ -54,7 +58,9 @@ public class MusicPlayer
     public double getLength(){
         return length;
     }
-
+    public void setStopTime(Duration x){
+        mediaPlayer.setStopTime(x);
+    }
     public void play(){
         if(!muted){
             /**

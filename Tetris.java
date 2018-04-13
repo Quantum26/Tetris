@@ -4,6 +4,7 @@ import sounds.APSoundClip;
 import sounds.Sample;
 import java.io.*;
 import java.util.Scanner;
+import javafx.util.Duration;
 
 public class Tetris implements ArrowListener
 {
@@ -79,6 +80,7 @@ public class Tetris implements ArrowListener
         game = true; //the game is active
         controlsActive = true; //controls are active
         music = new MusicPlayer("Tetris.mp3");
+        music.setStopTime(new Duration(77000));
         storm = new ArrayList<Tetrad>();
         start = System.currentTimeMillis();
     }
@@ -171,10 +173,6 @@ public class Tetris implements ArrowListener
         while (game)
         {
             elapsed = System.currentTimeMillis()-start;
-            if(elapsed>= music.getLength()){
-                music.play();
-                start = System.currentTimeMillis();
-            }
             for(int i = 0; i<5; i++){
                 try { Thread.sleep(gameTime/10); } catch(Exception e) {}
                 elapsed = System.currentTimeMillis()-start;
@@ -201,7 +199,7 @@ public class Tetris implements ArrowListener
                         clearCompletedRows();
 
                         activeTetrad = nextTetrad;
-                        MoveList m = getMovesToMake();
+                        //MoveList m = getMovesToMake();
                         activeTetrad.SpawnTetrad();
 
                         nextTetrad = new Tetrad(grid);
@@ -213,7 +211,7 @@ public class Tetris implements ArrowListener
                         DisplayNextTetrad();
 
                         controlsActive = true;
-                        makeMove(m);
+                        //makeMove(m);
                     }
                 }else{
                     playDejaMode();
@@ -249,10 +247,6 @@ public class Tetris implements ArrowListener
         while (game){
             gameTime = time;
             elapsed = System.currentTimeMillis()-start;
-            if(elapsed>= music.getLength()){
-                music.play();
-                start = System.currentTimeMillis();
-            }
             for(int i = 0; i<5; i++){
                 try { Thread.sleep(gameTime/10); } catch(Exception e) {}
                 elapsed = System.currentTimeMillis()-start;
@@ -764,12 +758,6 @@ public class Tetris implements ArrowListener
 
     public void mPressed(){
         music.setMuted(!music.getMuted());
-        if(music.getMuted())
-            music.pause();
-        else{
-            music.play();
-            start = System.currentTimeMillis();
-        }
     }
 
     public void aPressed(){
