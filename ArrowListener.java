@@ -23,4 +23,6 @@ public interface ArrowListener
 	void tPressed();
 	void dPressed();
 	void aPressed();
+	void wPressed();
+	void qPressed();
 }

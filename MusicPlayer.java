@@ -1,5 +1,4 @@
 import java.io.*;
-import sun.audio.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.embed.swing.JFXPanel;
@@ -44,7 +43,7 @@ public class MusicPlayer
     public void setMusic(String s){
         music = s;
         stopMusic();
-        
+        mediaPlayer.dispose();
         hit = new Media(new File(music).toURI().toString());
         mediaPlayer = new MediaPlayer(hit);
         length = mediaPlayer.getTotalDuration().toMillis();
@@ -59,8 +58,8 @@ public class MusicPlayer
         return music;
     }
 
-    public String getStatus(){
-        return ""+mediaPlayer.getStatus();
+    public MediaPlayer.Status getStatus(){
+        return mediaPlayer.getStatus();
     }
 
     public boolean getMuted(){

@@ -72,7 +72,7 @@ public class BlockDisplay implements KeyListener
     public void setRee(boolean r){
         ree = r;
     }
-    
+
     //Redraws the board to include the pieces and border colors.
     public void showBlocks()
     {
@@ -87,7 +87,7 @@ public class BlockDisplay implements KeyListener
         graphics.setColor(new Color(150,0,255));
         graphics.drawRect(0, 0, image.getWidth()-1, image.getHeight()-1);
         graphics.dispose();
-        
+
         for (int row = 0; row < board.getNumRows(); row++)
             for (int col = 0; col < board.getNumCols(); col++)
             {
@@ -99,7 +99,7 @@ public class BlockDisplay implements KeyListener
                     graphics.setColor(square.getColor());
                     graphics.fillRect(col*30+1, row*30+1, 28, 28);
                     graphics.dispose();
-                   
+
                 }
             }
         frame.repaint();
@@ -164,6 +164,11 @@ public class BlockDisplay implements KeyListener
             listener.dPressed();
         else if (code == KeyEvent.VK_A)
             listener.aPressed();
+        else if (code == KeyEvent.VK_Q)
+            listener.qPressed();
+        else if (code == KeyEvent.VK_W)
+            listener.wPressed();
+
     }
 
     public void setArrowListener(ArrowListener listener)

@@ -1,11 +1,9 @@
 import java.util.*;
 import java.awt.Color;
-import sounds.APSoundClip;
-import sounds.Sample;
 import java.io.*;
 import java.util.Scanner;
 import javafx.util.Duration;
-import javazoom.jl.player.*;
+import javafx.scene.media.MediaPlayer;
 public class Tetris implements ArrowListener
 {
     public static void main(String[] args)
@@ -35,6 +33,7 @@ public class Tetris implements ArrowListener
     private Tetrad activeTetrad; //current tetrad being manipulated
     private Tetrad nextTetrad; //next tetrad about to fall
     private Tetrad thirdTetrad; //extra tetrad for dodging mode
+    private Tetrad tnextTetrad;//player 2's next tetrad
     private String title; //title of the display
     private int combo; // # of rows previously cleared
     private boolean tettet; // true if you cleared a tetris previously
@@ -206,7 +205,6 @@ public class Tetris implements ArrowListener
                             nextTetrad.setShape(2);
                         }
                         DisplayNextTetrad();
-
                         controlsActive = true;
                         makeMove(m);
                     }
@@ -240,8 +238,11 @@ public class Tetris implements ArrowListener
         }
     }
 
+    
+
+    
     public void playDejaMode(){
-        while (game){
+        while(game){
             gameTime = time;
             for(int i = 0; i<5; i++){
                 try { Thread.sleep(gameTime/10); } catch(Exception e) {}
@@ -310,7 +311,7 @@ public class Tetris implements ArrowListener
                     if(lives<=0){
                         game = false;
                         gameOver();
-                        break;
+
                     }
                     nextTetrad.removeBlocks();
                     nextTetrad = new Tetrad(grid);
@@ -386,18 +387,19 @@ public class Tetris implements ArrowListener
                         System.out.println("SEIZURE WARNING!!!!!!!!");
                     }
                     score+=10*level;
-                    if(elapsed>=273000){
+                    if(music.getStatus()==MediaPlayer.Status.STOPPED){
                         game = false;
                         win();
-                        break;
+
                     }
                 }
                 if(game==false){
-                    break;
+
                 }
                 display.showBlocks();
                 title = "Level "+level+", Score: "+score;
                 display.setTitle(title);
+
             }
         }
     }
@@ -434,7 +436,7 @@ public class Tetris implements ArrowListener
     }
 
     //postcondition: All completed rows have been cleared.
-    private void clearCompletedRows()
+    public int clearCompletedRows()
     {
         int rowsBroke = 0;
         for(int i = 19; i > 0; i--){
@@ -497,6 +499,7 @@ public class Tetris implements ArrowListener
             }
         }
         display.showBlocks();
+        return rowsBroke;
     }
 
     private void moveDownAbove(int r){
@@ -830,6 +833,14 @@ public class Tetris implements ArrowListener
             music.setMusic("dejavu.mp3");
             music.play();
         }
+    }
+
+    public void wPressed(){
+
+    }
+
+    public void qPressed(){
+
     }
 
     public void tPressed(){

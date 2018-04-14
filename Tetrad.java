@@ -108,7 +108,7 @@ public class Tetrad
                 locs[3] = new Location(1,4);
                 break;
 
-                case 7:
+                case 7://smiley face death tetrad
 
                 color = Color.WHITE;
                 blocks = new Block[30];
@@ -149,7 +149,7 @@ public class Tetrad
                 locs[29] = new Location(9, 5);
                 break;
 
-                case 8:
+                case 8://a full 4 rows
                 color = Color.BLUE;
                 blocks = new Block[40];
                 for(int i = 0; i < blocks.length; i++)
@@ -166,7 +166,7 @@ public class Tetrad
                 }
                 break;
 
-                case 9:
+                case 9://a meteor
                 color = Color.BLUE;
                 locs[0] = new Location(0, 4);
                 locs[1] = new Location(1, 4);
@@ -174,7 +174,7 @@ public class Tetrad
                 locs[3] = new Location(3, 4);
                 break;
 
-                case 10:
+                case 10://block for controlling movement at bottom
                 color = Color.WHITE;
                 locs[0] = new Location(19,4);
                 locs[1] = new Location(19,5);
@@ -182,7 +182,7 @@ public class Tetrad
                 locs[3] = new Location(18,5);
                 break;
 
-                case 11:
+                case 11://half control block for deja vu mode
                 color = Color.WHITE;
                 blocks = new Block[2];
                 blocks[0] = new Block();
@@ -191,7 +191,7 @@ public class Tetrad
                 locs[0] = new Location (19,1);
                 locs[1] = new Location (18,1);
                 break;
-                case 12:
+                case 12://other half of the control block for deja vu mode
                 color = Color.WHITE;
                 blocks = new Block[2];
                 blocks[0] = new Block();
@@ -200,7 +200,7 @@ public class Tetrad
                 locs[0] = new Location (19,8);
                 locs[1] = new Location (18,8);
                 break;
-                default:
+                default://default tetrad, should never occur
                 color = Color.WHITE;
                 locs[0] = new Location(0,3);
                 locs[1] = new Location(0,4);
@@ -213,19 +213,19 @@ public class Tetrad
             //                  loop through the blocks array to
             //                      set the color of each block
             //                  call addToLocations
-            for(int i = 0; i < blocks.length; i++){
-                blocks[i].setColor(color);
-                blocks[i].setOriginal(color);
+            for(int i = 0; i < blocks.length; i++){//sets block colors
+                blocks[i].setColor(color);//sets current color
+                blocks[i].setOriginal(color);//sets original color
             }
-            if(shape == 9){
+            if(shape == 9){//sets meteors color to look like a meteor
                 blocks[0].setColor(Color.YELLOW);blocks[0].setOriginal(Color.YELLOW);
                 blocks[1].setColor(Color.ORANGE);blocks[0].setOriginal(Color.ORANGE);
                 blocks[2].setColor(Color.RED);blocks[0].setOriginal(Color.RED);
                 Color brown = new Color(166, 91, 41);
                 blocks[3].setColor(brown);blocks[0].setOriginal(brown);
             }
-            this.addToLocations(g, locs);
-            spawned = true;
+            this.addToLocations(g, locs);//adds tetrad to grid
+            spawned = true;//tetrad is spawned
         }else{
             for(int i = 0; i < blocks.length; i++){
                 blocks[i].setColor(color);
