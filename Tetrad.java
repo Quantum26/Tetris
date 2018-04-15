@@ -27,7 +27,7 @@ public class Tetrad
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
         spawned = false;
-        shape = (int)(Math.random()*8);
+        shape = (int)(Math.random()*7);
         hasShape = true;
     }
 
@@ -191,6 +191,7 @@ public class Tetrad
                 locs[0] = new Location (19,1);
                 locs[1] = new Location (18,1);
                 break;
+                
                 case 12://other half of the control block for deja vu mode
                 color = Color.WHITE;
                 blocks = new Block[2];
@@ -200,6 +201,22 @@ public class Tetrad
                 locs[0] = new Location (19,8);
                 locs[1] = new Location (18,8);
                 break;
+                
+                case 13://galaga main players ship
+                color = color.WHITE;
+                locs[0] = new Location(19,3);
+                locs[1] = new Location(19,4);
+                locs[2] = new Location(19,5);
+                locs[3] = new Location(18,4);
+                break;
+                
+                case 14://galaga bullet
+                blocks = new Block[1];
+                blocks[0] = new Block();
+                color = Color.GREEN;
+                locs = new Location[1];
+                locs[0] = new Location(17, 4);
+                
                 default://default tetrad, should never occur
                 color = Color.WHITE;
                 locs[0] = new Location(0,3);

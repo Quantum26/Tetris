@@ -168,6 +168,8 @@ public class BlockDisplay implements KeyListener
             listener.qPressed();
         else if (code == KeyEvent.VK_W)
             listener.wPressed();
+        else if (code == KeyEvent.VK_G)
+            listener.gPressed();
 
     }
 

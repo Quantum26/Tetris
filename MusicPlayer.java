@@ -107,4 +107,8 @@ public class MusicPlayer
 
         mediaPlayer.stop();
     }
+    
+    public void close(){
+        mediaPlayer.dispose();
+    }
 }

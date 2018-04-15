@@ -49,6 +49,7 @@ public class Tetris implements ArrowListener
     private boolean cheatCode4 = false;
     private boolean cheatCode5 = false;
     private boolean dejavu = false;
+    private boolean galaga = false;
     private boolean reee = false;
     private boolean raining = false;
     private MusicPlayer music;
@@ -66,8 +67,8 @@ public class Tetris implements ArrowListener
         display.setTitle("Tetris"); //sets the title to Tetris
         activeTetrad = new Tetrad(grid); //creates a new tetrad
         nextTetrad = new Tetrad(grid); //creates a second tetrad
-        time = 1000; //base time is set to 1000 milliseconds or 1 second
-        gameTime = 1000; //same for this time variable
+        time = 000; //base time is set to 1000 milliseconds or 1 second
+        gameTime = 000; //same for this time variable
         level = 1; //sets level to 1
         score = 0; //sets score to 0
         gotTetris = false; //you have not gotten a tetris yet
@@ -178,8 +179,29 @@ public class Tetris implements ArrowListener
                 for(int i = 0; i<5; i++){
                     try { Thread.sleep(gameTime/10); } catch(Exception e) {}
                 }
-                if(!dejavu){
-
+                if(dejavu){
+                    playDejaMode();
+                    if(game==false){
+                        break;
+                    }
+                    display.showBlocks();
+                    title = "Level "+level+", Score: "+score;
+                    display.setTitle(title);
+                    if(reee)
+                        ree();
+                    
+                }else if(galaga){
+                    playGalaga();
+                    if(game==false){
+                        break;
+                    }
+                    display.showBlocks();
+                    title = "Level "+level+", Score: "+score;
+                    display.setTitle(title);
+                    if(reee)
+                        ree();
+                    
+                }else{
                     if(!activeTetrad.translate(1,0)){
 
                         controlsActive = false;
@@ -208,16 +230,6 @@ public class Tetris implements ArrowListener
                         controlsActive = true;
                         makeMove(m);
                     }
-                }else{
-                    playDejaMode();
-                    if(game==false){
-                        break;
-                    }
-                    display.showBlocks();
-                    title = "Level "+level+", Score: "+score;
-                    display.setTitle(title);
-                    if(reee)
-                        ree();
                 }
                 if(elapsed >=24000 && sped){
                     time = 48;
@@ -238,9 +250,10 @@ public class Tetris implements ArrowListener
         }
     }
 
-    
+    public void playGalaga(){
 
-    
+    }
+
     public void playDejaMode(){
         while(game){
             gameTime = time;
@@ -311,7 +324,7 @@ public class Tetris implements ArrowListener
                     if(lives<=0){
                         game = false;
                         gameOver();
-
+                        break;
                     }
                     nextTetrad.removeBlocks();
                     nextTetrad = new Tetrad(grid);
@@ -390,11 +403,11 @@ public class Tetris implements ArrowListener
                     if(music.getStatus()==MediaPlayer.Status.STOPPED){
                         game = false;
                         win();
-
+                        break;
                     }
                 }
                 if(game==false){
-
+                    break;
                 }
                 display.showBlocks();
                 title = "Level "+level+", Score: "+score;
@@ -832,6 +845,41 @@ public class Tetris implements ArrowListener
             music.stopMusic();
             music.setMusic("dejavu.mp3");
             music.play();
+        }
+    }
+
+    public void gPressed(){
+        if(cheats){
+            music.stopMusic();
+            music.setMusic("Fingerdash.mp3");
+            music.play();
+            galaga = true;
+            for(int i = 0; i< grid.getNumRows(); i++){
+                clearRow(i);
+            }
+            if(galaga){
+
+                nextTetrad = new Tetrad(grid);
+                activeTetrad = new Tetrad(grid);
+                thirdTetrad = new Tetrad(grid);
+                storm.add(new Tetrad(grid));
+                storm.get(0).setShape(9);
+                nextTetrad.setShape(9);
+                activeTetrad.setShape(13);
+                thirdTetrad.setShape(14);
+                DisplayNextTetrad();
+                start = System.currentTimeMillis();
+                time = 50;
+                activeTetrad.SpawnTetrad();
+                nextTetrad.SpawnTetrad();
+                int n = activeTetrad.getLocations()[0].getCol();
+                n = (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
+                nextTetrad.translateToCol(n);
+                storm.get(0).SpawnTetrad();
+                n = activeTetrad.getLocations()[0].getCol();
+                n = (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
+                storm.get(0).translateToCol(n);
+            }
         }
     }
 
