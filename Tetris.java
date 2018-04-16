@@ -87,9 +87,14 @@ public class Tetris implements ArrowListener
 
     public void upPressed()
     {
-        if(!paused && game && controlsActive){
+        if(!paused && game && controlsActive&&!galaga){
             activeTetrad.rotate(); //rotates the block when up is pressed
             display.showBlocks();
+        }else if(galaga){
+            storm.add(new Tetrad(grid));
+            storm.get(storm.size()-1).setShape(14);
+            storm.get(storm.size()-1).SpawnTetrad();
+            storm.get(storm.size()-1).translateToCol(activeTetrad.getLocations()[3].getCol());
         }
     }
 
@@ -124,11 +129,6 @@ public class Tetris implements ArrowListener
             while(activeTetrad.translate(1,0)){score+=2;} //adds to your score and moves the block until it is unable to move down
             gameTime = 0; //sets gameTime = 0 so it can reset the loop, thats why we have two time variables, one for a temp variable the other for the actual time being used
             display.showBlocks();
-        }else if(galaga){
-            storm.add(new Tetrad(grid));
-            storm.get(storm.size()-1).setShape(14);
-            storm.get(storm.size()-1).SpawnTetrad();
-            storm.get(storm.size()-1).translateToCol(activeTetrad.getLocations()[3].getCol());
         }
     }
 
