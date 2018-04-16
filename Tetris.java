@@ -67,8 +67,8 @@ public class Tetris implements ArrowListener
         display.setTitle("Tetris"); //sets the title to Tetris
         activeTetrad = new Tetrad(grid); //creates a new tetrad
         nextTetrad = new Tetrad(grid); //creates a second tetrad
-        time = 000; //base time is set to 1000 milliseconds or 1 second
-        gameTime = 000; //same for this time variable
+        time = 1000; //base time is set to 1000 milliseconds or 1 second
+        gameTime = 1000; //same for this time variable
         level = 1; //sets level to 1
         score = 0; //sets score to 0
         gotTetris = false; //you have not gotten a tetris yet
@@ -120,10 +120,12 @@ public class Tetris implements ArrowListener
 
     public void spacePressed()
     {
-        if(!paused && game && controlsActive&&!dejavu){
+        if(!paused && game && controlsActive&&!dejavu&&!galaga){
             while(activeTetrad.translate(1,0)){score+=2;} //adds to your score and moves the block until it is unable to move down
             gameTime = 0; //sets gameTime = 0 so it can reset the loop, thats why we have two time variables, one for a temp variable the other for the actual time being used
             display.showBlocks();
+        }else if(galaga){
+            thirdTetrad.SpawnTetrad();
         }
     }
 
@@ -189,7 +191,7 @@ public class Tetris implements ArrowListener
                     display.setTitle(title);
                     if(reee)
                         ree();
-                    
+
                 }else if(galaga){
                     playGalaga();
                     if(game==false){
@@ -200,7 +202,7 @@ public class Tetris implements ArrowListener
                     display.setTitle(title);
                     if(reee)
                         ree();
-                    
+
                 }else{
                     if(!activeTetrad.translate(1,0)){
 
@@ -250,8 +252,111 @@ public class Tetris implements ArrowListener
         }
     }
 
+    
     public void playGalaga(){
+        while(game){
+            gameTime = time;
+            for(int i = 0; i<5; i++){
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+            }
+            if(!paused){
+                for(int i = 0; i<5; i++){
+                    try { Thread.sleep(gameTime/10); } catch(Exception e) {}
+                }
+                boolean ntt = nextTetrad.translate(1,0);
+                boolean stt = storm.get(0).translate(1,0);
+                if(!ntt||!stt){
+                    elapsed = (long)music.getCurrentTime().toMillis();
+                    if(nextTetrad.isNextToSomething()||(storm.get(0).isNextToSomething())){
+                        score+=20*level;
+                    }
+                    controlsActive = false;
+                    gameTime = time;
+                    if(!nextTetrad.isOnGround()){
+                        
+                        Location l = nextTetrad.getLocations()[3];
+                        Location newl = new Location(l.getRow()+1, l.getCol());
+                        if(grid.isValid(newl)&&grid.get(newl)!=null){
+                            if(grid.get(newl).getColor().equals(Color.WHITE)){
+                                lives--;
+                            }
+                        }
+                        nextTetrad.removeBlocks();
+                    }
+                    if(lives<=0){
+                        game = false;
+                        gameOver();
+                        break;
+                        
+                    }
+                    nextTetrad.removeBlocks();
+                    nextTetrad = new Tetrad(grid);
+                    nextTetrad.setShape(9);
+                    nextTetrad.SpawnTetrad();
+                    int n = activeTetrad.getLocations()[0].getCol();
+                    if(n>1 && n<8){
+                        n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
+                    }else if(n<=1){
+                        n += (int)(Math.random()*2);
+                    }
+                    else if (n>=8){
+                        n += -1*(int)(Math.random()*2);
+                    }
 
+                    nextTetrad.translateToCol(n);
+
+                    if(storm.get(0).getSpawned()){
+                        storm.get(0).removeBlocks();
+                        storm.remove(0);
+                    }
+                    storm.add(new Tetrad(grid));
+                    storm.get(0).setShape(9);
+                    storm.get(0).SpawnTetrad();
+                    int t = activeTetrad.getLocations()[0].getCol();
+
+                    if(n>1 && n<8){
+                        t += (Math.random()<0.5)?(-1*(int)(Math.random()*4) -2):((int)(Math.random()*4) + 2);
+                    }else if(n<=1){
+                        t += (int)(Math.random()*4) + 2;
+                    }
+                    else if (n>=8){
+                        t += -1*(int)(Math.random()*4) - 2;
+                    }
+
+                    storm.get(0).translateToCol(t); 
+
+                    DisplayNextTetrad();
+                    controlsActive = true;
+                    meteors++;
+                    if(cheatCode3){
+                        meteors++;
+                    }
+                    if(meteors%10==0){
+                        level++;
+                        time-=2;
+                        if(time<30){
+                            time = 30;
+                        }
+                    }
+                    if(level>=8){
+                        System.out.println("SEIZURE WARNING!!!!!!!!");
+                    }
+                    score+=10*level;
+                    if(music.getStatus()==MediaPlayer.Status.STOPPED){
+                        game = false;
+                        win();
+                        break;
+                    }
+                }
+                if(game==false){
+                    break;
+                }
+                display.showBlocks();
+                title = "Level "+level+", Score: "+score;
+                display.setTitle(title);
+
+            }
+        }
     }
 
     public void playDejaMode(){
@@ -651,7 +756,7 @@ public class Tetris implements ArrowListener
     public void DisplayNextTetrad(){
         for(int i = 0; i<16; i++)
             System.out.println();
-        if(!dejavu){
+        if(!dejavu&&!galaga){
             System.out.println("Level: " + level + "\nLines: " + lines + "\nScore: " + score + 
                 "\nNext:\n");
         }else{

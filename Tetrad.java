@@ -216,6 +216,7 @@ public class Tetrad
                 color = Color.GREEN;
                 locs = new Location[1];
                 locs[0] = new Location(17, 4);
+                break;
                 
                 default://default tetrad, should never occur
                 color = Color.WHITE;
@@ -276,6 +277,7 @@ public class Tetrad
     //               blocks have been removed from grid.
     public Location[] removeBlocks()
     {
+        spawned = false;
         Location[] locs = new Location[blocks.length];
         for(int i = 0; i<blocks.length; i++){
             locs[i] = blocks[i].getLocation();
