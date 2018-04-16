@@ -29,7 +29,10 @@ public class BoundedGrid<E>
     @SuppressWarnings("unchecked")
     public E get(Location loc)
     {
-        return (E) occupantArray[loc.getRow()][loc.getCol()];
+        if(isValid(loc)){
+            return (E) occupantArray[loc.getRow()][loc.getCol()];
+        }
+        return null;
     }
 
     //puts obj at location loc in this grid and returns the object previously at that location (or null if the

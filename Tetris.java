@@ -125,7 +125,10 @@ public class Tetris implements ArrowListener
             gameTime = 0; //sets gameTime = 0 so it can reset the loop, thats why we have two time variables, one for a temp variable the other for the actual time being used
             display.showBlocks();
         }else if(galaga){
-            thirdTetrad.SpawnTetrad();
+            storm.add(new Tetrad(grid));
+            storm.get(storm.size()-1).setShape(14);
+            storm.get(storm.size()-1).SpawnTetrad();
+            storm.get(storm.size()-1).translateToCol(activeTetrad.getLocations()[3].getCol());
         }
     }
 
@@ -252,7 +255,6 @@ public class Tetris implements ArrowListener
         }
     }
 
-    
     public void playGalaga(){
         while(game){
             gameTime = time;
@@ -264,66 +266,74 @@ public class Tetris implements ArrowListener
                     try { Thread.sleep(gameTime/10); } catch(Exception e) {}
                 }
                 boolean ntt = nextTetrad.translate(1,0);
-                boolean stt = storm.get(0).translate(1,0);
-                if(!ntt||!stt){
+                boolean ttt = thirdTetrad.translate(1,0);
+                List<Boolean> btt = new ArrayList<Boolean>();
+                for(Tetrad tet : storm){
+                    btt.add(0, tet.translate(-1,0));
+                }
+                if(!ntt||!ttt){
                     elapsed = (long)music.getCurrentTime().toMillis();
-                    if(nextTetrad.isNextToSomething()||(storm.get(0).isNextToSomething())){
+                    if(nextTetrad.isNextToSomething()||(thirdTetrad.isNextToSomething())){
                         score+=20*level;
                     }
                     controlsActive = false;
                     gameTime = time;
-                    if(!nextTetrad.isOnGround()){
-                        
-                        Location l = nextTetrad.getLocations()[3];
-                        Location newl = new Location(l.getRow()+1, l.getCol());
-                        if(grid.isValid(newl)&&grid.get(newl)!=null){
-                            if(grid.get(newl).getColor().equals(Color.WHITE)){
-                                lives--;
+                    int n = activeTetrad.getLocations()[0].getCol();
+                    if(!ntt){
+                        if(!nextTetrad.isOnGround()){
+
+                            Location l = nextTetrad.getLocations()[3];
+                            Location newl = new Location(l.getRow()+1, l.getCol());
+                            if(grid.isValid(newl)&&grid.get(newl)!=null){
+                                if(grid.get(newl).getColor().equals(Color.WHITE)){
+                                    lives--;
+                                }
                             }
+                        }else{
+                            score+=10*level;
                         }
                         nextTetrad.removeBlocks();
+                        nextTetrad = new Tetrad(grid);
+                        nextTetrad.setShape(9);
+                        nextTetrad.SpawnTetrad();
+
+                        if(n>1 && n<8){
+                            n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
+                        }else if(n<=1){
+                            n += (int)(Math.random()*2);
+                        }
+                        else if (n>=8){
+                            n += -1*(int)(Math.random()*2);
+                        }
+
+                        nextTetrad.translateToCol(n);
                     }
                     if(lives<=0){
                         game = false;
                         gameOver();
                         break;
-                        
-                    }
-                    nextTetrad.removeBlocks();
-                    nextTetrad = new Tetrad(grid);
-                    nextTetrad.setShape(9);
-                    nextTetrad.SpawnTetrad();
-                    int n = activeTetrad.getLocations()[0].getCol();
-                    if(n>1 && n<8){
-                        n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
-                    }else if(n<=1){
-                        n += (int)(Math.random()*2);
-                    }
-                    else if (n>=8){
-                        n += -1*(int)(Math.random()*2);
+
                     }
 
-                    nextTetrad.translateToCol(n);
+                    if(!ttt){
+                        thirdTetrad.removeBlocks();
+                        thirdTetrad = new Tetrad(grid);
+                        thirdTetrad.setShape(9);
+                        thirdTetrad.SpawnTetrad();
+                        int t = activeTetrad.getLocations()[0].getCol();
 
-                    if(storm.get(0).getSpawned()){
-                        storm.get(0).removeBlocks();
-                        storm.remove(0);
-                    }
-                    storm.add(new Tetrad(grid));
-                    storm.get(0).setShape(9);
-                    storm.get(0).SpawnTetrad();
-                    int t = activeTetrad.getLocations()[0].getCol();
+                        if(n>1 && n<8){
+                            t += (Math.random()<0.5)?(-1*(int)(Math.random()*4) -2):((int)(Math.random()*4) + 2);
+                        }else if(n<=1){
+                            t += (int)(Math.random()*4) + 2;
+                        }
+                        else if (n>=8){
+                            t += -1*(int)(Math.random()*4) - 2;
+                        }
 
-                    if(n>1 && n<8){
-                        t += (Math.random()<0.5)?(-1*(int)(Math.random()*4) -2):((int)(Math.random()*4) + 2);
-                    }else if(n<=1){
-                        t += (int)(Math.random()*4) + 2;
-                    }
-                    else if (n>=8){
-                        t += -1*(int)(Math.random()*4) - 2;
+                        thirdTetrad.translateToCol(t); 
                     }
 
-                    storm.get(0).translateToCol(t); 
 
                     DisplayNextTetrad();
                     controlsActive = true;
@@ -967,11 +977,9 @@ public class Tetris implements ArrowListener
                 nextTetrad = new Tetrad(grid);
                 activeTetrad = new Tetrad(grid);
                 thirdTetrad = new Tetrad(grid);
-                storm.add(new Tetrad(grid));
-                storm.get(0).setShape(9);
                 nextTetrad.setShape(9);
                 activeTetrad.setShape(13);
-                thirdTetrad.setShape(14);
+                thirdTetrad.setShape(9);
                 DisplayNextTetrad();
                 start = System.currentTimeMillis();
                 time = 50;
@@ -980,10 +988,10 @@ public class Tetris implements ArrowListener
                 int n = activeTetrad.getLocations()[0].getCol();
                 n = (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
                 nextTetrad.translateToCol(n);
-                storm.get(0).SpawnTetrad();
+                thirdTetrad.SpawnTetrad();
                 n = activeTetrad.getLocations()[0].getCol();
                 n = (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
-                storm.get(0).translateToCol(n);
+                thirdTetrad.translateToCol(n);
             }
         }
     }
