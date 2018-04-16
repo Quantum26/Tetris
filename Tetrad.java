@@ -259,6 +259,12 @@ public class Tetrad
             b.setColor(c);
         }
     }
+    
+    public void setColor(Color[] c){
+        for(int i = 0; i<blocks.length; i++){
+            blocks[i].setColor(c[i]);
+        }
+    }
 
     public void setShape(int s){
         shape = s;
