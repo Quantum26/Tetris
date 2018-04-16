@@ -136,7 +136,7 @@ public class Tetris implements ArrowListener
     {
         if(paused){ //if the game is currently paused
             paused = false; //the game is no longer paused
-            System.out.println("unpause"); //tells the player the game is unpaused
+            System.out.println("unpause."); //tells the player the game is unpaused
             for(int r = 0; r < 20; r++){ //for each block
                 for(int c = 0; c < 10; c++){
                     Location l = new Location (r, c);
