@@ -253,6 +253,12 @@ public class Tetrad
             this.addToLocations(g, lol);
         }
     }
+    
+    public void setColor(Color c){
+        for(Block b: blocks){
+            b.setColor(c);
+        }
+    }
 
     public void setShape(int s){
         shape = s;

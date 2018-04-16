@@ -288,6 +288,8 @@ public class Tetris implements ArrowListener
                                 if(grid.get(newl).getColor().equals(Color.WHITE)){
                                     lives--;
                                 }
+                            }else if(grid.get(newl).getColor().equals(Color.GREEN)){
+                                score+=20*level;
                             }
                         }else{
                             score+=10*level;
@@ -308,32 +310,43 @@ public class Tetris implements ArrowListener
 
                         nextTetrad.translateToCol(n);
                     }
+                    if(!ttt){
+                        if(!thirdTetrad.isOnGround()){
+
+                            Location l = thirdTetrad.getLocations()[3];
+                            Location newl = new Location(l.getRow()+1, l.getCol());
+                            if(grid.isValid(newl)&&grid.get(newl)!=null){
+                                if(grid.get(newl).getColor().equals(Color.WHITE)){
+                                    lives--;
+                                }
+                            }else if(grid.get(newl).getColor().equals(Color.GREEN)){
+                                score+=20*level;
+                            }
+                        }else{
+                            score+=10*level;
+                        }
+                        thirdTetrad.removeBlocks();
+                        thirdTetrad = new Tetrad(grid);
+                        thirdTetrad.setShape(9);
+                        thirdTetrad.SpawnTetrad();
+
+                        if(n>1 && n<8){
+                            n += (Math.random()<0.5)?(-1*(int)(Math.random()*2)):((int)(Math.random()*2));
+                        }else if(n<=1){
+                            n += (int)(Math.random()*2);
+                        }
+                        else if (n>=8){
+                            n += -1*(int)(Math.random()*2);
+                        }
+
+                        thirdTetrad.translateToCol(n);
+                    }
                     if(lives<=0){
                         game = false;
                         gameOver();
                         break;
 
                     }
-
-                    if(!ttt){
-                        thirdTetrad.removeBlocks();
-                        thirdTetrad = new Tetrad(grid);
-                        thirdTetrad.setShape(9);
-                        thirdTetrad.SpawnTetrad();
-                        int t = activeTetrad.getLocations()[0].getCol();
-
-                        if(n>1 && n<8){
-                            t += (Math.random()<0.5)?(-1*(int)(Math.random()*4) -2):((int)(Math.random()*4) + 2);
-                        }else if(n<=1){
-                            t += (int)(Math.random()*4) + 2;
-                        }
-                        else if (n>=8){
-                            t += -1*(int)(Math.random()*4) - 2;
-                        }
-
-                        thirdTetrad.translateToCol(t); 
-                    }
-
 
                     DisplayNextTetrad();
                     controlsActive = true;
