@@ -271,6 +271,12 @@ public class Tetris implements ArrowListener
                 for(Tetrad tet : storm){
                     btt.add(0, tet.translate(-1,0));
                 }
+                boolean bbtt = true;
+                for(Boolean boi : btt){
+                    if(boi.equals(false)){
+                        bbtt = false;
+                    }
+                }
                 if(!ntt||!ttt){
                     elapsed = (long)music.getCurrentTime().toMillis();
                     if(nextTetrad.isNextToSomething()||(thirdTetrad.isNextToSomething())){
@@ -340,6 +346,9 @@ public class Tetris implements ArrowListener
                         }
 
                         thirdTetrad.translateToCol(n);
+                    }
+                    if(!bbtt){
+                        storm.remove(0).removeBlocks();
                     }
                     if(lives<=0){
                         game = false;
