@@ -186,30 +186,19 @@ public class Tetris implements ArrowListener
                 }
                 if(dejavu){
                     playDejaMode();
-                    if(game==false){
-                        break;
-                    }
-                    display.showBlocks();
-                    title = "Level "+level+", Score: "+score;
-                    display.setTitle(title);
-                    if(reee)
-                        ree();
-
                 }else if(galaga){
                     playGalaga();
-                    if(game==false){
-                        break;
-                    }
-                    display.showBlocks();
-                    title = "Level "+level+", Score: "+score;
-                    display.setTitle(title);
-                    if(reee)
-                        ree();
-
                 }else{
                     playTetris();
-
                 }
+                if(game==false){
+                    break;
+                }
+                display.showBlocks();
+                title = "Level "+level+", Score: "+score;
+                display.setTitle(title);
+                if(reee)
+                    ree();
             }
             if(elapsed >=24000 && sped){
                 time = 48;
@@ -294,7 +283,7 @@ public class Tetris implements ArrowListener
                         }
                     }else if(grid.isValid(newl)&&grid.get(newl)!=null&&
                     (grid.get(newl).getColor().equals(Color.GREEN)||
-                    grid.get(newl).getColor().equals(Color.CYAN))){
+                        grid.get(newl).getColor().equals(Color.CYAN))){
                         score+=20*level;
                     }
                 }else{
@@ -371,9 +360,6 @@ public class Tetris implements ArrowListener
                 if(time<30){
                     time = 30;
                 }
-            }
-            if(level>=8){
-                System.out.println("SEIZURE WARNING!!!!!!!!");
             }
             score+=10*level;
             if(music.getStatus()==MediaPlayer.Status.STOPPED){
