@@ -294,7 +294,7 @@ public class Tetris implements ArrowListener
                                 if(grid.get(newl).getColor().equals(Color.WHITE)){
                                     lives--;
                                 }
-                            }else if(grid.get(newl).getColor().equals(Color.GREEN)){
+                            }else if(grid.isValid(newl)&&grid.get(newl)!=null&&grid.get(newl).getColor().equals(Color.GREEN)){
                                 score+=20*level;
                             }
                         }else{
