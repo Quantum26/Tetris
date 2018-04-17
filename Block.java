@@ -12,12 +12,14 @@ public class Block
     private Location location;
     private Color color;
     private Color original;
+    private boolean removeable;
     //constructs a blue block, because blue is the greatest color ever!
     public Block()
     {
         color = Color.BLUE;//color of the block
         grid = null;//makes the grid nonexistent, like the block
         location = null;//the block has no location yet
+        removeable = true;
     }
 
     //gets the color of this block
@@ -50,6 +52,14 @@ public class Block
     {
         return location;    //returns location of the block
     }
+    
+    public void setDestroyable(boolean b){
+        removeable = b;
+    }
+    
+    public boolean getDestroyable(){
+        return removeable;
+    }
 
     //removes this block from its grid
     //precondition:  this block is contained in a grid
@@ -58,11 +68,19 @@ public class Block
         //First, using the grid object, call the remove method (pass it this location)
         //Second, set this location to null
         //Third, set this grid to null
-        if(location!=null){
-        grid.remove(location);    //removes the location from the grid
-        location = null;            //location is gone now, so it's null
-        grid = null;            //grid is gone now, so it's null
+        if(location!=null&&removeable){
+            grid.remove(location);    //removes the location from the grid
+            location = null;            //location is gone now, so it's null
+            grid = null;            //grid is gone now, so it's null
+        }
     }
+
+    public void destroySelfFromGrid(){
+        if(location!=null){
+            grid.remove(location);    //removes the location from the grid
+            location = null;            //location is gone now, so it's null
+            grid = null;            //grid is gone now, so it's null
+        }
     }
 
     //puts this block into location loc of grid gr
@@ -73,7 +91,7 @@ public class Block
     {
         Block block = gr.get(loc);//gets the block that was in the position
         if (block != null)//if there is a block,
-            block.removeSelfFromGrid();//it removes it
+            block.destroySelfFromGrid();//it removes it
         gr.put(loc, this);//puts this block there
         grid = gr;//resets the grid of this block to what it was given
         location = loc;//resets the location to what was given
@@ -93,7 +111,6 @@ public class Block
         grid.put(location,this);//put this block to the new location
     }
 
-        
     //returns a string with the location and color of this block
     public String toString()
     {
