@@ -341,7 +341,7 @@ public class Tetrad
             locs[i] = blocks[i].getLocation();
             if(locs[i]==null)
                 return false;
-            blocks[i].removeSelfFromGrid();
+            blocks[i].destroySelfFromGrid();
         }
         Location[] newLocs = new Location[blocks.length];
         for(int i = 0; i<blocks.length; i++){

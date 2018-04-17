@@ -229,7 +229,6 @@ public class Tetris implements ArrowListener
                 return;
             }
             clearCompletedRows();
-
             activeTetrad = nextTetrad;
             MoveList m = getMovesToMake();
             activeTetrad.SpawnTetrad();
@@ -315,8 +314,8 @@ public class Tetris implements ArrowListener
                             lives--;
                         }
                     }else if(grid.isValid(newl)&&grid.get(newl)!=null&&
-                    grid.get(newl).getColor().equals(Color.GREEN)||
-                    grid.get(newl).getColor().equals(Color.CYAN)){
+                    (grid.get(newl).getColor().equals(Color.GREEN)||
+                        grid.get(newl).getColor().equals(Color.CYAN))){
                         score+=20*level;
                     }
                 }else{
@@ -553,7 +552,7 @@ public class Tetris implements ArrowListener
     {
         for(int i = 0; i<10; i++){
             Location l = new Location(row, i);
-            if(grid.get(l)!=null)
+            if(grid.get(l)!=null&&grid.get(l).getDestroyable())
                 grid.remove(l).removeSelfFromGrid();
 
         }
@@ -626,6 +625,29 @@ public class Tetris implements ArrowListener
         return rowsBroke;
     }
 
+    public void addRows(int n){
+        List<Location> locs = grid.getOccupiedLocations();
+        Location[] locss = new Location[4];
+        Tetrad omg = new Tetrad(grid, locs.toArray(locss), Color.BLUE);
+        for(int i = 0; i< grid.getNumRows(); i++){
+            clearRow(i);
+        }
+        omg.SpawnTetrad();
+        for(Location l : grid.getOccupiedLocations()){
+            grid.get(l).setColor(grid.get(l).getOriginal());
+        }
+        omg.translate(-1*n,0);
+        for(int i = 0; i< n; i++){
+            for(int c = 0; c < grid.getNumCols(); c++){
+                Location place = new Location(grid.getNumRows()-1, c);
+                Block boi = new Block();boi.setColor(Color.GRAY);boi.setOriginal(Color.GRAY);
+                boi.setDestroyable(false);
+                boi.putSelfInGrid(grid, place);
+            }
+        }
+
+    }
+
     private void moveDownAbove(int r){
         if(r<1){
             return;
@@ -640,12 +662,26 @@ public class Tetris implements ArrowListener
         moveDownAbove(r-1);
     }
 
+    private void moveUpBelow(int r){
+        if(r>19){
+            return;
+        }
+        List<Location> locs = grid.getRow(r);
+        for(Location l: locs){
+            Location x = new Location(l.getRow()-1, l.getCol());
+            if(grid.isValid(x)&&grid.get(x)==null){
+                grid.remove(l).moveTo(x);
+            }
+        }
+        moveUpBelow(r+1);
+    }
+
     public void flashRow(int row){
         Color[] colors = new Color[10];
         for(int k = 0; k<2; k++){
             for(int i = 0; i< 10; i++){
                 Location l = new Location(row, i);
-                if(grid.get(l)!=null){
+                if(grid.get(l)!=null&&grid.get(l).getDestroyable()){
                     colors[i] = grid.get(l).getColor();
                     grid.get(l).setColor(new Color(0, 0, 0));
                 }
