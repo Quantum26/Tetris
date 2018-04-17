@@ -52,12 +52,15 @@ public class Tetris implements ArrowListener
     private boolean galaga = false;
     private boolean reee = false;
     private boolean raining = false;
+    private boolean battle = false;
+    private boolean bot = true;
     private MusicPlayer music;
     private boolean sped = false;
     private long elapsed;
     private int meteors = 0;
     private int lives = 1500;
     private List<Tetrad> storm;
+    private Tetris other;
     private Object l1;
     private Object l2;
     public Tetris()
@@ -191,7 +194,7 @@ public class Tetris implements ArrowListener
                 }else if(galaga){
                     playGalaga();
                 }else{
-                    playAgainst(new Tetris());
+                    playTetris();
                 }
                 if(game==false){
                     break;
@@ -233,7 +236,7 @@ public class Tetris implements ArrowListener
             }
             x= clearCompletedRows();
             activeTetrad = nextTetrad;
-            //MoveList m = getMovesToMake();
+            MoveList m = getMovesToMake();
             activeTetrad.SpawnTetrad();
             if(activeTetrad.getShape()==7){
                 omae();
@@ -245,9 +248,12 @@ public class Tetris implements ArrowListener
             }else if(cheatCode2){
                 nextTetrad.setShape(2);
             }
+            display.showBlocks();
             DisplayNextTetrad();
             controlsActive = true;
-            //makeMove(m);
+            if(bot){
+                makeMove(m);
+            }
         }
         return x;
     }
@@ -531,10 +537,13 @@ public class Tetris implements ArrowListener
 
     }
 
-    public void playAgainst(Tetris other){
+    public void playAgainst(){
+        other = new Tetris();
+        other.setBot(true);
+        this.setBot(false);
+        battle = true;
         l1 = new Object();
         l2 = new Object();
-
         Thread hope = new Thread(){
 
                 @Override
@@ -543,32 +552,32 @@ public class Tetris implements ArrowListener
                     while (game)
                     {
                         for(int i = 0; i<5; i++){
-                            try { l2.wait(gameTime/10); } catch(Exception e) {}
+                            try { sleep(gameTime/10); } catch(Exception e) {}
                         }
                         if(!paused){
                             for(int i = 0; i<5; i++){
-                                try { l2.wait(gameTime/10); } catch(Exception e) {}
+                                try { sleep(gameTime/10); } catch(Exception e) {}
                             }
-                            other.playTetris();
-
+                            addRows(other.playTetris());
+                            other.showBlocks();
                         }
 
                     }
                 }
             };
         hope.start();
-
+        display.setTitle("ssh");
         while (game)
         {
             for(int i = 0; i<5; i++){
-                try { l1.wait(gameTime/10); } catch(Exception e) {}
+                try { Thread.sleep(gameTime/10); } catch(Exception e) {}
             }
             if(!paused){
                 for(int i = 0; i<5; i++){
-                    try { l1.wait(gameTime/10); } catch(Exception e) {}
+                    try { Thread.sleep(gameTime/10); } catch(Exception e) {}
                 }
-                this.playTetris();
-                
+                other.addRows(this.playTetris());
+                display.showBlocks();
             }
         }
 
@@ -672,18 +681,8 @@ public class Tetris implements ArrowListener
     }
 
     public void addRows(int n){
-        List<Location> locs = grid.getOccupiedLocations();
-        Location[] locss = new Location[4];
-        Tetrad omg = new Tetrad(grid, locs.toArray(locss), Color.BLUE);
-        for(int i = 0; i< grid.getNumRows(); i++){
-            clearRow(i);
-        }
-        omg.SpawnTetrad();
-        for(Location l : grid.getOccupiedLocations()){
-            grid.get(l).setColor(grid.get(l).getOriginal());
-        }
-        omg.translate(-1*n,0);
         for(int i = 0; i< n; i++){
+            moveUpBelow(0);
             for(int c = 0; c < grid.getNumCols(); c++){
                 Location place = new Location(grid.getNumRows()-1, c);
                 Block boi = new Block();boi.setColor(Color.GRAY);boi.setOriginal(Color.GRAY);
@@ -691,6 +690,8 @@ public class Tetris implements ArrowListener
                 boi.putSelfInGrid(grid, place);
             }
         }
+        
+        
 
     }
 
@@ -720,6 +721,10 @@ public class Tetris implements ArrowListener
             }
         }
         moveUpBelow(r+1);
+    }
+
+    public void showBlocks(){
+        display.showBlocks();
     }
 
     public void flashRow(int row){
@@ -840,6 +845,10 @@ public class Tetris implements ArrowListener
 
         }
     }
+    
+    public void setBot(boolean b){
+        bot = b;
+    }
 
     public void DisplayNextTetrad(){
         for(int i = 0; i<16; i++)
@@ -925,7 +934,9 @@ public class Tetris implements ArrowListener
     }
 
     public void sPressed(){
-        if(!dejavu){
+        if(battle){
+            other.downPressed();
+        }else if(!dejavu){
             if(cheats){
                 sped = true;
                 music.stopMusic();
@@ -993,7 +1004,9 @@ public class Tetris implements ArrowListener
     }
 
     public void aPressed(){
-        if(!paused && game && controlsActive && cheatCode5){
+        if(battle){
+            other.leftPressed();
+        }else if(!paused && game && controlsActive && cheatCode5){
             if(thirdTetrad.getSpawned()){
                 thirdTetrad.translate(0, -1); //moves the block left 1 square
                 display.showBlocks();
@@ -1002,7 +1015,9 @@ public class Tetris implements ArrowListener
     }
 
     public void dPressed(){
-        if(!paused && game && controlsActive && cheatCode5){
+        if(battle){
+            other.rightPressed();
+        }else if(!paused && game && controlsActive && cheatCode5){
             if(thirdTetrad.getSpawned()){
                 thirdTetrad.translate(0, 1); //moves the block right 1 square
                 display.showBlocks();
@@ -1079,11 +1094,15 @@ public class Tetris implements ArrowListener
     }
 
     public void wPressed(){
-
+        if(battle){
+            other.upPressed();
+        }
     }
 
     public void qPressed(){
-
+        if(battle){
+            other.spacePressed();
+        }
     }
 
     public void tPressed(){
