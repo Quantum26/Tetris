@@ -58,6 +58,8 @@ public class Tetris implements ArrowListener
     private int meteors = 0;
     private int lives = 1500;
     private List<Tetrad> storm;
+    private Object l1;
+    private Object l2;
     public Tetris()
     {
         grid = new BoundedGrid<Block>(20, 10); //creates a new grid
@@ -189,7 +191,7 @@ public class Tetris implements ArrowListener
                 }else if(galaga){
                     playGalaga();
                 }else{
-                    playTetris();
+                    playAgainst(new Tetris());
                 }
                 if(game==false){
                     break;
@@ -218,7 +220,8 @@ public class Tetris implements ArrowListener
         }
     }
 
-    public void playTetris(){
+    public int playTetris(){
+        int x = 0;
         if(!activeTetrad.translate(1,0)){
 
             controlsActive = false;
@@ -226,11 +229,11 @@ public class Tetris implements ArrowListener
             if(!topRowsEmpty()){
                 game = false;
                 gameOver();
-                return;
+                return 0;
             }
-            clearCompletedRows();
+            x= clearCompletedRows();
             activeTetrad = nextTetrad;
-            MoveList m = getMovesToMake();
+            //MoveList m = getMovesToMake();
             activeTetrad.SpawnTetrad();
             if(activeTetrad.getShape()==7){
                 omae();
@@ -244,9 +247,9 @@ public class Tetris implements ArrowListener
             }
             DisplayNextTetrad();
             controlsActive = true;
-            makeMove(m);
+            //makeMove(m);
         }
-
+        return x;
     }
 
     public void playGalaga(){
@@ -525,6 +528,49 @@ public class Tetris implements ArrowListener
         display.showBlocks();
         title = "Level "+level+", Score: "+score;
         display.setTitle(title);
+
+    }
+
+    public void playAgainst(Tetris other){
+        l1 = new Object();
+        l2 = new Object();
+
+        Thread hope = new Thread(){
+
+                @Override
+                public void run()
+                {
+                    while (game)
+                    {
+                        for(int i = 0; i<5; i++){
+                            try { l2.wait(gameTime/10); } catch(Exception e) {}
+                        }
+                        if(!paused){
+                            for(int i = 0; i<5; i++){
+                                try { l2.wait(gameTime/10); } catch(Exception e) {}
+                            }
+                            other.playTetris();
+
+                        }
+
+                    }
+                }
+            };
+        hope.start();
+
+        while (game)
+        {
+            for(int i = 0; i<5; i++){
+                try { l1.wait(gameTime/10); } catch(Exception e) {}
+            }
+            if(!paused){
+                for(int i = 0; i<5; i++){
+                    try { l1.wait(gameTime/10); } catch(Exception e) {}
+                }
+                this.playTetris();
+                
+            }
+        }
 
     }
     //precondition:  0 <= row < number of rows
