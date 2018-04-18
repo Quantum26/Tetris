@@ -194,7 +194,7 @@ public class Tetris implements ArrowListener
                 }else if(galaga){
                     playGalaga();
                 }else{
-                    playTetris();
+                    playAgainst();
                 }
                 if(game==false){
                     break;
@@ -226,7 +226,7 @@ public class Tetris implements ArrowListener
     public int playTetris(){
         int x = 0;
         if(!activeTetrad.translate(1,0)){
-
+            
             controlsActive = false;
             gameTime = time;
             if(!topRowsEmpty()){
@@ -235,9 +235,11 @@ public class Tetris implements ArrowListener
                 return 0;
             }
             x= clearCompletedRows();
+            
             activeTetrad = nextTetrad;
             MoveList m = getMovesToMake();
             activeTetrad.SpawnTetrad();
+            display.showBlocks();
             if(activeTetrad.getShape()==7){
                 omae();
             }
@@ -591,7 +593,7 @@ public class Tetris implements ArrowListener
         boolean full = true;
         for(int i = 0; i < 10; i++){
             Location l = new Location(row, i);
-            if(grid.get(l)==null){
+            if(grid.get(l)==null||!grid.get(l).getDestroyable()){
                 full = false;
             }
         }
