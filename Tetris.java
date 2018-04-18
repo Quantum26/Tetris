@@ -728,9 +728,9 @@ public class Tetris implements ArrowListener
     }
 
     public void showBlocks(){display.showBlocks();}
-    
+
     public int getGameTime(){return gameTime;}
-    
+
     public void closeMusic(){music.close();}
 
     public void flashRow(int row){
@@ -859,7 +859,7 @@ public class Tetris implements ArrowListener
     public void setBattle(boolean b){
         battle = b;
     }
-    
+
     public void DisplayNextTetrad(){
         int n = 16;
         if(battle){
@@ -1021,6 +1021,15 @@ public class Tetris implements ArrowListener
         String input = reader.nextLine();
         if(input.equals("oof"))
             cheats = true;
+        if(battle){
+            if(input.equals("2player")){
+                setBot(false);
+                other.setBot(false);
+            }else if(input.equals("bot")){
+                setBot(false);
+                other.setBot(true);
+            }
+        }
     }
 
     public void mPressed(){
@@ -1126,6 +1135,7 @@ public class Tetris implements ArrowListener
                 clearRow(i);
             }
             battle = true;
+
         }
     }   
 
