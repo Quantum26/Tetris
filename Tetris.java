@@ -179,7 +179,7 @@ public class Tetris implements ArrowListener
         activeTetrad.SpawnTetrad();
         DisplayNextTetrad();
         display.showBlocks();
-        music.play();
+        //music.play();
         while (game)
         {
             for(int i = 0; i<5; i++){
@@ -543,8 +543,8 @@ public class Tetris implements ArrowListener
 
     public void playAgainst(){
         other = new Tetris();
+        other.closeMusic();
         other.setBot(false);
-        other.setBattle(true);
         this.setBot(false);
         battle = true;
         Thread hope = new Thread(){
@@ -555,11 +555,11 @@ public class Tetris implements ArrowListener
                     while (game)
                     {
                         for(int i = 0; i<5; i++){
-                            try { sleep(gameTime/10); } catch(Exception e) {}
+                            try { sleep(other.getGameTime()/10); } catch(Exception e) {}
                         }
                         if(!paused){
                             for(int i = 0; i<5; i++){
-                                try { sleep(gameTime/10); } catch(Exception e) {}
+                                try { sleep(other.getGameTime()/10); } catch(Exception e) {}
                             }
                             addRows(other.playTetris());
                             other.showBlocks();
@@ -727,9 +727,11 @@ public class Tetris implements ArrowListener
         moveUpBelow(r+1);
     }
 
-    public void showBlocks(){
-        display.showBlocks();
-    }
+    public void showBlocks(){display.showBlocks();}
+    
+    public int getGameTime(){return gameTime;}
+    
+    public void closeMusic(){music.close();}
 
     public void flashRow(int row){
         Color[] colors = new Color[10];
@@ -906,6 +908,7 @@ public class Tetris implements ArrowListener
         if(sped){
             System.out.println("SEIZURE WARNING");
         }
+        System.out.println(Thread.activeCount());
     }
 
     public void updateScreen(){
