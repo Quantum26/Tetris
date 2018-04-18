@@ -10,7 +10,7 @@ public class Tetris implements ArrowListener
     {
         boolean playing = true;
         while(playing){
-            Tetris tetris = new Tetris(8, 4); //creates a new tetris
+            Tetris tetris = new Tetris(20, 10); //creates a new tetris
             tetris.play(); //starts the game
             System.out.println("Would you Like to Play Again? yes/no");
             Scanner reader = new Scanner(System.in);
