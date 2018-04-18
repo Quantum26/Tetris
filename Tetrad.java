@@ -11,6 +11,8 @@ public class Tetrad
 {
     private Block[] blocks;
     private int shape;//94 indicates custom shape
+    private int r;
+    private int c;
     private BoundedGrid<Block> g;
     private Color color;
     private boolean spawned;
@@ -29,9 +31,11 @@ public class Tetrad
         spawned = false;
         shape = (int)(Math.random()*7);
         hasShape = true;
+        r = g.getNumRows();
+        c = g.getNumCols();
     }
 
-    public Tetrad(BoundedGrid<Block> grid, Location[] locs, Color c){
+    public Tetrad(BoundedGrid<Block> grid, Location[] locs, Color co){
         blocks = new Block[locs.length];
         lol = new Location[locs.length];
 
@@ -41,10 +45,12 @@ public class Tetrad
         }
 
         g = grid;
-        color = c;
+        color = co;
         shape = 94;
         spawned = false;
         hasShape = false;
+        r = g.getNumRows();
+        c = g.getNumCols();
     }
 
     public void SpawnTetrad(){
@@ -54,58 +60,58 @@ public class Tetrad
             switch(shape){ 
                 case 0://I
                 color = Color.BLUE;
-                locs[0] = new Location(0,4);
-                locs[1] = new Location(1,4);
-                locs[2] = new Location(2,4);
-                locs[3] = new Location(3,4);
+                locs[0] = new Location(0,c/2-1);
+                locs[1] = new Location(1,c/2-1);
+                locs[2] = new Location(2,c/2-1);
+                locs[3] = new Location(3,c/2-1);
                 break;
 
                 case 1: //T
                 color = Color.MAGENTA;
-                locs[0] = new Location(0,3);
-                locs[1] = new Location(0,4);
-                locs[2] = new Location(0,5);
-                locs[3] = new Location(1,4);
+                locs[0] = new Location(0,c/2-2);
+                locs[1] = new Location(0,c/2-1);
+                locs[2] = new Location(0,c/2);
+                locs[3] = new Location(1,c/2-1);
                 break;
 
                 case 2: //O
                 color = Color.RED;
-                locs[0] = new Location(1,5);
-                locs[1] = new Location(0,4);
-                locs[2] = new Location(0,5);
-                locs[3] = new Location(1,4);
+                locs[0] = new Location(1,c/2);
+                locs[1] = new Location(0,c/2-1);
+                locs[2] = new Location(0,c/2);
+                locs[3] = new Location(1,c/2-1);
                 break;
 
                 case 3://L
                 color = Color.ORANGE;
-                locs[0] = new Location(0,4);
-                locs[1] = new Location(1,4);
-                locs[2] = new Location(2,4);
-                locs[3] = new Location(2,5);
+                locs[0] = new Location(0,c/2-1);
+                locs[1] = new Location(1,c/2-1);
+                locs[2] = new Location(2,c/2-1);
+                locs[3] = new Location(2,c/2);
                 break;
 
                 case 4://J
                 color = Color.YELLOW;
-                locs[0] = new Location(0,5);
-                locs[1] = new Location(1,5);
-                locs[2] = new Location(2,5);
-                locs[3] = new Location(2,4);
+                locs[0] = new Location(0,c/2);
+                locs[1] = new Location(1,c/2);
+                locs[2] = new Location(2,c/2);
+                locs[3] = new Location(2,c/2-1);
                 break;
 
                 case 5://S
                 color = Color.GREEN;
-                locs[0] = new Location(1,5);
-                locs[1] = new Location(0,5);
-                locs[2] = new Location(0,6);
-                locs[3] = new Location(1,4);
+                locs[0] = new Location(1,c/2);
+                locs[1] = new Location(0,c/2);
+                locs[2] = new Location(0,c/2+1);
+                locs[3] = new Location(1,c/2-1);
                 break;
 
                 case 6://Z
                 color = Color.CYAN;
-                locs[0] = new Location(0,3);
-                locs[1] = new Location(0,4);
-                locs[2] = new Location(1,5);
-                locs[3] = new Location(1,4);
+                locs[0] = new Location(0,c/2-2);
+                locs[1] = new Location(0,c/2-1);
+                locs[2] = new Location(1,c/2);
+                locs[3] = new Location(1,c/2-1);
                 break;
 
                 case 7://smiley face death tetrad
