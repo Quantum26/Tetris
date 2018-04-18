@@ -196,7 +196,7 @@ public class Tetris implements ArrowListener
                 }else if(battle){
                     playAgainst();
                 }else{
-                    playAgainst();
+                    playTetris();
                 }
                 if(game==false){
                     break;
@@ -914,11 +914,13 @@ public class Tetris implements ArrowListener
             display.setTitle(title);
         }
     }   
-    
+
     public void setTitle(String s){title = s;display.setTitle(s);}
+
     public int getLevel(){return level;}
+
     public int getScore(){return score;}
-    
+
     public void onePressed(){
         music.stopMusic();
         music.setMusic("Tetris.mp3");
@@ -1104,6 +1106,16 @@ public class Tetris implements ArrowListener
             }
         }
     }
+
+    public void vPressed(){
+        level = 1;
+        gameTime= 1000;
+        score = 0;
+        for(int i = 0; i< grid.getNumRows(); i++){
+            clearRow(i);
+        }
+        battle = true;
+    }   
 
     public void wPressed(){
         if(battle){
