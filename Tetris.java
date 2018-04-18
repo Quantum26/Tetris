@@ -543,7 +543,7 @@ public class Tetris implements ArrowListener
 
     public void playAgainst(){
         other = new Tetris();
-        other.setBot(true);
+        other.setBot(false);
         this.setBot(false);
         battle = true;
         l1 = new Object();
@@ -688,6 +688,7 @@ public class Tetris implements ArrowListener
 
     public void addRows(int n){
         for(int i = 0; i< n; i++){
+            activeTetrad.translate(1,0);
             moveUpBelow(0);
             for(int c = 0; c < grid.getNumCols(); c++){
                 Location place = new Location(grid.getNumRows()-1, c);
