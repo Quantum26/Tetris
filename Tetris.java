@@ -546,8 +546,6 @@ public class Tetris implements ArrowListener
         other.setBot(false);
         this.setBot(false);
         battle = true;
-        l1 = new Object();
-        l2 = new Object();
         Thread hope = new Thread(){
 
                 @Override
@@ -564,7 +562,7 @@ public class Tetris implements ArrowListener
                             }
                             addRows(other.playTetris());
                             other.showBlocks();
-                            other.updateScreen();
+                            other.setTitle("P2:Level "+other.getLevel()+", Score: "+other.getScore());
                         }
 
                     }
@@ -583,7 +581,7 @@ public class Tetris implements ArrowListener
                 }
                 other.addRows(this.playTetris());
                 display.showBlocks();
-                updateScreen();
+                setTitle("P1:Level "+level+", Score: "+score);
             }
         }
 
@@ -917,7 +915,7 @@ public class Tetris implements ArrowListener
         }
     }   
     
-    public void setTitle(String s){title = s;}
+    public void setTitle(String s){title = s;display.setTitle(s);}
     public int getLevel(){return level;}
     public int getScore(){return score;}
     
