@@ -544,6 +544,7 @@ public class Tetris implements ArrowListener
     public void playAgainst(){
         other = new Tetris();
         other.setBot(false);
+        other.setBattle(true);
         this.setBot(false);
         battle = true;
         Thread hope = new Thread(){
@@ -853,8 +854,16 @@ public class Tetris implements ArrowListener
         bot = b;
     }
 
+    public void setBattle(boolean b){
+        battle = b;
+    }
+    
     public void DisplayNextTetrad(){
-        for(int i = 0; i<16; i++)
+        int n = 16;
+        if(battle){
+            n = 0;
+        }
+        for(int i = 0; i<n; i++)
             System.out.println();
         if(!dejavu&&!galaga){
             System.out.println("Level: " + level + "\nLines: " + lines + "\nScore: " + score + 
@@ -891,14 +900,12 @@ public class Tetris implements ArrowListener
         }else if(nextTetrad.getShape()==7){
             System.out.println("ya done mate\n\n\n");
         }else{
-            System.out.println("You dirty cheater");
+            System.out.println("Snook");
         }
 
         if(sped){
             System.out.println("SEIZURE WARNING");
         }
-        System.out.println(music.getStatus());
-        System.out.println(Thread.activeCount());
     }
 
     public void updateScreen(){
@@ -1108,13 +1115,15 @@ public class Tetris implements ArrowListener
     }
 
     public void vPressed(){
-        level = 1;
-        gameTime= 1000;
-        score = 0;
-        for(int i = 0; i< grid.getNumRows(); i++){
-            clearRow(i);
+        if(cheats){
+            level = 1;
+            gameTime= 1000;
+            score = 0;
+            for(int i = 0; i< grid.getNumRows(); i++){
+                clearRow(i);
+            }
+            battle = true;
         }
-        battle = true;
     }   
 
     public void wPressed(){
