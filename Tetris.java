@@ -193,6 +193,8 @@ public class Tetris implements ArrowListener
                     playDejaMode();
                 }else if(galaga){
                     playGalaga();
+                }else if(battle){
+                    playAgainst();
                 }else{
                     playAgainst();
                 }
@@ -226,7 +228,7 @@ public class Tetris implements ArrowListener
     public int playTetris(){
         int x = 0;
         if(!activeTetrad.translate(1,0)){
-            
+
             controlsActive = false;
             gameTime = time;
             if(!topRowsEmpty()){
@@ -235,7 +237,7 @@ public class Tetris implements ArrowListener
                 return 0;
             }
             x= clearCompletedRows();
-            
+
             activeTetrad = nextTetrad;
             MoveList m = getMovesToMake();
             activeTetrad.SpawnTetrad();
@@ -562,6 +564,7 @@ public class Tetris implements ArrowListener
                             }
                             addRows(other.playTetris());
                             other.showBlocks();
+                            other.updateScreen();
                         }
 
                     }
@@ -580,6 +583,7 @@ public class Tetris implements ArrowListener
                 }
                 other.addRows(this.playTetris());
                 display.showBlocks();
+                updateScreen();
             }
         }
 
@@ -692,8 +696,6 @@ public class Tetris implements ArrowListener
                 boi.putSelfInGrid(grid, place);
             }
         }
-        
-        
 
     }
 
@@ -847,7 +849,7 @@ public class Tetris implements ArrowListener
 
         }
     }
-    
+
     public void setBot(boolean b){
         bot = b;
     }
@@ -900,15 +902,24 @@ public class Tetris implements ArrowListener
         System.out.println(Thread.activeCount());
     }
 
-    public void stockStorm(){
-        for(int i = 0; i<4; i++){
-            Tetrad temp = new Tetrad(grid);
-            temp.setShape(9);
-            temp.translate(0,((Math.random()<0.5)?((int)(Math.random()*6)):(-1*(int)(Math.random()*6))));
-            storm.add(temp);
+    public void updateScreen(){
+        if(battle){
+            display.showBlocks();
+            title = "P1:Level "+level+", Score: "+score;
+            String t2 = "P2:Level "+other.getLevel()+", Score: "+other.getScore();
+            display.setTitle(title);
+            other.setTitle(t2);
+        }else{
+            display.showBlocks();
+            title = "Level "+level+", Score: "+score;
+            display.setTitle(title);
         }
     }   
-
+    
+    public void setTitle(String s){title = s;}
+    public int getLevel(){return level;}
+    public int getScore(){return score;}
+    
     public void onePressed(){
         music.stopMusic();
         music.setMusic("Tetris.mp3");
