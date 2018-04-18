@@ -1044,6 +1044,15 @@ public class Tetris implements ArrowListener
         String input = reader.nextLine();
         if(input.equals("oof"))
             cheats = true;
+        if(battle){
+            if(input.equals("2player")){
+                setBot(false);
+                other.setBot(false);
+            }else if(input.equals("bot")){
+                setBot(false);
+                other.setBot(true);
+            }
+        }
     }
 
     public void mPressed(){
@@ -1149,6 +1158,7 @@ public class Tetris implements ArrowListener
                 clearRow(i);
             }
             battle = true;
+
         }
     }   
 
