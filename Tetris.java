@@ -63,6 +63,7 @@ public class Tetris implements ArrowListener
     private Tetris other;
     private Object l1;
     private Object l2;
+    private boolean p2 = false;
     public Tetris()
     {
         grid = new BoundedGrid<Block>(20, 10); //creates a new grid
@@ -546,6 +547,7 @@ public class Tetris implements ArrowListener
         other.closeMusic();
         other.setBot(false);
         this.setBot(false);
+        other.setP2(true);
         battle = true;
         Thread hope = new Thread(){
 
@@ -585,7 +587,9 @@ public class Tetris implements ArrowListener
                 setTitle("P1:Level "+level+", Score: "+score);
             }
         }
-
+        if(other.isGameOver()){
+            win();
+        }
     }
     //precondition:  0 <= row < number of rows
     //postcondition: Returns true if every cell in the
@@ -618,6 +622,9 @@ public class Tetris implements ArrowListener
         }
     }
 
+    public boolean isGameOver(){
+        return !game;
+    }
     //postcondition: All completed rows have been cleared.
     public int clearCompletedRows()
     {
@@ -728,10 +735,14 @@ public class Tetris implements ArrowListener
     }
 
     public void showBlocks(){display.showBlocks();}
-    
+
     public int getGameTime(){return gameTime;}
-    
+
     public void closeMusic(){music.close();}
+
+    public void setP2(boolean p){
+        p2 = p;
+    }
 
     public void flashRow(int row){
         Color[] colors = new Color[10];
@@ -794,12 +805,14 @@ public class Tetris implements ArrowListener
         title+= " You lose m8";
         display.setTitle(title);
         DisplayNextTetrad();
+        game = false;
     }
 
     public void win(){
         System.out.println("YOU WIN! \nYour Score was: " + score);
         title+=" YOU A WINNER";
         display.setTitle(title);
+        game = false;
     }
 
     private void ree(){
@@ -859,58 +872,62 @@ public class Tetris implements ArrowListener
     public void setBattle(boolean b){
         battle = b;
     }
-    
+
     public void DisplayNextTetrad(){
-        int n = 16;
-        if(battle){
-            n = 0;
-        }
-        for(int i = 0; i<n; i++)
-            System.out.println();
-        if(!dejavu&&!galaga){
-            System.out.println("Level: " + level + "\nLines: " + lines + "\nScore: " + score + 
-                "\nNext:\n");
-        }else{
-            if(level>=14){
-                System.out.println("GET READY FOR DOUBLE BLOCK (A and D keys)");
-            }
-            System.out.print("\nLevel: " + level + "\nLives: ");
-            if(lives>5){
-                System.out.print(lives);
+        if(!p2){
+            int n = 16;
+            for(int i = 0; i<n; i++)
+                System.out.println();
+            if(battle){
+                displayBattle();
             }else{
-                for(int i = 0; i<lives; i++)
-                    System.out.print("[]");
+            if(!dejavu&&!galaga){
+                System.out.println("Level: " + level + "\nLines: " + lines + "\nScore: " + score + 
+                    "\nNext:\n");
+            }else{
+                if(level>=14){
+                    System.out.println("GET READY FOR DOUBLE BLOCK (A and D keys)");
+                }
+                System.out.print("\nLevel: " + level + "\nLives: ");
+                if(lives>5){
+                    System.out.print(lives);
+                }else{
+                    for(int i = 0; i<lives; i++)
+                        System.out.print("[]");
+                }
+                System.out.print("\nScore: " + score + 
+                    "\nNext:\n");
             }
-            System.out.print("\nScore: " + score + 
-                "\nNext:\n");
-        }
-        if(nextTetrad.getShape()==0){
-            for(int i = 0; i<4; i++)
-                System.out.println(" []");
-        }else if(nextTetrad.getShape()==1){
-            System.out.println(" [][][] \n   [] \n\n");
-        }else if(nextTetrad.getShape()==2){
-            System.out.println(" [][] \n [][] \n \n");
-        }else if(nextTetrad.getShape()==3){
-            System.out.println(" [] \n [] \n [][]\n");
-        }else if(nextTetrad.getShape()==4){
-            System.out.println("   [] \n   [] \n [][]\n"); 
-        }else if(nextTetrad.getShape()==6){
-            System.out.println(" [][] \n   [][]\n\n"); 
-        }else if(nextTetrad.getShape()==5){
-            System.out.println("   [][] \n [][]\n\n"); 
-        }else if(nextTetrad.getShape()==7){
-            System.out.println("ya done mate\n\n\n");
-        }else{
-            System.out.println("Snook");
-        }
+            if(nextTetrad.getShape()==0){
+                String s = "";
+                for(int i = 0; i<4; i++)
+                    s+=" []\n";
+                System.out.print(s);
+            }else if(nextTetrad.getShape()==1){
+                System.out.println(" [][][] \n   [] \n\n");
+            }else if(nextTetrad.getShape()==2){
+                System.out.println(" [][] \n [][] \n \n");
+            }else if(nextTetrad.getShape()==3){
+                System.out.println(" [] \n [] \n [][]\n");
+            }else if(nextTetrad.getShape()==4){
+                System.out.println("   [] \n   [] \n [][]\n"); 
+            }else if(nextTetrad.getShape()==6){
+                System.out.println(" [][] \n   [][]\n\n"); 
+            }else if(nextTetrad.getShape()==5){
+                System.out.println("   [][] \n [][]\n\n"); 
+            }else if(nextTetrad.getShape()==7){
+                System.out.println("ya done mate\n\n\n");
+            }else{
+                System.out.println("Snook");
+            }
 
-        if(sped){
-            System.out.println("SEIZURE WARNING");
+            if(sped){
+                System.out.println("SEIZURE WARNING");
+            }
+            System.out.println(Thread.activeCount());
         }
-        System.out.println(Thread.activeCount());
     }
-
+    }
     public void updateScreen(){
         if(battle){
             display.showBlocks();
@@ -924,13 +941,19 @@ public class Tetris implements ArrowListener
             display.setTitle(title);
         }
     }   
-
+    
     public void setTitle(String s){title = s;display.setTitle(s);}
 
     public int getLevel(){return level;}
 
     public int getScore(){return score;}
-
+    
+    public int getLines(){return lines;}
+    
+    public int getNextTetradShape(){
+        return nextTetrad.getShape();
+        }
+    
     public void onePressed(){
         music.stopMusic();
         music.setMusic("Tetris.mp3");
@@ -1336,5 +1359,31 @@ public class Tetris implements ArrowListener
             try{Thread.sleep(gameTime/10);}catch(Exception e){};
 
         }
+    }
+    public void displayBattle(){
+        String s = "";
+        if(nextTetrad.getShape()==0){
+                s+=" []\n";
+            }else if(nextTetrad.getShape()==1){
+                System.out.println(" [][][] \n   [] \n\n");
+            }else if(nextTetrad.getShape()==2){
+                System.out.println(" [][] \n [][] \n \n");
+            }else if(nextTetrad.getShape()==3){
+                System.out.println(" [] \n [] \n [][]\n");
+            }else if(nextTetrad.getShape()==4){
+                System.out.println("   [] \n   [] \n [][]\n"); 
+            }else if(nextTetrad.getShape()==6){
+                System.out.println(" [][] \n   [][]\n\n"); 
+            }else if(nextTetrad.getShape()==5){
+                System.out.println("   [][] \n [][]\n\n"); 
+            }else if(nextTetrad.getShape()==7){
+                System.out.println("ya done mate\n\n\n");
+            }else{
+                System.out.println("Snook");
+            }
+        System.out.println("P1 Level: " + level + "\tP2 Level: " + other.getLevel()+
+        "\nP1 Lines: " + lines + "\tP2 Lines: " + other.getLines() +
+        "\nP1 Score: " + score + "\tP2 Score: " + other.getScore() +
+        "\nP1 Next:" + "\tP2 Next:");
     }
 }
