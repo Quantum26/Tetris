@@ -103,7 +103,7 @@ public class BlockDisplay implements KeyListener
                     graphics.dispose();
                     inboi = image.createGraphics();
                     inboi.setColor(Color.BLACK);
-                    inboi.fillRect(col*30+8, row*30+8, 14, 14);
+                    inboi.fillRect(col*30+2, row*30+2, 26, 26);
                     inboi.dispose();
                 }
             }
