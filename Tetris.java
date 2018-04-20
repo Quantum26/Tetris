@@ -53,12 +53,12 @@ public class Tetris implements ArrowListener
     private boolean reee = false;
     private boolean raining = false;
     private boolean battle = false;
-    private boolean bot = true;
+    private boolean bot = false;
     private MusicPlayer music;
     private boolean sped = false;
     private long elapsed;
     private int meteors = 0;
-    private int lives = 1500;
+    private int lives = 15;
     private List<Tetrad> storm;
     private Tetris other;
     private Object l1;
@@ -180,7 +180,8 @@ public class Tetris implements ArrowListener
         activeTetrad.SpawnTetrad();
         DisplayNextTetrad();
         display.showBlocks();
-        //music.play();
+        
+        music.play();
         start = System.currentTimeMillis();
         while (game)
         {
@@ -246,6 +247,7 @@ public class Tetris implements ArrowListener
             activeTetrad = nextTetrad;
             MoveList m = getMovesToMake();
             activeTetrad.SpawnTetrad();
+            if(activeTetrad.getShape()!=7)
             display.showBlocks();
             if(activeTetrad.getShape()==7){
                 omae();
