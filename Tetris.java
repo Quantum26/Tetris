@@ -10,7 +10,7 @@ public class Tetris implements ArrowListener
     {
         boolean playing = true;
         while(playing){
-            Tetris tetris = new Tetris(22, 42); //creates a new tetris
+            Tetris tetris = new Tetris(20,10); //creates a new tetris
             tetris.play(); //starts the game
             System.out.println("Would you Like to Play Again? yes/no");
             Scanner reader = new Scanner(System.in);
@@ -73,8 +73,8 @@ public class Tetris implements ArrowListener
         display.setTitle("Tetris"); //sets the title to Tetris
         activeTetrad = new Tetrad(grid); //creates a new tetrad
         nextTetrad = new Tetrad(grid); //creates a second tetrad
-        time = 000; //base time is set to 1000 milliseconds or 1 second
-        gameTime = 000; //same for this time variable
+        time = 300; //base time is set to 1000 milliseconds or 1 second
+        gameTime = 300; //same for this time variable
         level = 1; //sets level to 1
         score = 0; //sets score to 0
         gotTetris = false; //you have not gotten a tetris yet
@@ -85,7 +85,7 @@ public class Tetris implements ArrowListener
         paused = false; //the game is not paused
         game = true; //the game is active
         controlsActive = true; //controls are active
-        music = new MusicPlayer("Tetris.mp3");
+        music = new MusicPlayer("Tetris.mp3");//the player for the music
         music.setStopTime(new Duration(77000));
         storm = new ArrayList<Tetrad>();
         start = System.currentTimeMillis();
@@ -552,8 +552,8 @@ public class Tetris implements ArrowListener
     public void playAgainst(){
         other = new Tetris(grid.getNumRows(), grid.getNumCols());
         other.closeMusic();
-        other.setBot(true);
-        this.setBot(true);
+        other.setBot(false);
+        this.setBot(false);
         other.setP2(true);
         battle = true;
         Thread hope = new Thread(){

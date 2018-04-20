@@ -20,7 +20,7 @@ public class BlockDisplay implements KeyListener
     public BlockDisplay(BoundedGrid<Block> board)
     {
         this.board = board;
-        ree = false;
+        ree = false;  
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         SwingUtilities.invokeLater(new Runnable()
@@ -77,8 +77,10 @@ public class BlockDisplay implements KeyListener
     public void showBlocks()
     {
         Graphics2D graphics = image.createGraphics();
+        Graphics2D inboi = image.createGraphics();
         if(ree){
-            graphics.setColor(new Color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255)));
+            Color c= new Color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255));
+            graphics.setColor(c);
         }
         else{
             graphics.setColor(BACKGROUND);
@@ -99,7 +101,10 @@ public class BlockDisplay implements KeyListener
                     graphics.setColor(square.getColor());
                     graphics.fillRect(col*30+1, row*30+1, 28, 28);
                     graphics.dispose();
-
+                    inboi = image.createGraphics();
+                    inboi.setColor(Color.BLACK);
+                    inboi.fillRect(col*30+8, row*30+8, 14, 14);
+                    inboi.dispose();
                 }
             }
         frame.repaint();
