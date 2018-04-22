@@ -53,7 +53,7 @@ public class Tetris implements ArrowListener
     private boolean reee = false;
     private boolean raining = false;
     private boolean battle = false;
-    private boolean bot = false;
+    private boolean bot = true;
     private MusicPlayer music;
     private boolean sped = false;
     private long elapsed;
@@ -61,8 +61,6 @@ public class Tetris implements ArrowListener
     private int lives = 15;
     private List<Tetrad> storm;
     private Tetris other;
-    private Object l1;
-    private Object l2;
     private boolean p2 = false;
     public Tetris(int r, int c)
     {
@@ -73,8 +71,8 @@ public class Tetris implements ArrowListener
         display.setTitle("Tetris"); //sets the title to Tetris
         activeTetrad = new Tetrad(grid); //creates a new tetrad
         nextTetrad = new Tetrad(grid); //creates a second tetrad
-        time = 300; //base time is set to 1000 milliseconds or 1 second
-        gameTime = 300; //same for this time variable
+        time = 1000; //base time is set to 1000 milliseconds or 1 second
+        gameTime = 1000; //same for this time variable
         level = 1; //sets level to 1
         score = 0; //sets score to 0
         gotTetris = false; //you have not gotten a tetris yet

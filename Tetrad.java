@@ -29,7 +29,7 @@ public class Tetrad
         //Exercise 2.0  Insert code here to
         //                  choose a random integer from 0 to 6
         spawned = false;
-        shape = (int)(Math.random()*8);
+        shape = (int)(Math.random()*7);
         hasShape = true;
         r = g.getNumRows();
         c = g.getNumCols();

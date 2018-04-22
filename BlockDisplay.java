@@ -77,7 +77,6 @@ public class BlockDisplay implements KeyListener
     public void showBlocks()
     {
         Graphics2D graphics = image.createGraphics();
-        Graphics2D inboi = image.createGraphics();
         if(ree){
             Color c= new Color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255));
             graphics.setColor(c);
@@ -100,11 +99,9 @@ public class BlockDisplay implements KeyListener
                     graphics = image.createGraphics();
                     graphics.setColor(square.getColor());
                     graphics.fillRect(col*30+1, row*30+1, 28, 28);
+                    graphics.setColor(Color.BLACK);
+                    graphics.fillRect(col*30+8, row*30+8, 14, 14);
                     graphics.dispose();
-                    inboi = image.createGraphics();
-                    inboi.setColor(Color.BLACK);
-                    inboi.fillRect(col*30+8, row*30+8, 14, 14);
-                    inboi.dispose();
                     
                     
                 }
