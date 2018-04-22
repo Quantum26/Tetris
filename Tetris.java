@@ -1130,6 +1130,8 @@ public class Tetris implements ArrowListener
             music.setMusic("Fingerdash.mp3");
             music.play();
             galaga = true;
+            dejavu = false;
+            battle = false;
             for(int i = 0; i< grid.getNumRows(); i++){
                 clearRow(i);
             }
@@ -1168,8 +1170,10 @@ public class Tetris implements ArrowListener
             for(int i = 0; i< grid.getNumRows(); i++){
                 clearRow(i);
             }
+            galaga = false;
+            dejavu = false;
             battle = true;
-
+            
         }
     }   
 
