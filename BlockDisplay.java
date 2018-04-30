@@ -99,14 +99,14 @@ public class BlockDisplay implements KeyListener
                     graphics = image.createGraphics();
                     graphics.setColor(square.getColor());
                     graphics.fillRect(col*30+1, row*30+1, 28, 28);
-                    graphics.setColor(Color.BLACK);
-                    graphics.fillRect(col*30+2, row*30+2, 26, 26);
+                    /**graphics.setColor(Color.BLACK);
+                    graphics.fillRect(col*30+2, row*30+2, 26, 26);*/
                     graphics.dispose();
-                    
-                    
+
                 }
             }
         frame.repaint();
+
     }
 
     // Sets the title of the window.
