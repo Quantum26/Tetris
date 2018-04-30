@@ -91,20 +91,20 @@ public class Tetris implements ArrowListener
 
     public void upPressed()
     {
-        if(!paused && game && controlsActive&&!galaga){
+        if(!paused && game && controlsActive&&!galaga){//cant play if ye's paused
             activeTetrad.rotate(); //rotates the block when up is pressed
-            display.showBlocks();
-        }else if(galaga){
-            activeTetrad.translate(-1,0);
-            display.showBlocks();
+            display.showBlocks();//show the block
+        }else if(galaga){//if you playin galaga
+            activeTetrad.translate(-1,0);//move the player up
+            display.showBlocks();//show the block
         }
     }
 
     public void downPressed()
     {
-        if(!paused && game && controlsActive){
+        if(!paused && game && controlsActive){//gotta have these things active
             activeTetrad.translate(1, 0); //moves the block down 1 square
-            display.showBlocks();
+            display.showBlocks();//show the blocks
             score+=1; //adds to your score
         }
     }
@@ -131,11 +131,11 @@ public class Tetris implements ArrowListener
             while(activeTetrad.translate(1,0)){score+=2;} //adds to your score and moves the block until it is unable to move down
             gameTime = 0; //sets gameTime = 0 so it can reset the loop, thats why we have two time variables, one for a temp variable the other for the actual time being used
             display.showBlocks();
-        }else if(galaga){
-            storm.add(new Tetrad(grid));
-            storm.get(storm.size()-1).setShape(14);
-            storm.get(storm.size()-1).SpawnTetrad();
-            storm.get(storm.size()-1).translateToCol(activeTetrad.getLocations()[3].getCol());
+        }else if(galaga){//if  you playin galaga
+            storm.add(new Tetrad(grid));//adds a new tetrad
+            storm.get(storm.size()-1).setShape(14);//makes it a bullet
+            storm.get(storm.size()-1).SpawnTetrad();//spawns it
+            storm.get(storm.size()-1).translateToCol(activeTetrad.getLocations()[3].getCol());//moves bullet to ships"cannon nozzle"
         }
     }
 
@@ -144,25 +144,25 @@ public class Tetris implements ArrowListener
         if(paused){ //if the game is currently paused
             paused = false; //the game is no longer paused
             System.out.println("unpause"); //tells the player the game is unpaused
-            for(int r = 0; r < grid.getNumRows(); r++){ //for each block
-                for(int c = 0; c < grid.getNumCols(); c++){
-                    Location l = new Location (r, c);
-                    if(grid.get(l)!=null&&colors[r][c]!=null){
-                        grid.get(l).setColor(colors[r][c]);
-                        colors[r][c]=null;
+            for(int r = 0; r < grid.getNumRows(); r++){ //for each row
+                for(int c = 0; c < grid.getNumCols(); c++){//for each block in the row
+                    Location l = new Location (r, c);//location to look at
+                    if(grid.get(l)!=null&&colors[r][c]!=null){//if there is a block and it has a color
+                        grid.get(l).setColor(colors[r][c]);//set it back to OG color
+                        colors[r][c]=null;//reset that color to null
                     }
                     //resets the color of each block
                 }
             }
             activeTetrad.resetColor(); //resets the color of the active tetrad
-            display.showBlocks();
-            music.play();
+            display.showBlocks();//shows blocks
+            music.play();//play the music
         }else{ //if the game isnt paused
             paused = true; //pause the game
             System.out.println("pause"); //tell the player the game is paused
             for(int r = 0; r < grid.getNumRows(); r++){
                 for(int c = 0; c < grid.getNumCols(); c++){ //for each block
-                    Location l = new Location (r, c);
+                    Location l = new Location (r, c);//location to look at
                     if(grid.get(l)!=null){
                         colors[r][c]=(grid.get(l).getColor());
                         grid.get(l).setColor(Color.BLACK);
@@ -171,72 +171,70 @@ public class Tetris implements ArrowListener
                 }
             }
             display.showBlocks();
-            music.pause();
+            music.pause();//pause the music
         }
     }
 
     public void play()
     {
-        game = true;
-        activeTetrad.SpawnTetrad();
-        DisplayNextTetrad();
-        display.showBlocks();
+        game = true;//you are playing
+        activeTetrad.SpawnTetrad();//spawn thet active tetrad
+        DisplayNextTetrad();//display the next tetrad, shows info 
+        display.showBlocks();//shows the blocks
         
-        music.play();
-        start = System.currentTimeMillis();
+        music.play();//plays music
+        start = System.currentTimeMillis();//startime of song
         while (game)
         {
             for(int i = 0; i<5; i++){
                 try { Thread.sleep(gameTime/10); } catch(Exception e) {}
-            }
-            if(!paused){
+            }//sleeps half the thread incrementally, to decrease lag
+            if(!paused){//if you are not paused
                 for(int i = 0; i<5; i++){
                     try { Thread.sleep(gameTime/10); } catch(Exception e) {}
                     elapsed = System.currentTimeMillis()-start;
-                }
+                }//completes the sleep
                 
-                if(dejavu){
-                    playDejaMode();
+                if(dejavu){//depending on gamemode, plays one increment of it
+                    playDejaMode();//falling meteors(ignore title, ian made it up)
                 }else if(galaga){
-                    playGalaga();
+                    playGalaga();//galaga
                 }else if(battle){
-                    playAgainst();
+                    playAgainst();//2 player tetris
                 }else{
-                    playTetris();
+                    playTetris();//normal tetris
                 }
-                if(game==false){
-                    break;
+                if(game==false){//if the game is over
+                    break;//STOP
                 }
-                display.showBlocks();
-                title = "Level "+level+", Score: "+score;
-                display.setTitle(title);
-                if(reee)
-                    ree();
+                display.showBlocks();//shows some information
+                title = "Level "+level+", Score: "+score;//displays information
+                display.setTitle(title);//sets title to that information
             }
-            if(elapsed >=24000 && sped){
-                time = 48;
-                gameTime = 48;
-                sped = false;
-                display.setRee(true);
-                ree();
-                reee = true;
+            if(elapsed >=24000 && sped){//if bass drop in one of dem cheat codes
+                time = 48;//FAST
+                gameTime = 48;//FAST
+                sped = false;//dont do this agan
+                display.setRee(true);//activates intense display mode(seizure warning)
+                ree();//intense display
+                reee = true;//intense display mode is true
             }
 
-            if(game==false){
-                break;
+            if(game==false){//if somehow the game hasnt stopped yet
+                break;//STOP
             }
-            display.showBlocks();
-            title = "Level "+level+", Score: "+score;
-            display.setTitle(title);
+            display.showBlocks();//shows information in terminal
+            title = "Level "+level+", Score: "+score;//shows info in game title
+            display.setTitle(title);//sets title to said info
         }
     }
 
-    public int playTetris(){
-        int x = 0;
+    public int playTetris(){//iteration for tetris
+        int x = 0;//number of rows broken, used for 2 player
         
-        if(!activeTetrad.translate(1,0)){
-
-            controlsActive = false;
+        if(!activeTetrad.translate(1,0)){//if tetrad is stuck on ground, otherwise, just moves it down
+            //but if its stuck
+            controlsActive = false;//no controls for no glitches
             gameTime = time;
             if(!topRowsEmpty()){
                 game = false;
