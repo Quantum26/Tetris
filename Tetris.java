@@ -53,7 +53,7 @@ public class Tetris implements ArrowListener
     private boolean reee = false;
     private boolean raining = false;
     private boolean battle = false;
-    private boolean bot = true;
+    private boolean bot = false;
     private MusicPlayer music;
     private boolean sped = false;
     private long elapsed;
