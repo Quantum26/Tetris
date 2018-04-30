@@ -60,10 +60,10 @@ public class Tetrad
             switch(shape){ 
                 case 0://I
                 color = Color.BLUE;
-                locs[0] = new Location(0,c/2-1);
-                locs[1] = new Location(1,c/2-1);
-                locs[2] = new Location(2,c/2-1);
-                locs[3] = new Location(3,c/2-1);
+                locs[0] = new Location(0,c/2-2);
+                locs[1] = new Location(0,c/2-1);
+                locs[2] = new Location(0,c/2);
+                locs[3] = new Location(0,c/2+1);
                 break;
 
                 case 1: //T
@@ -84,18 +84,18 @@ public class Tetrad
 
                 case 3://L
                 color = Color.ORANGE;
-                locs[0] = new Location(0,c/2-1);
-                locs[1] = new Location(1,c/2-1);
-                locs[2] = new Location(2,c/2-1);
-                locs[3] = new Location(2,c/2);
+                locs[0] = new Location(0,c/2-2);
+                locs[1] = new Location(0,c/2-1);
+                locs[2] = new Location(0,c/2);
+                locs[3] = new Location(1,c/2-2);
                 break;
 
                 case 4://J
                 color = Color.YELLOW;
-                locs[0] = new Location(0,c/2);
-                locs[1] = new Location(1,c/2);
-                locs[2] = new Location(2,c/2);
-                locs[3] = new Location(2,c/2-1);
+                locs[0] = new Location(0,c/2-2);
+                locs[1] = new Location(0,c/2-1);
+                locs[2] = new Location(0,c/2);
+                locs[3] = new Location(1,c/2);
                 break;
 
                 case 5://S
