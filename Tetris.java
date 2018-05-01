@@ -70,7 +70,7 @@ public class Tetris implements ArrowListener
         display.setTitle("Tetris"); //sets the title to Tetris
         activeTetrad = new Tetrad(grid); //creates a new tetrad
         nextTetrad = new Tetrad(grid); //creates a second tetrad
-        time = 1000; //base time is set to 1000 milliseconds or 1 second
+        time =1000; //base time is set to 1000 milliseconds or 1 second
         gameTime = 1000; //same for this time variable
         level = 1; //sets level to 1
         score = 0; //sets score to 0
@@ -291,7 +291,7 @@ public class Tetris implements ArrowListener
         if(!ntt||!ttt){//if one of the meteors stopped falling
             elapsed = (long)music.getCurrentTime().toMillis();//elapsed time reset
             if(nextTetrad.isNextToSomething()||(thirdTetrad.isNextToSomething())){//if you are next to a fallen meteor
-                score+=20*level;//
+                score+=20*level;//UAHAUHAU
             }
             controlsActive = false;
             gameTime = time;
