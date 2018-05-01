@@ -271,7 +271,7 @@ public class Tetris implements ArrowListener
                 makeMove(m);//bot makes moves based on movelist
             }
         }
-        return x;
+        return x;//number of rows completed is returned
     }
 
     public void playGalaga(){
