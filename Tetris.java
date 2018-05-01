@@ -228,43 +228,47 @@ public class Tetris implements ArrowListener
         }
     }
 
+    /**
+     * @return is a number of rows completed in this iteration
+     * used for 2 player mode, for adding rows
+     */
     public int playTetris(){//iteration for tetris
         int x = 0;//number of rows broken, used for 2 player
         
         if(!activeTetrad.translate(1,0)){//if tetrad is stuck on ground, otherwise, just moves it down
             //but if its stuck
             controlsActive = false;//no controls for no glitches
-            gameTime = time;
-            if(!topRowsEmpty()){
-                game = false;
-                gameOver();
-                return 0;
+            gameTime = time;//the time for the next interation is set to base time
+            if(!topRowsEmpty()){//if there is something in top rows
+                game = false;//game is done
+                gameOver();//display gameover graphic
+                return 0;//you did not complete any rows
             }
-            x= clearCompletedRows();
+            x= clearCompletedRows();//sets x to the number of rows that were completed
+            //also clears those rows
+            activeTetrad = nextTetrad;//active tetrad is now the next tetrad
+            MoveList m = getMovesToMake();//AI analyzes pieces for series of moves to make
+            activeTetrad.SpawnTetrad();//spawns active tetrad
+            if(activeTetrad.getShape()!=7)//as long as you dont have the death tetrad
+            display.showBlocks();//diaplys blocks on grid in GUI
+            if(activeTetrad.getShape()==7){//if you have death tetrad
+                omae();//indicates with loud music
+            }
+            if(grid.getNumCols()!=10){//if you are playing on resized board
+                activeTetrad.translateToCol(grid.getNumCols()/2);//translate tetrad to center
+            }
 
-            activeTetrad = nextTetrad;
-            MoveList m = getMovesToMake();
-            activeTetrad.SpawnTetrad();
-            if(activeTetrad.getShape()!=7)
-            display.showBlocks();
-            if(activeTetrad.getShape()==7){
-                omae();
+            nextTetrad = new Tetrad(grid);//next tetrad has to becoe a new tetrad
+            if(cheatCode1){//if you have I block cheatcode
+                nextTetrad.setShape(0);//next shape you have is I
+            }else if(cheatCode2){//if you have O block cheatcode
+                nextTetrad.setShape(2);//next shape is an O
             }
-            if(grid.getNumCols()!=10){
-                activeTetrad.translateToCol(grid.getNumCols()/2);
-            }
-
-            nextTetrad = new Tetrad(grid);
-            if(cheatCode1){
-                nextTetrad.setShape(0);
-            }else if(cheatCode2){
-                nextTetrad.setShape(2);
-            }
-            display.showBlocks();
-            DisplayNextTetrad();
-            controlsActive = true;
-            if(bot){
-                makeMove(m);
+            display.showBlocks();//shows blocks you have
+            DisplayNextTetrad();//displays information in terminal
+            controlsActive = true;//controls are now active again
+            if(bot){//if bot active
+                makeMove(m);//bot makes moves based on movelist
             }
         }
         return x;
