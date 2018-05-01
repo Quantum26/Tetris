@@ -274,24 +274,24 @@ public class Tetris implements ArrowListener
         return x;//number of rows completed is returned
     }
 
-    public void playGalaga(){
+    public void playGalaga(){//single iteration for galaga
 
-        boolean ntt = nextTetrad.translate(1,0);
-        boolean ttt = thirdTetrad.translate(1,0);
-        List<Boolean> btt = new ArrayList<Boolean>();
-        for(Tetrad tet : storm){
-            btt.add(0, tet.translate(-1,0));
+        boolean ntt = nextTetrad.translate(1,0);//did the next tetrad fall
+        boolean ttt = thirdTetrad.translate(1,0);//did the third tetrad fall
+        List<Boolean> btt = new ArrayList<Boolean>();//boolean list for if bullets kept going up
+        for(Tetrad tet : storm){//fills boolean list
+            btt.add(0, tet.translate(-1,0));//moves bullets up
         }
-        boolean bbtt = true;
-        for(Boolean boi : btt){
-            if(boi.equals(false)){
-                bbtt = false;
+        boolean bbtt = true;//did a single bullet stop
+        for(Boolean boi : btt){//for all the bullets
+            if(boi.equals(false)){//if one stopped
+                bbtt = false;//has to adress it
             }
         }
-        if(!ntt||!ttt){
-            elapsed = (long)music.getCurrentTime().toMillis();
-            if(nextTetrad.isNextToSomething()||(thirdTetrad.isNextToSomething())){
-                score+=20*level;
+        if(!ntt||!ttt){//if one of the meteors stopped falling
+            elapsed = (long)music.getCurrentTime().toMillis();//elapsed time reset
+            if(nextTetrad.isNextToSomething()||(thirdTetrad.isNextToSomething())){//if you are next to a fallen meteor
+                score+=20*level;//
             }
             controlsActive = false;
             gameTime = time;
