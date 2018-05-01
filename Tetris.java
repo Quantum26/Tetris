@@ -42,26 +42,25 @@ public class Tetris implements ArrowListener
     private boolean controlsActive; //can you control the block
     private Color[][] colors; // list of colors for every block
     private long start = System.currentTimeMillis(); //internal stopwatch
-    private boolean cheats = false;
-    private boolean cheatCode1 = false;
-    private boolean cheatCode2 = false;
-    private boolean cheatCode3 = false;
-    private boolean cheatCode4 = false;
-    private boolean cheatCode5 = false;
-    private boolean dejavu = false;
-    private boolean galaga = false;
-    private boolean reee = false;
-    private boolean raining = false;
-    private boolean battle = false;
-    private boolean bot = false;
-    private MusicPlayer music;
-    private boolean sped = false;
-    private long elapsed;
-    private int meteors = 0;
-    private int lives = 15;
-    private List<Tetrad> storm;
-    private Tetris other;
-    private boolean p2 = false;
+    private boolean cheats = false;//cheatcodes active
+    private boolean cheatCode1 = false;//cheatcode for an I block
+    private boolean cheatCode2 = false;//cheatcode for an O block
+    private boolean cheatCode3 = false;//cheatcode for part 1 of meteor mode
+    private boolean cheatCode4 = false;//cheatcode for part 2 of meteor mode
+    private boolean cheatCode5 = false;//cheatcode for part 3 of meteor mode
+    private boolean dejavu = false;//cheatcode for meteor mode
+    private boolean galaga = false;//cheatcode for galaga
+    private boolean reee = false;//cheatcode for intense display mode
+    private boolean battle = false;//cheatcode for 2 player
+    private boolean bot = false;//is the AI active
+    private MusicPlayer music;//musicplayer used for playing music
+    private boolean sped = false;//cheatcode for extra speed mode
+    private long elapsed;//time elapsed
+    private int meteors = 0;//number of meteors avoided
+    private int lives = 15;//number of lives in meteor mode
+    private List<Tetrad> storm;//some extra tetrads
+    private Tetris other;//second tetris object used for 2player
+    private boolean p2 = false;//is the second player active
     public Tetris(int r, int c)
     {
         grid = new BoundedGrid<Block>(r, c); //creates a new grid
@@ -84,9 +83,9 @@ public class Tetris implements ArrowListener
         game = true; //the game is active
         controlsActive = true; //controls are active
         music = new MusicPlayer("Tetris.mp3");//the player for the music
-        music.setStopTime(new Duration(77000));
-        storm = new ArrayList<Tetrad>();
-        start = System.currentTimeMillis();
+        music.setStopTime(new Duration(77000));//wheen the song should stop
+        storm = new ArrayList<Tetrad>();//initializes some extra tetrads
+        start = System.currentTimeMillis();//start time
     }
 
     public void upPressed()
