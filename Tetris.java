@@ -52,7 +52,7 @@ public class Tetris implements ArrowListener
     private boolean galaga = false;//cheatcode for galaga
     private boolean reee = false;//cheatcode for intense display mode
     private boolean battle = false;//cheatcode for 2 player
-    private boolean bot = false;//is the AI active
+    private boolean bot = true;//is the AI active
     private MusicPlayer music;//musicplayer used for playing music
     private boolean sped = false;//cheatcode for extra speed mode
     private long elapsed;//time elapsed
@@ -86,6 +86,7 @@ public class Tetris implements ArrowListener
         music.setStopTime(new Duration(77000));//wheen the song should stop
         storm = new ArrayList<Tetrad>();//initializes some extra tetrads
         start = System.currentTimeMillis();//start time
+        //will it push?
     }
 
     public void upPressed()
