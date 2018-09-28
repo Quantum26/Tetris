@@ -10,7 +10,7 @@ import javax.swing.*;
 public class BlockDisplay implements KeyListener
 {
     private static final Color BACKGROUND = Color.BLACK;
-
+    private static final Color GRAY = Color.GRAY;
     private BoundedGrid<Block> board;
     private JFrame frame;
     private ArrowListener listener;
@@ -87,8 +87,16 @@ public class BlockDisplay implements KeyListener
         graphics.fillRect(0, 0, image.getWidth(), image.getHeight());
         graphics.setColor(new Color(150,0,255));
         graphics.drawRect(0, 0, image.getWidth()-1, image.getHeight()-1);
+        graphics.setColor(GRAY);
+        for (int col = 0; col < board.getNumCols(); col++){
+            graphics.drawLine(col*30, 0, col*30,image.getHeight()-1);
+        }
+        
+        for (int row = 0; row < board.getNumRows(); row++){
+            graphics.drawLine(0, row*30, image.getWidth()-1,row*30);
+        }
         graphics.dispose();
-
+        
         for (int row = 0; row < board.getNumRows(); row++)
             for (int col = 0; col < board.getNumCols(); col++)
             {

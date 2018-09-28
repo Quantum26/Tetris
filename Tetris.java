@@ -10,7 +10,7 @@ public class Tetris implements ArrowListener
     {
         boolean playing = true;
         while(playing){
-            Tetris tetris = new Tetris(20,10); //creates a new tetris
+            Tetris tetris = new Tetris(22,10); //creates a new tetris
             tetris.play(); //starts the game
             System.out.println("Would you Like to Play Again? yes/no");
             Scanner reader = new Scanner(System.in);
@@ -52,7 +52,7 @@ public class Tetris implements ArrowListener
     private boolean galaga = false;//cheatcode for galaga
     private boolean reee = false;//cheatcode for intense display mode
     private boolean battle = false;//cheatcode for 2 player
-    private boolean bot = true;//is the AI active
+    private boolean bot = false;//is the AI active
     private MusicPlayer music;//musicplayer used for playing music
     private boolean sped = false;//cheatcode for extra speed mode
     private long elapsed;//time elapsed
@@ -181,7 +181,7 @@ public class Tetris implements ArrowListener
         activeTetrad.SpawnTetrad();//spawn thet active tetrad
         DisplayNextTetrad();//display the next tetrad, shows info 
         display.showBlocks();//shows the blocks
-        
+
         music.play();//plays music
         start = System.currentTimeMillis();//startime of song
         while (game)
@@ -194,7 +194,7 @@ public class Tetris implements ArrowListener
                     try { Thread.sleep(gameTime/10); } catch(Exception e) {}
                     elapsed = System.currentTimeMillis()-start;
                 }//completes the sleep
-                
+
                 if(dejavu){//depending on gamemode, plays one increment of it
                     playDejaMode();//falling meteors(ignore title, ian made it up)
                 }else if(galaga){
@@ -235,7 +235,7 @@ public class Tetris implements ArrowListener
      */
     public int playTetris(){//iteration for tetris
         int x = 0;//number of rows broken, used for 2 player
-        
+
         if(!activeTetrad.translate(1,0)){//if tetrad is stuck on ground, otherwise, just moves it down
             //but if its stuck
             controlsActive = false;//no controls for no glitches
@@ -251,7 +251,7 @@ public class Tetris implements ArrowListener
             MoveList m = getMovesToMake();//AI analyzes pieces for series of moves to make
             activeTetrad.SpawnTetrad();//spawns active tetrad
             if(activeTetrad.getShape()!=7)//as long as you dont have the death tetrad
-            display.showBlocks();//diaplys blocks on grid in GUI
+                display.showBlocks();//diaplys blocks on grid in GUI
             if(activeTetrad.getShape()==7){//if you have death tetrad
                 omae();//indicates with loud music
             }
@@ -575,7 +575,8 @@ public class Tetris implements ArrowListener
                             for(int i = 0; i<5; i++){
                                 try { sleep(other.getGameTime()/10); } catch(Exception e) {}
                             }
-                            addRows(other.playTetris());
+                            int add = other.playTetris();
+                            if(add>2)addRows(add);
                             other.showBlocks();
                             other.setTitle("P2:Level "+other.getLevel()+", Score: "+other.getScore());
                         }
@@ -594,7 +595,8 @@ public class Tetris implements ArrowListener
                 for(int i = 0; i<5; i++){
                     try { Thread.sleep(gameTime/10); } catch(Exception e) {}
                 }
-                other.addRows(this.playTetris());
+                int add = this.playTetris();
+                if(add>2)other.addRows(add);
                 display.showBlocks();
                 setTitle("P1:Level "+level+", Score: "+score);
             }
@@ -705,14 +707,17 @@ public class Tetris implements ArrowListener
     }
 
     public void addRows(int n){
+        int not = (int)(Math.random()*10);
         for(int i = 0; i< n; i++){
             activeTetrad.translate(1,0);
             moveUpBelow(0);
             for(int c = 0; c < grid.getNumCols(); c++){
-                Location place = new Location(grid.getNumRows()-1, c);
-                Block boi = new Block();boi.setColor(Color.GRAY);boi.setOriginal(Color.GRAY);
-                boi.setDestroyable(false);
-                boi.putSelfInGrid(grid, place);
+                if(c!=not){
+                    Location place = new Location(grid.getNumRows()-1, c);
+                    Block boi = new Block();boi.setColor(Color.GRAY);boi.setOriginal(Color.GRAY);
+                    boi.setDestroyable(true);
+                    boi.putSelfInGrid(grid, place);
+                }
             }
         }
 
@@ -1175,7 +1180,7 @@ public class Tetris implements ArrowListener
             galaga = false;
             dejavu = false;
             battle = true;
-            
+
         }
     }   
 
