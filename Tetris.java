@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.Scanner;
 import javafx.util.Duration;
 import javafx.scene.media.MediaPlayer;
+import java.awt.Robot;
+import java.awt.event.*;
 public class Tetris implements ArrowListener
 {
     public static void main(String[] args)
@@ -269,7 +271,7 @@ public class Tetris implements ArrowListener
             DisplayNextTetrad();//displays information in terminal
             controlsActive = true;//controls are now active again
             if(bot){//if bot active
-                makeMove(m);//bot makes moves based on movelist
+                try{makeMove(m);}catch(Exception e){}//bot makes moves based on movelist
             }
         }
         return x;//number of rows completed is returned
@@ -1056,6 +1058,12 @@ public class Tetris implements ArrowListener
         reee = !reee;
     }
 
+    public void bPressed(){
+        if(cheats){
+            bot = !bot;
+        }
+    }
+
     public void cPressed(){
         Scanner reader = new Scanner(System.in);
         System.out.println("Enter in code");
@@ -1369,31 +1377,43 @@ public class Tetris implements ArrowListener
         return movesList.get(0);
     }
 
-    public void makeMove(MoveList moves){
-        Move[] plz = new Move[]{Move.DOWN,Move.DOWN,Move.LEFT,Move.UP,Move.SPACE}; 
-        for(Move m: moves.getList()){
-            switch(m){
-                case UP:
-                upPressed();
-                break;
-                case DOWN:
-                downPressed();
-                break;
-                case LEFT:
-                leftPressed();
-                break;
-                case RIGHT:
-                rightPressed();
-                break;
-                case SPACE:
-                spacePressed();
-                break;
+    public void makeMove(MoveList moves) throws Exception{
+        class MyThread extends Thread{
+            public void run(){
+                try{Robot robot = new Robot();
+                    for(Move m: moves.getList()){
+                        switch(m){
+                            case UP:
+                            robot.keyPress(KeyEvent.VK_UP);
+                            robot.keyRelease(KeyEvent.VK_UP);
+                            break;
+                            case DOWN:
+                            robot.keyPress(KeyEvent.VK_DOWN);
+                            robot.keyRelease(KeyEvent.VK_DOWN);
+                            break;
+                            case LEFT:
+                            robot.keyPress(KeyEvent.VK_LEFT);
+                            robot.keyRelease(KeyEvent.VK_LEFT);
+                            break;
+                            case RIGHT:
+                            robot.keyPress(KeyEvent.VK_RIGHT);
+                            robot.keyRelease(KeyEvent.VK_RIGHT);
+                            break;
+                            case SPACE:
+                            robot.keyPress(KeyEvent.VK_SPACE);
+                            robot.keyRelease(KeyEvent.VK_SPACE);
+                            break;
 
+                        }
+                        display.showBlocks();
+                        try{Thread.sleep(gameTime/10);}catch(Exception e){};
+
+                    }
+                }catch(Exception e){}
             }
-            display.showBlocks();
-            try{Thread.sleep(gameTime/10);}catch(Exception e){};
-
-        }
+        };
+        MyThread t = new MyThread();
+        t.start();
     }
 
     public void displayBattle(){

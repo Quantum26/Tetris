@@ -184,6 +184,8 @@ public class BlockDisplay implements KeyListener
             listener.gPressed();
         else if (code == KeyEvent.VK_V)
             listener.vPressed();
+        else if (code == KeyEvent.VK_B)
+            listener.bPressed();
     }
 
     public void setArrowListener(ArrowListener listener)
