@@ -578,7 +578,8 @@ public class Tetris implements ArrowListener
                                 try { sleep(other.getGameTime()/10); } catch(Exception e) {}
                             }
                             int add = other.playTetris();
-                            if(add>2)addRows(add);
+                            if(add>2)
+                            addRows(add);
                             other.showBlocks();
                             other.setTitle("P2:Level "+other.getLevel()+", Score: "+other.getScore());
                         }
@@ -598,7 +599,8 @@ public class Tetris implements ArrowListener
                     try { Thread.sleep(gameTime/10); } catch(Exception e) {}
                 }
                 int add = this.playTetris();
-                if(add>2)other.addRows(add);
+                if(add>2)
+                other.addRows(add);
                 display.showBlocks();
                 setTitle("P1:Level "+level+", Score: "+score);
             }
@@ -1384,29 +1386,34 @@ public class Tetris implements ArrowListener
                     for(Move m: moves.getList()){
                         switch(m){
                             case UP:
-                            robot.keyPress(KeyEvent.VK_UP);
-                            robot.keyRelease(KeyEvent.VK_UP);
+                            upPressed();
+                            //robot.keyPress(KeyEvent.VK_UP);
+                            //robot.keyRelease(KeyEvent.VK_UP);
                             break;
                             case DOWN:
-                            robot.keyPress(KeyEvent.VK_DOWN);
-                            robot.keyRelease(KeyEvent.VK_DOWN);
+                            downPressed();
+                            //robot.keyPress(KeyEvent.VK_DOWN);
+                            //robot.keyRelease(KeyEvent.VK_DOWN);
                             break;
                             case LEFT:
-                            robot.keyPress(KeyEvent.VK_LEFT);
-                            robot.keyRelease(KeyEvent.VK_LEFT);
+                            leftPressed();
+                            //robot.keyPress(KeyEvent.VK_LEFT);
+                            //robot.keyRelease(KeyEvent.VK_LEFT);
                             break;
                             case RIGHT:
-                            robot.keyPress(KeyEvent.VK_RIGHT);
-                            robot.keyRelease(KeyEvent.VK_RIGHT);
+                            rightPressed();
+                            //robot.keyPress(KeyEvent.VK_RIGHT);
+                            //robot.keyRelease(KeyEvent.VK_RIGHT);
                             break;
                             case SPACE:
-                            robot.keyPress(KeyEvent.VK_SPACE);
-                            robot.keyRelease(KeyEvent.VK_SPACE);
+                            spacePressed();
+                            //robot.keyPress(KeyEvent.VK_SPACE);
+                            //robot.keyRelease(KeyEvent.VK_SPACE);
                             break;
 
                         }
                         display.showBlocks();
-                        try{Thread.sleep(gameTime/10);}catch(Exception e){};
+                        try{sleep(gameTime/10);}catch(Exception e){};
 
                     }
                 }catch(Exception e){}
